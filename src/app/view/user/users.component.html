@@ -1,0 +1,63 @@
+<form (submit)="addUser()" >
+	<div class= "form-group">
+		<label>Username</label>
+		<input type="text" [(ngModel)] = "model.username" name="username" class="form-control">
+	</div>
+	<div class= "form-group">
+		<label>Password</label>
+		<input type="password" [(ngModel)] = "model.password" name="password" class="form-control">
+	</div>
+	<div class= "form-group">
+		<label>Nome</label>
+		<input type="text" [(ngModel)] = "model.nome" name="nome" class="form-control">
+	</div>
+	<div class= "form-group">
+		<label>Cognome</label>
+		<input type="text" [(ngModel)] = "model.cognome" name="cognome" class="form-control">
+	</div>
+	<div class= "form-group">
+		<label>Mail</label>
+		<input type="text" [(ngModel)]="model.email" name="email" class="form-control" required="">
+	</div>
+	<div class= "form-group">
+		<label>Sede</label>
+		<input type="text" [(ngModel)]="model.sede" name="sede" class="form-control" required="">
+	</div>
+	<div class= "form-group">
+		<label>Data Inizio Validita</label>
+		<div class="input-group">
+			<input class="form-control" placeholder="yyyy-mm-dd"
+             name="dp" [(ngModel)]="model.data_inizio_validita" ngbDatepicker #d="ngbDatepicker">
+		      <button class="input-group-addon" (click)="d.toggle()" type="button">
+		        <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+		      </button>
+		 </div>
+	</div>
+	<div class= "form-group">
+		<label>Data Fine Validita</label>
+		<input type="text" [(ngModel)]="model.data_fine_validita" name="data_fine_validita" class="form-control" required="">
+	</div>
+	<div class= "form-group">
+		<label>Amministratore</label>
+		<input type="checkbox" [(ngModel)]="model.isAdmin" name="isAdmin" class="form-control" required="">
+	</div>
+	<input type="submit" class="btn btn btn-success" value="AGGIUNGI">
+</form>
+
+<hr>
+
+
+<div class="row" *ngFor="let user of users">
+	<div class="col">
+		{{user._id}}
+	</div>
+	<div class="col">
+		{{user.nome}}
+	</div>
+	<div class="col">
+		{{user.cognome}}
+	</div>
+	<div class="col">
+		-
+	</div>
+</div>

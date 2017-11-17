@@ -1,0 +1,32 @@
+.toggleControl {
+	position: absolute;
+	height: calc(100vh - 120px);
+}
+.toggleControl .sidebarToggle {
+	position: absolute;
+	top: calc(50% - 10pt);
+	cursor: pointer;
+	background: #f2f2f2;
+	color: #666;
+	border-radius: 50%;
+	height: 20pt;
+	width: 20pt;
+	border: 2px solid #666;
+	padding: 5px;
+	user-select: none;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.4);
+}
+.toggleControl .sidebarToggle i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 12pt;
+}
+.toggleControl .sidebarToggle.active {
+	left: calc(220px - 10pt);
+}
+.toggleControl .sidebarToggle.deactive {
+    left: -5pt;
+    transform: rotate(180deg);
+}

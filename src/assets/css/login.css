@@ -1,0 +1,65 @@
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.login {
+    border-radius: 3px;
+}
+.loginStatic {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    width: 70%;
+    height: 60%;
+    min-height: 300px;
+    /*background: rgba(0, 0, 0, 0.4);*/
+    background: #666;
+    color: #f2f2f2;
+    /*position: relative;
+    margin: 10% auto 0;
+    display: flex;
+    align-items: center;
+    width: 80%;
+    height: 60%;
+    min-height: 300px;
+    background: #666;
+    color: #f2f2f2;*/
+}
+.loginStatic .loginContent {
+    padding: 10%;
+}
+.loginSliding {
+    position: absolute;
+    top: -5%;
+    left: 4%;
+    width: 50%;
+    height: 110%;
+    background: #fefefe;
+    /*box-shadow: 3px -2px 6px 0px rgba(0, 0, 0, 0.4);*/
+    box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.4);
+}
+.loginSliding .loginContent.reset {
+    display: none;
+}
+.loginSliding .loginContent.success {
+    display: none;
+}
+.loginSliding .loginContent.success div p {
+    color: #666;
+}
+.loginHeading {
+    font-size: 1.2rem;
+}
+.loginSliding .loginHeading {
+    color: #b10022;
+    text-transform: uppercase;
+}
+.loginCopy {
+    font-size: 0.7rem;
+}
+
+

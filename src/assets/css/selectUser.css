@@ -1,0 +1,183 @@
+.defaultUser {
+    position: relative;
+    height: 50px;
+}
+.defaultUser h1 {
+    color: #666;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin: 0;
+    left: 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+    user-select: none;
+}
+.defaultUserSelectedSection {
+    position: relative;
+    height: 70px;
+    user-select: none;
+    cursor: pointer;
+    border-bottom: 1px solid #666;
+}
+.defaultUserSelectedIcon {
+    user-select: none;
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+.defaultUserSelectedIcon i {
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease-in;
+    float: left;
+    border: 2px solid #b10022;
+    padding: 15px;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    background: #f2f2f2;
+    z-index: 2;
+    position: relative;
+}
+.defaultUserSelectedSection h3 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 65px;
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #b10022;
+}
+.defaultUserSelectedSection .infoalternative {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+.defaultUserSelectedSection .infoalternative ul {
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+}
+.defaultUserSelectedSection .infoalternative ul li {
+    float: left;
+    font-size: 0.8rem;
+    text-indent: 5px;
+    text-transform: uppercase;
+}
+.defaultUserSelectedSection:hover {
+    opacity: 0.7;
+}
+.searchUser {
+    position: relative;
+    height: 50px;
+}
+.searchUser h1 {
+    color: #666;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin: 0;
+    left: 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+    user-select: none;
+}
+.searchUser input {
+    width: 270px;
+    outline: none;
+    border-bottom: 1px solid #666;
+    background: #f2f2f2;
+    position: absolute;
+    top: 50%;
+    /*transform: translate(0, -50%);
+    margin: 0;
+    right: 0;*/
+    transform: translate(50%, -50%);
+    margin: 0;
+}
+.selectUser ul {
+    list-style: none;
+    padding: 15px;
+    margin: 0;
+}
+.user {
+    position: relative;
+    user-select: none;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%;
+    cursor: pointer;
+}
+.user i {
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease-in;
+    float: left;
+    margin-right: 15px;
+    border: 2px solid #666;
+    padding: 15px;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    background: #f2f2f2;
+    z-index: 2;
+    position: relative;
+    margin-top: 9px;
+}
+.user h3 {
+    line-height: 4;
+    z-index: 2;
+    white-space: nowrap;
+    margin-top: 0;
+    color: #b10022;
+    font-size: 0.8rem;
+    float: left;
+    position: absolute;
+    left: 65px;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 175px;
+    transition: all 0.4s ease-in;
+}
+.user .infoalternative {
+    position: relative;
+    width: 100%;
+    height: 59px;
+}
+.user .infoalternative ul {
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+}
+.user .infoalternative ul li {
+    float: left;
+    font-size: 0.8rem;
+    text-indent: 5px;
+    text-transform: uppercase;
+}
+.list-comma::before{
+    content: ', ';
+}
+.list-comma:first-child::before{
+    content: '';
+}
+.user:hover {
+    z-index: 10;
+    opacity: 0.7;
+}
+.user:hover i {
+    transform: rotate(360deg) scale(1.5, 1.5);
+    margin-right: 25px;
+    border: 2px solid #b10022;
+}
+.user:hover h3 {
+    transform: translate(15px, -50%);
+}

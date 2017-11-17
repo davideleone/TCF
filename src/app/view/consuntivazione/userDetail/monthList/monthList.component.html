@@ -1,0 +1,29 @@
+<section class="riassuntoAnni">
+    <div class="riassuntoAnniSection">
+        <h1 aria-hidden="true"><i class="fa fa-calendar" aria-hidden="true"></i> Anno</h1>
+        <div class="selectContainer">
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+            <input placeholder="Seleziona anno" class="elementList today" maxlength="4" pattern="[0-9]" type="text" readonly (click)="changeDate()">
+            <ul class="allList">
+                <li id="{{year}}" *ngFor="let year of years" (click)="changeYear(year)">{{year}}</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="riassuntoMesi">
+    <div class="riassuntoMesiSection" (click)=openMonths()>
+        <h1><i class="fa fa-calendar" aria-hidden="true"></i> Riepilogo mesi</h1>
+        <p></p>
+        <h1 class="toggleRight active"><i class="fa fa-arrow-down" aria-hidden="true"></i></h1>
+    </div>
+    <ul>
+        <li *ngFor="let month of months; let j = index" (click)="selectMonth(j+1)">
+            <div class="mese">
+                <i [ngClass]="monthStatus(j+1)" aria-hidden="true"></i> {{month}}
+            </div>
+            <div class="statoMese"> {{setStatus(j+1)}}
+            </div>
+        </li>       
+    </ul>
+</section>

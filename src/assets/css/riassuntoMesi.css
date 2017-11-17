@@ -1,0 +1,93 @@
+.riassuntoMesi {
+    position: relative;
+    height: auto;
+    user-select: none;
+}
+.riassuntoMesiSection {
+    height: 70px;
+    position: relative;
+    cursor: pointer;
+}
+.riassuntoMesiSection:hover {
+    opacity: 0.7;
+}
+.riassuntoMesiSection h1 {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+
+.riassuntoMesiSection p {
+    position: absolute;
+    margin: 0;
+    font-size: 0.8rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    right: 30px;
+}
+
+.riassuntoMesiSection .toggleRight {
+    right: 10px;
+    transition: all 0.4s ease-in;
+    cursor: pointer;
+    user-select: none;
+}
+.riassuntoMesiSection .toggleRight.active {
+    transform: rotate(-180deg);
+}
+.riassuntoMesiSection .toggleRight.deactive {
+    transform: rotate(0deg);
+}
+.riassuntoMesi ul {
+    font-size: 0.8rem;
+    list-style: none;
+    margin: 0;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+    padding: 15px 5px;
+}
+.riassuntoMesi ul li {
+    position: relative;
+    height: 35px;
+    user-select: none;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+}
+.riassuntoMesi ul li:hover {
+    border-bottom: 1px solid #f2f2f2;
+}
+.riassuntoMesi ul li .mese {
+    padding: 10px 15px;
+    width: 50%;
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 0;
+}
+.riassuntoMesi ul li .mese .fa-calendar-check-o {
+    color: green;
+}
+.riassuntoMesi ul li .mese .fa-calendar-minus-o {
+    color: orange;
+}
+.riassuntoMesi ul li .mese .fa-calendar-plus-o {
+    color: blue;
+}
+.riassuntoMesi ul li .mese .fa-calendar-o {
+    color: grey;
+}
+.riassuntoMesi ul li .statoMese {
+    padding: 10px 15px;
+    width: 50%;
+    text-align: right;
+    float: right;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    right: 0;
+}

@@ -1,0 +1,17 @@
+.rightSidebar.deactive {
+	width: calc(100% - 220px);
+}
+.rightSidebar.active {
+	width: calc(100% - 5pt);
+}
+.rightSidebar {
+	float: right;
+	position: absolute;
+	height: calc(100vh - 120px);
+	right: 0;
+	z-index: -2;
+	padding: 15px;
+	overflow-y: auto;
+	word-wrap: break-word;
+	color: #666;
+}

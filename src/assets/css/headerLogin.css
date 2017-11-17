@@ -1,0 +1,114 @@
+.headerLogin {
+	height: 70px;
+	padding: 15px;
+	background: #f2f2f2;
+	box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+}
+
+.sectionHeader {
+	width: 50%;
+	float: left;
+}
+
+.logoLoginImg {
+	height: 35px;
+	position: relative;
+}
+
+.logoLoginImg img {
+	height: 35px;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+	user-select: none;
+	cursor: default;
+}
+
+.logoLoginImg p {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+	left: 120px;
+	color: #666;
+	user-select: none;
+	cursor: default;
+}
+
+.logoLoginImg p i {
+	color: #b10022;
+}
+
+.account {
+	height: 35px;
+	position: relative;
+}
+
+.account div {
+	height: 35px;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+	user-select: none;
+	cursor: default;
+	right: 0;
+}
+
+.account div h1 {
+	margin: 0;
+	font-size: 1em;
+	color: #b10022;
+}
+
+.account div p {
+    margin: 0;
+    color: #666;
+    width: 200px;
+}
+
+.account div p i {
+	color: #b10022;
+	cursor: pointer;
+	float: right;
+}
+
+.account div p i:hover {
+	opacity: 0.7;
+}
+
+.account div .listMenu {
+	position: relative;
+}
+
+.account div .listMenu .arrow {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #666;
+	position: absolute;
+	top: -5px;
+	right: 50%;
+	transform: translate(50%, 0);
+}
+
+.account div .listMenu ul {
+	list-style: none;
+	margin: 15px 0 0 0px;
+	padding: 0;
+	background: #666;
+	color: #fff;
+	font-size: 0.8em;
+	border-radius: 3px;
+	box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.4);	
+}
+
+.account div .listMenu ul li {
+	padding: 15px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.account div .listMenu ul li:hover {
+	opacity: 0.7;
+}

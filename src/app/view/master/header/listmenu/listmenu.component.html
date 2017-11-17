@@ -1,0 +1,14 @@
+<div class="sectionHeader account" *ngIf="userLogged">
+    <div>
+        <h1>Benvenuto</h1>
+        <p>{{userLogged.nome}} {{userLogged.cognome}}<i class="fa fa-cogs listMenuControl" aria-hidden="true" (click) = "onMenuClick()"></i></p>
+        <div class="listMenu deactive" id = "listMenu"  style="display: none;" >
+            <div class="arrow" ></div>
+            <ul>
+                <li class="changepassword" (click)="navtoChangePwd()"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Modifica password</li>
+                <li class="changemail" (click)="navtoChangeEmail()"><i class="fa fa-envelope" aria-hidden="true"></i> Cambia e-mail</li>
+                <li class="logout" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</li>
+            </ul>
+        </div>
+    </div>
+</div>

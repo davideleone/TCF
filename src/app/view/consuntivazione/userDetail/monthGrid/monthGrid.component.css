@@ -1,0 +1,32 @@
+ :host /deep/ .ui-datatable .ui-datatable-thead > tr > th {
+    height: 30px;
+    font-size: 10px;
+    text-align: center;
+    word-wrap: normal;
+}
+:host /deep/ .ui-datatable .ui-datatable-data > tr > td {
+    height: 40px;
+    font-size: 10px;
+    text-align: center;
+}
+.inputDay {
+    width: 12px;
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: 0rem !important;
+    padding: 0rem 0rem !important;
+}
+:host /deep/ .fixed .ui-datatable-scrollable-view{
+    float: none!important;
+} 
+
+:host /deep/ .ui-datatable thead th {
+    word-wrap: break-word;
+    }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}

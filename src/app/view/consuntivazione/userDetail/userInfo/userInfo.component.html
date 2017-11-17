@@ -1,0 +1,9 @@
+<section class="userInfo">
+    <div class="userDetailSection">
+        <div class="userDetailIcon">
+            <i class="fa fa-user" aria-hidden="true"></i>
+        </div>
+        <h1>{{this.userSelected != null ? this.userSelected.nome : null }} {{this.userSelected != null ? this.userSelected.cognome : null }} </h1>
+        <button *ngIf="!this.isConsuntivatore" class="btn btnPrimary changeUserBtn" (click)="changeUser()">Cambia utente</button>
+    </div>
+</section>

@@ -1,0 +1,185 @@
+<section class="containerUtenti">
+
+    <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="30" placeholder="Filtra utenti">
+    </div>
+    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" selectionMode="single" [paginator]="true"
+        [rows]="8" [globalFilter]="gb" responsive="true">
+        <p-header>
+            <div>                
+                <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
+                <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
+            </div>
+        </p-header>
+        <p-column header="Azioni" visible="true" [style]="{'width':'7%'}">
+            <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
+                <span style="display: inline-block;">
+                        <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editRow(row, index)"></i>   
+                        <i class="fa fa-trash-o elimina" aria-hidden="true" (click)="deleteRow(row, index)"></i>
+                    </span>
+            </ng-template>
+        </p-column>
+        <p-column field="nome" header="Nome" [sortable]="true"></p-column>
+        <p-column field="cognome" header="Cognome" [sortable]="true"></p-column>
+        <p-column field="clienti" header="Clienti">
+            <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
+                <ng-container *ngIf="users[index].clienti != null">
+                    <span *ngFor="let cliente of row.clienti; let i=index">{{cliente.id_cliente}}{{i+1 < row.clienti.length ? ', ' : null}}</span>
+                </ng-container>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+
+    <p-dialog id="dialog" [(header)]="headerUtente" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
+         scrollable="true">
+        <form [formGroup]="userForm" (ngSubmit)="checkForm(userForm) && saveNew()" novalidate>
+            <div class="halfWidth noPaddingLeft">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <input type="text" id="cognome" formControlName="cognome" pInputText [(ngModel)]="newUser.cognome" >
+                            <label for="cognome" [ngStyle]="{'color': isValid('cognome')}">Cognome</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                                <input type="text" id="nome" formControlName="nome" pInputText [(ngModel)]="newUser.nome">
+                                <label for="nome" [ngStyle]="{'color': isValid('nome')}" >Nome</label>
+                           </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <input type="email" id="email" formControlName="email" type="text" pInputText [(ngModel)]="newUser.email">
+                            <label for="email" [ngStyle]="{'color': isValid('email')}">Email</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <p-calendar id="dataInizio" formControlName="dataInizio"  [(ngModel)]="newUser.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                            <label for="dataInizio" [ngStyle]="{'color': isValid('dataInizio')}">Data Inizio Validità (dd/mm/aaaa)</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <p-calendar id="dataFine" formControlName="dataFine" [minDate]="newUser.data_inizio_validita" [(ngModel)]="newUser.data_fine_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                            <label for="dataFine" [ngStyle]="{'color': isValid('dataFine')}">Data Fine Validità (dd/mm/aaaa)</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="halfWidth noPaddingRight">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <input id="username" formControlName="username"  type="text" pInputText [(ngModel)]="newUser._id">
+                            <label for="username" [ngStyle]="{'color': isValid('username')}">Username</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid" *ngIf="userIndex == null">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <input type="password" formControlName="password" id="password"  pInputText [(ngModel)]="newUser.password" >
+                            <label for="password" [ngStyle]="{'color': isValid('password')}">Password</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid" *ngIf="userIndex == null">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                                <input type="password" formControlName="confPassword" id="confPassword" pInputText [(ngModel)]="this.confirmPassword">
+                                <label for="confPassword" [ngStyle]="{'color': isValid('confPassword')}" >Conferma Password</label>
+                           </span>
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                            <label for="sede" [ngStyle]="{'color': isValid('sede')}" style="top: -.60em;font-size:12px;">Sede</label>
+                        </span>
+                        <p-dropdown id="sede" formControlName="sede" [options]="sediList" [style]="{'width':'100%'}" placeholder="Seleziona sede"
+                            [(ngModel)]="newUser.id_sede">
+                        </p-dropdown>
+
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="ui-float-label">
+                                <label for="admin" style="top: -.60em;font-size:12px; color:#898989">Admin</label>
+                            </span>
+                        <p-dropdown [ngModelOptions]="{standalone: true}" [options]="admins" [style]="{'width':'100%'}" placeholder="Amm. di Sistema" [(ngModel)]="newUser.isAdmin"></p-dropdown>
+                    </div>
+                </div>
+                <!-- <div class="ui-g ui-fluid">
+                    <p-multiSelect class="ui-g-12 ui-md-12" [options]="clientiComboBox" [(ngModel)]="selectedClients" [panelStyle]="{minWidth:'12em'}"
+                        defaultLabel="Seleziona cliente" maxSelectedLabels="10" scrollable="false">
+                    </p-multiSelect>
+                </div> -->
+            </div>
+            <div style="clear:both;">
+                <p-dataTable [value]="newUser.clienti" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
+                    scrollHeight="200px">
+                    <p-header>
+                        <div>
+                            <button style="float: left;" pButton type="button" icon="fa fa-plus" (click)="addCliente()" label="Aggiungi Cliente"></button>
+                            <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
+                        </div>
+                    </p-header>
+
+                    <p-column [style]="{'width':'6%'}">
+                        <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
+                            <button style="display: inline-block;" pButton type="button" icon="fa fa-trash" (click)="deleteClientRow(row, index)"></button>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="id_cliente" header="Cliente">
+                        <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
+                            <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
+                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.id_cliente"
+                                [style]="{'width':'100%'}" appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="id_profilo" header="Profilo">
+                        <ng-template let-index="rowIndex" let-row="rowData" pTemplate="body">
+                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="profili" [(ngModel)]="row.id_profilo" required="true" [autoWidth]="false"
+                                [style]="{'width':'100%'}" required="true" appendTo="body" placeholder="Seleziona profilo"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="data_inizio_validita_cliente" header="Data Inizio">
+                        <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
+                            <!-- [minDate]="minClientDate[index] | date:'dd/mm/yy'" [maxDate]="maxClientDate[index]"  -->
+                            <p-calendar id="dataInizioCliente" formControlName="dataInizioCliente" placeholder="Data Inizio (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_inizio_validita_cliente"
+                                dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="data_fine_validita_cliente" header="Data Fine">
+                        <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
+                            <p-calendar id="dataFineCliente" formControlName="dataFineCliente" [minDate]="row.data_inizio_validita_cliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
+                                dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+            </div>
+            <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                    <button type="submit" class="btn btnPrimary aggiungi">{{this.btnDialog}}</button>
+                </div>
+            </p-footer>
+        </form>
+    </p-dialog>
+
+    <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
+
+</section>

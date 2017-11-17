@@ -1,0 +1,1 @@
+export { IMetadata } from 'kaop-ts';

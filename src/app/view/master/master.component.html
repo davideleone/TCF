@@ -1,0 +1,10 @@
+<header [userLogged]="this.userLogged"></header>
+<subheader *ngIf="this.userLogged" [userLogged]="this.userLogged" [menuSelected]="this.menuSelected" [maxUserProfile] = "this.maxUserProfile"></subheader>
+<section class="generalIndexContainer" *ngIf="this.userLogged">
+  <toggle></toggle>
+  <leftsidebar (menuSelected)="selectMenu($event)" [maxUserProfile] = "this.maxUserProfile" [userLogged]="this.userLogged"></leftsidebar>
+</section>
+
+<rightsidebar>
+    <router-outlet></router-outlet>
+</rightsidebar>

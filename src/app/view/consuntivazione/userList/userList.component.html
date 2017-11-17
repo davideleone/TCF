@@ -1,0 +1,46 @@
+    
+<section class="selectUser">
+    <div class="defaultUser">
+            <h1>Utente loggato:</h1>
+    </div>
+    <div class="defaultUserSelectedSection selectUserBtn" (click)="selectUser(this.userLogged)">
+            <div class='defaultUserSelectedIcon'>
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </div>
+            <h3>{{this.userLogged.nome}} {{this.userLogged.cognome}}</h3>
+            <div class="infoalternative">
+                <ul>
+                    <ng-container *ngIf="userLogged.clienti != null">
+                    <li *ngFor="let c of userLogged.clienti; let i = index">
+                        <ng-container *ngIf="c != null && c.cliente != null">
+                            {{c.cliente.nome_cliente}}{{i+1 < userLogged.clienti.length ? ', ' : null}}
+                        </ng-container>                                                                                                                                              
+                    </li>
+                    </ng-container>
+                </ul>
+            </div>
+    </div>
+    <div class="searchUser">
+        <h1>Seleziona l'utente:</h1>
+        <input placeholder="Filtra per nome" id="search" class="input" [(ngModel)]="query">
+    </div>
+    <ul>
+        <li *ngFor="let user of users | search:'nome,cognome':query">
+            <div class='user selectUserBtn' (click)="selectUser(user)">
+                <i [ngClass]='chooseClass(user)' aria-hidden="true"></i>
+                <h3>{{user.nome}} {{user.cognome}}</h3> 
+                <div class="infoalternative">
+                    <ul>
+                        <ng-container *ngIf="user.clienti != null">
+                            <li *ngFor="let c of user.clienti; let i = index">
+                                    <ng-container *ngIf="c != null && c.cliente != null">
+                                        {{c.cliente.nome_cliente}}{{i+1 < user.clienti.length ? ', ' : null}}
+                                    </ng-container> 
+                            </li>
+                        </ng-container> 
+                    </ul>
+                </div>
+            </div>
+        </li>                
+    </ul>
+</section>

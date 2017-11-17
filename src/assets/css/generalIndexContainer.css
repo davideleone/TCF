@@ -1,0 +1,5 @@
+.generalIndexContainer {
+	width: 100%;
+	height: 100%;
+	/*position: relative;  commentato da Federico Bortolomiol per il problema dell'overlay con il menu gestione dell'utente*/
+}

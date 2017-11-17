@@ -1,0 +1,50 @@
+/*Inizio override primeng.css*/
+:host ::ng-deep .ui-calendar .ui-calendar-button {
+    background-color: #b10022 !important;
+    border: 1px solid #b10022;   
+}
+
+:host ::ng-deep .ui-calendar .ui-calendar-button:enabled:hover, .ui-calendar .ui-calendar-button:focus {
+    border-left: 0 none;
+    /*Modifica Davide Leone*/    
+    background-color: #7C021A;
+    border-color: #7C021A; 
+    /*Modifica Davide Leone*/
+} 
+
+:host ::ng-deep .ui-button .ui-button-text { 
+    /*Modifica Davide Leone*/ 
+     border: 1px solid #b10022;   
+     background-color: #b10022; 
+    /*Modifica Davide Leone*/
+}
+
+:host ::ng-deep .ui-button.ui-button-info.ui-state-default{
+    /*Modifica Davide Leone*/    
+    background-color: #b10022;
+    border: 1px solid #b10022;   
+    /*Modifica Davide Leone*/
+}
+
+
+
+:host ::ng-deep .ui-splitbutton.ui-button-info .ui-button.ui-state-default {
+    /*Modifica Davide Leone*/    
+    background-color: #b10022;
+    border-color: #b10022; 
+    /*Modifica Davide Leone*/
+}
+
+:host ::ng-deep .ui-fluid .ui-datepicker-buttonbar button {
+    /*Modifica Davide Leone*/    
+    background-color: #b10022;
+    border-color: #b10022; 
+    /*Modifica Davide Leone*/
+}
+
+:host ::ng-deep .ui-button{
+    /*Modifica Davide Leone*/    
+    background-color: #b10022;
+    border: 1px solid #b10022;   
+    /*Modifica Davide Leone*/
+}

@@ -1,0 +1,15 @@
+
+@import url("../../../assets/css/generalIndexContainer.css"); 
+
+.main-container {
+	margin-top: 70px;
+}
+
+.navbar-nav-svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+}
+
+
