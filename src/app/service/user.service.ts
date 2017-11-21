@@ -16,14 +16,14 @@ export class UserService {
   		.map(res=> res.json());
   }
 
-  //add user
-  @beforeMethod(LogAspect.log)
-  addUser(newUser){
-  	var headers = new Headers();
-  	headers.append('Content-Type', 'application/json');
-  	return this.http.post('/tcf/api/userController/CRUD', newUser, {headers:headers})
-  		.map(res => res.json());
-  }
+  // //add user
+  // @beforeMethod(LogAspect.log)
+  // addUser(newUser){
+  // 	var headers = new Headers();
+  // 	headers.append('Content-Type', 'application/json');
+  // 	return this.http.post('/tcf/api/userController/CRUD', newUser, {headers:headers})
+  // 		.map(res => res.json());
+  // }
 
   @beforeMethod(LogAspect.log)
   deleteUser(criteria){
@@ -34,10 +34,10 @@ export class UserService {
   }
 
   @beforeMethod(LogAspect.log)
-  updateUser(userParam, criteria){
+  insOrUpdUser(userParam){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
-  	return this.http.put('/tcf/api/userController/CRUD/?criteria='+JSON.stringify(criteria), userParam, {headers:headers})
+  	return this.http.post('/tcf/api/userController/insOrUpdUser/', userParam, {headers:headers})
   		.map(res => res.json());
   }
 

@@ -11,7 +11,7 @@ export class User{
 	clienti: [
 		{
 			cliente:  any;
-			id_profilo : string;
+			profilo : any;
 			data_inizio_validita_cliente : Date;
 			data_fine_validita_cliente : Date;
 		}

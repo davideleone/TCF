@@ -75,33 +75,32 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getInformations();
-  }
-
-  getInformations() {
-    this.userService.getUsersByManager(this.userLogged._id).subscribe(users => this.users = users);
+    this.userService.getUsersByManager(this.userLogged._id).subscribe(users => 
+      this.users = users);
+        
     this.domainService.getSedi().subscribe(sedi => {      
         this.sediList = sedi;   
     });
+
     this.clienteService.getClienti().subscribe(clienti => {
       this.clienti = clienti;
-      clienti.forEach(clienti => {
+      clienti.forEach(cliente => {
         /*Come value gli devo passare la stringa e non l'oggetto.
         * Se passassi l'oggetto andrebbe a confrontare la stringa (clientSelected)
         * con l'oggetto del value, ritornerebbe false e quindi non sarebbe preselezionato il cliente*/
-        this.clientiComboBox.push({ label: clienti.nome_cliente, value: clienti._id });
-        this.minClientDate.push(clienti.data_inizio_validita);
-        this.maxClientDate.push(clienti.data_fine_validita);
+        this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
+        this.minClientDate.push(cliente.data_inizio_validita);
+        this.maxClientDate.push(cliente.data_fine_validita);
       });
     });
     //this.userService.getUsers().subscribe(users => this.allSistemUser = users);
-  }
+  }  
 
   /*Gestione click MODIFICA UTENTE*/
   editRow(rowData, rowIndex) {
-    this.newUser = rowData;
-    this.newUser.data_inizio_validita = new Date(rowData.data_inizio_validita);
-    this.newUser.data_fine_validita = rowData.data_fine_validita != null ? new Date(rowData.data_fine_validita) : null;
+    this.newUser = JSON.parse(JSON.stringify(rowData));
+    this.newUser.data_inizio_validita = new Date(this.newUser.data_inizio_validita);
+    this.newUser.data_fine_validita = this.newUser.data_fine_validita != null ? new Date(this.newUser.data_fine_validita) : null;
     this.newUser.clienti.forEach((element, index) => {
       if (element != null) {
         element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
@@ -128,41 +127,50 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   saveNew() {
-    if (this.userIndex == null) { //aggiunta
-      this.userService.addUser(this.newUser).subscribe(event => {
-        this.users.push(this.newUser);
-        this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
-        this.changeFormatDate(this.users);
+
+    this.userService.insOrUpdUser(this.newUser).subscribe(
+      user => {
+        console.log(user);
+        this.users.push(user);        
+        this.changeFormatDate(user);
       });
-    }
-    else { //modifica
-      var selCriteria;
-      selCriteria = new Object();
-      selCriteria._id = this.newUser._id;
-      console.log(selCriteria);
-      this.userService.updateUser(this.newUser, selCriteria).subscribe(event => {
-        this.users[this.userIndex] = this.newUser;
-        this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
-        this.changeFormatDate(this.users);
-      });
-    }
+    // if (this.userIndex == null) { //aggiunta
+    //   this.userService.addUser(this.newUser).subscribe(event => {
+    //     this.users.push(this.newUser);
+    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
+    //     this.changeFormatDate(this.users);
+    //   });
+    // }
+    // else { //modifica
+    //   var selCriteria;
+    //   selCriteria = new Object();
+    //   selCriteria._id = this.newUser._id;
+    //   console.log(selCriteria);
+    //   this.userService.updateUser(this.newUser, selCriteria).subscribe(event => {
+    //     this.users[this.userIndex] = this.newUser;
+    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
+    //     this.changeFormatDate(this.users);
+    //   });
+    // }
     this.displayDialog = false;
   }
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/
   addCliente() {
     var newCliente: any = {};
-    newCliente.id_cliente = null;
-    newCliente.id_profilo = null;
+    newCliente.cliente = {};
+    newCliente.cliente._id = null;
+    newCliente.profilo = null;
     newCliente.data_inizio_validita_cliente = new Date();
     newCliente.data_fine_validita_cliente = null;
 
 
     if (this.newUser.clienti == null) {
-      this.newUser.clienti = [{ cliente: null, id_profilo: null, data_inizio_validita_cliente: new Date(), data_fine_validita_cliente: null }];
-    } else {
+      this.newUser.clienti = [{ cliente: new Object(), profilo: null, data_inizio_validita_cliente: new Date(), data_fine_validita_cliente: null }];
+    } else {      
       this.newUser.clienti.push(newCliente);
     }
+
     this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
     this.changeFormatDate(this.newUser);
   }
@@ -198,6 +206,9 @@ export class GestioneUtentiComponent implements OnInit {
       }
     });
   }
+
+
+  //VALIDATOR & UTILITY
 
   /*Funzione per modificare il formato della data ritornato dallo stringify(da ISO8061 a new Date)
   per la non compatibilità col calendar*/

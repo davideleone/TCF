@@ -64,7 +64,7 @@ export class ConsuntivazioneComponent implements OnInit {
 
     if (userLogged.clienti != null) {
       for (let i = 0; i < userLogged.clienti.length; i++)
-        profiles.push(userLogged.clienti[i].id_profilo);
+        profiles.push(userLogged.clienti[i].profilo);
 
       return (profiles.includes('AS') || userLogged.isAdmin) ? this.adminSystem : profiles.includes('AP') ? this.adminProject : this.reporter;
 

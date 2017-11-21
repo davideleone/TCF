@@ -75,7 +75,7 @@ export class UserListComponent implements OnChanges{
     var profiles = Array<string>();
     
     for(let i=0; i<userLogged.clienti.length; i++)
-        profiles.push(userLogged.clienti[i].id_profilo);
+        profiles.push(userLogged.clienti[i].profilo);
 
     return profiles.includes('AS') ? "AS" : profiles.includes('AP') ? "AP" : "CS";
 

@@ -259,7 +259,7 @@ export class MonthGridComponent implements OnChanges {
   private showDialogToAdd() {
     //Inizializzazione dei parametri di input
     this.lst_clienti = [];
-    
+    //TODO: gestire clienteuser.cliente.id == null
     this.clienti.forEach(clienteAll => {
       this.userSelected.clienti.forEach(clienteUser => {
         if (clienteAll._id == clienteUser.cliente._id)

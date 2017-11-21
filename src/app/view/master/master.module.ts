@@ -17,7 +17,6 @@ import { RightsideBarComponent } from './rightsidebar/rightsidebar.component';
 
 import { HomeComponent } from '../home/home.component';
 import { LoginComponent } from '../login/login.component';
-import { UsersComponent } from '../user/users.component';
 import { ConsuntivazioneModule } from '../consuntivazione/consuntivazione.module';
 import { GestioneUtentiModule } from '../amministrazione/gestioneUtenti/gestioneUtenti.module';
 import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gestioneAttivita.module';
@@ -35,7 +34,6 @@ import { ChangePwdComponent } from '../user/changepwd/changepwd.component';
     MasterComponent,
     HomeComponent,
     LoginComponent,
-    UsersComponent,
     ToggleComponent,
     LeftsideBarComponent,
     RightsideBarComponent,

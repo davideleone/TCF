@@ -62,7 +62,7 @@ export class MasterComponent {
 
 		if (userLogged.clienti != null && userLogged.clienti.length>0) {
 			for (let i = 0; i < userLogged.clienti.length; i++)
-				profiles.push(userLogged.clienti[i].id_profilo);
+				profiles.push(userLogged.clienti[i].profilo);
 
 			return profiles.includes('AS') ? this.adminSystem : profiles.includes('AP') ? this.adminProject : profiles.includes('CS') ? this.reporter : "";
 		} else {

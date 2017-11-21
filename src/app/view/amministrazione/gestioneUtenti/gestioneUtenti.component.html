@@ -25,7 +25,11 @@
         <p-column field="clienti" header="Clienti">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                 <ng-container *ngIf="users[index].clienti != null">
-                    <span *ngFor="let cliente of row.clienti; let i=index">{{cliente.id_cliente}}{{i+1 < row.clienti.length ? ', ' : null}}</span>
+                    <span *ngFor="let c of row.clienti; let i=index">
+                        <ng-container *ngIf="c != null && c.cliente != null">
+                            {{c.cliente.nome_cliente}}{{i+1 < row.clienti.length ? ', ' : null}}
+                        </ng-container>  
+                    </span>
                 </ng-container>
             </ng-template>
         </p-column>
@@ -143,16 +147,16 @@
                             <button style="display: inline-block;" pButton type="button" icon="fa fa-trash" (click)="deleteClientRow(row, index)"></button>
                         </ng-template>
                     </p-column>
-                    <p-column field="id_cliente" header="Cliente">
+                    <p-column field="cliente._id" header="Cliente">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
-                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.id_cliente"
+                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id"
                                 [style]="{'width':'100%'}" appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
                         </ng-template>
                     </p-column>
-                    <p-column field="id_profilo" header="Profilo">
+                    <p-column field="profilo" header="Profilo">
                         <ng-template let-index="rowIndex" let-row="rowData" pTemplate="body">
-                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="profili" [(ngModel)]="row.id_profilo" required="true" [autoWidth]="false"
+                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="profili" [(ngModel)]="row.profilo" required="true" [autoWidth]="false"
                                 [style]="{'width':'100%'}" required="true" appendTo="body" placeholder="Seleziona profilo"></p-dropdown>
                         </ng-template>
                     </p-column>
