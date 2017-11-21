@@ -130,28 +130,14 @@ export class GestioneUtentiComponent implements OnInit {
 
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
-        console.log(user);
-        this.users.push(user);        
-        this.changeFormatDate(user);
-      });
-    // if (this.userIndex == null) { //aggiunta
-    //   this.userService.addUser(this.newUser).subscribe(event => {
-    //     this.users.push(this.newUser);
-    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
-    //     this.changeFormatDate(this.users);
-    //   });
-    // }
-    // else { //modifica
-    //   var selCriteria;
-    //   selCriteria = new Object();
-    //   selCriteria._id = this.newUser._id;
-    //   console.log(selCriteria);
-    //   this.userService.updateUser(this.newUser, selCriteria).subscribe(event => {
-    //     this.users[this.userIndex] = this.newUser;
-    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
-    //     this.changeFormatDate(this.users);
-    //   });
-    // }
+        if (this.userIndex == null) { //aggiunta
+          this.users.push(user);
+        }else{
+          this.users[this.userIndex] = user;
+        }
+        this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
+        this.changeFormatDate(this.users);
+      });   
     this.displayDialog = false;
   }
 

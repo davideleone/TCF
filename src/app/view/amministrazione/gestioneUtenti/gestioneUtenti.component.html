@@ -163,13 +163,13 @@
                     <p-column field="data_inizio_validita_cliente" header="Data Inizio">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <!-- [minDate]="minClientDate[index] | date:'dd/mm/yy'" [maxDate]="maxClientDate[index]"  -->
-                            <p-calendar id="dataInizioCliente" formControlName="dataInizioCliente" placeholder="Data Inizio (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_inizio_validita_cliente"
+                            <p-calendar formControlName="dataInizioCliente" placeholder="Data Inizio (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_inizio_validita_cliente"
                                 dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
                         </ng-template>
                     </p-column>
                     <p-column field="data_fine_validita_cliente" header="Data Fine">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-                            <p-calendar id="dataFineCliente" formControlName="dataFineCliente" [minDate]="row.data_inizio_validita_cliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
+                            <p-calendar formControlName="dataFineCliente" [minDate]="row.data_inizio_validita_cliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
                                 dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
                         </ng-template>
                     </p-column>
