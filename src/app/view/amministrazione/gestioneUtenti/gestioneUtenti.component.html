@@ -150,13 +150,13 @@
                     <p-column field="cliente._id" header="Cliente">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
-                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id"
+                            <p-dropdown formControlName="idCliente" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id"
                                 [style]="{'width':'100%'}" appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
                         </ng-template>
                     </p-column>
                     <p-column field="profilo" header="Profilo">
                         <ng-template let-index="rowIndex" let-row="rowData" pTemplate="body">
-                            <p-dropdown [ngModelOptions]="{standalone: true}" [options]="profili" [(ngModel)]="row.profilo" required="true" [autoWidth]="false"
+                            <p-dropdown formControlName="profiloCliente" [options]="profili" [(ngModel)]="row.profilo" required="true" [autoWidth]="false"
                                 [style]="{'width':'100%'}" required="true" appendTo="body" placeholder="Seleziona profilo"></p-dropdown>
                         </ng-template>
                     </p-column>

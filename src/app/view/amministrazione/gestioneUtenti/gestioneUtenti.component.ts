@@ -53,7 +53,7 @@ export class GestioneUtentiComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef) {
+    private changeDetectionRef: ChangeDetectorRef) {
     this.authenticationService.user$.subscribe(user => { this.userLogged = user });
     this.allSistemUser = [];
     this.users = null;
@@ -68,9 +68,11 @@ export class GestioneUtentiComponent implements OnInit {
       username: new FormControl('', [Validators.required/*, this.usernameValidator*/]),
       password: new FormControl('', Validators.required),
       confPassword: new FormControl('', [Validators.required, this.matchPasswordValidator]),
-      dataInizioCliente: new FormControl('', Validators.required),
+      dataInizioCliente: new FormControl('', /*Validators.required*/this.controlClientStartDateValidator(this.newUser)/*Validators.required*/),
       dataFineCliente: new FormControl('', this.controlClientDateValidator),
-      sede: new FormControl('', Validators.required)
+      sede: new FormControl('', Validators.required),
+      idCliente: new FormControl('', this.controlClienteRequired(this.newUser)),
+      profiloCliente: new FormControl('', this.controlProfiloClienteRequired(this.newUser))
     });
   }
 
@@ -130,35 +132,54 @@ export class GestioneUtentiComponent implements OnInit {
 
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
-        if (this.userIndex == null) { //aggiunta
-          this.users.push(user);
-        }else{
-          this.users[this.userIndex] = user;
-        }
-        this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
-        this.changeFormatDate(this.users);
-      });   
+        console.log(user);
+        this.users.push(user);
+        this.changeFormatDate(user);
+      });
+    // if (this.userIndex == null) { //aggiunta
+    //   this.userService.addUser(this.newUser).subscribe(event => {
+    //     this.users.push(this.newUser);
+    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
+    //     this.changeFormatDate(this.users);
+    //   });
+    // }
+    // else { //modifica
+    //   var selCriteria;
+    //   selCriteria = new Object();
+    //   selCriteria._id = this.newUser._id;
+    //   console.log(selCriteria);
+    //   this.userService.updateUser(this.newUser, selCriteria).subscribe(event => {
+    //     this.users[this.userIndex] = this.newUser;
+    //     this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
+    //     this.changeFormatDate(this.users);
+    //   });
+    // }
     this.displayDialog = false;
   }
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/
   addCliente() {
     var newCliente: any = {};
+    var clientiCopy;
     newCliente.cliente = {};
     newCliente.cliente._id = null;
     newCliente.profilo = null;
     newCliente.data_inizio_validita_cliente = new Date();
     newCliente.data_fine_validita_cliente = null;
 
-
     if (this.newUser.clienti == null) {
-      this.newUser.clienti = [{ cliente: new Object(), profilo: null, data_inizio_validita_cliente: new Date(), data_fine_validita_cliente: null }];
-    } else {      
-      this.newUser.clienti.push(newCliente);
+      clientiCopy = [{ cliente: new Object(), profilo: null, data_inizio_validita_cliente: new Date(), data_fine_validita_cliente: null }];
+    } else {
+      clientiCopy = JSON.parse(JSON.stringify(this.newUser.clienti));   //deepcopy
+      clientiCopy.push(newCliente);
     }
+    
+    this.newUser.clienti = clientiCopy; 
 
-    this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
+    //usato per intercettare i cambiamenti dei componenti
+    // altrimenti andrebbe in ExpressionChangedAfterItHasBeenCheckedError
     this.changeFormatDate(this.newUser);
+    this.changeDetectionRef.detectChanges();
   }
 
   //DELETE ROW
@@ -234,6 +255,36 @@ export class GestioneUtentiComponent implements OnInit {
     return null;
   }
 
+  private controlClientStartDateValidator = (user:User) => {
+    return (control : FormControl) => {
+      let dataInizioCliente = control.value;
+      if (this.newUser != null  && this.newUser.clienti != null && dataInizioCliente == null) {
+        return { controlClientStartDate: true }
+      }
+      return null;
+    };
+  }
+
+  private controlClienteRequired = (user:User) => {
+    return (control : FormControl) => {
+      let idCliente = control.value;
+      if (this.newUser != null  && this.newUser.clienti != null && idCliente == null) {
+        return { controlCliente: true }
+      }
+      return null;
+    };
+  }
+
+  private controlProfiloClienteRequired = (user:User) => {
+    return (control : FormControl) => {
+      let profiloCliente = control.value;
+      if (this.newUser != null  && this.newUser.clienti != null && profiloCliente == null) {
+        return { controlprofiloCliente: true }
+      }
+      return null;
+    };
+  }
+
   /*private usernameValidator(control: FormControl) {
     let username = control.value;
     if(this.allSistemUser != null)
@@ -255,6 +306,10 @@ export class GestioneUtentiComponent implements OnInit {
       return "#a94442";
     else
       return "#898989"; //#d6d6d6
+  }
+
+  private isModifica(){
+    return this.userIndex != null;
   }
 }
 
