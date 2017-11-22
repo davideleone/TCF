@@ -23,10 +23,10 @@
 :host /deep/ .ui-datatable thead th {
     word-wrap: break-word;
     }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+
+:host /deep/ input[type=number] {
     -webkit-appearance: none;
-    -moz-appearance: textfield;
+    -moz-appearance:textfield;
     appearance: none;
     margin: 0; 
 }
