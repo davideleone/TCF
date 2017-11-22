@@ -67,3 +67,26 @@
 :host ::ng-deep div.ui-datatable.ui-widget.ui-datatable-reflow.ui-datatable-scrollable {
     font-size: 14px;
 }
+
+
+:host ::ng-deep .ui-widget-header .ui-button, .ui-widget-content .ui-button, .ui-widget.ui-button, .ui-button {
+    border: 1px solid #b10022;
+    color: #FFFFFF;
+    background: #b10022;
+    transition: background-color .2s;
+}
+
+:host ::ng-deep .ui-button {
+    border: 1px solid #b10022 !important; 
+    color: #FFFFFF !important;
+    background: #b10022 !important;
+    transition: background-color .2s !important;
+
+}
+:host ::ng-deep .ui-calendar button  {
+    border: 1px solid #b10022 !important; 
+    color: #FFFFFF !important;
+    background: #b10022 !important;
+    transition: background-color .2s !important;
+
+}

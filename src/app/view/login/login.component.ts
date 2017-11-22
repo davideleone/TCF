@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([this.returnUrl]);
             },
             error => {
-                alert("Errore di Login: " ||  error);
+                alert("Errore di Login: " +  error);
                 this.loading = false;
             });
 
