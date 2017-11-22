@@ -48,3 +48,22 @@
     border: 1px solid #b10022;   
     /*Modifica Davide Leone*/
 }
+
+:host ::ng-deep .ui-paginator .ui-paginator-page.ui-state-active {
+    background: #b10022;
+    color: #ffffff;
+    border-color: #b10022;
+}
+
+:host ::ng-deep .ui-paginator .ui-paginator-page, .ui-paginator .ui-paginator-pages, .ui-paginator .ui-paginator-next, .ui-paginator .ui-paginator-last, .ui-paginator .ui-paginator-first, .ui-paginator .ui-paginator-prev, .ui-paginator .ui-paginator-current {
+    display: inline-block;
+    padding: .125em .375em;
+    margin-left: .063em;
+    margin-right: .063em;
+    text-decoration: none;
+}
+
+
+:host ::ng-deep div.ui-datatable.ui-widget.ui-datatable-reflow.ui-datatable-scrollable {
+    font-size: 14px;
+}

@@ -42,7 +42,7 @@ export class GestioneUtentiComponent implements OnInit {
   endClientDate: Date[] = [];
   minClientDate: Date[] = [];
   maxClientDate: Date[] = [];
-  userIndex;
+  userIndex = null;
   userForm: FormGroup;
   confirmPassword: string;
   formSubmitted: boolean = false;
@@ -66,8 +66,8 @@ export class GestioneUtentiComponent implements OnInit {
       dataInizio: new FormControl('', Validators.required),
       dataFine: new FormControl('', this.controlDateValidator),
       username: new FormControl('', [Validators.required/*, this.usernameValidator*/]),
-      password: new FormControl('', Validators.required),
-      confPassword: new FormControl('', [Validators.required, this.matchPasswordValidator]),
+      password: new FormControl('', this.controlPasswordRequired(this.userIndex)),
+      confPassword: new FormControl('', [this.controlPasswordRequired(this.userIndex), this.matchPasswordValidator]),
       dataInizioCliente: new FormControl('', /*Validators.required*/this.controlClientStartDateValidator(this.newUser)/*Validators.required*/),
       dataFineCliente: new FormControl('', this.controlClientDateValidator),
       sede: new FormControl('', Validators.required),
@@ -129,7 +129,7 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   saveNew() {
-
+    //alert("save");
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
         if (this.userIndex == null) { //aggiunta
@@ -239,7 +239,7 @@ export class GestioneUtentiComponent implements OnInit {
   private controlClientStartDateValidator = (user: User) => {
     return (control: FormControl) => {
       let dataInizioCliente = control.value;
-      if (this.newUser != null && this.newUser.clienti != null && dataInizioCliente == null) {
+      if (user != null && user.clienti != null && dataInizioCliente == null) {
         return { controlClientStartDate: true }
       }
       return null;
@@ -249,17 +249,34 @@ export class GestioneUtentiComponent implements OnInit {
   private controlClienteRequired = (user: User) => {
     return (control: FormControl) => {
       let idCliente = control.value;
-      if (this.newUser != null && this.newUser.clienti != null && idCliente == null) {
+      if (user != null && user.clienti != null && idCliente == null) {
         return { controlCliente: true }
       }
       return null;
     };
   }
 
+  private controlPasswordRequired(userIndex) {
+    return (control: FormControl) => {
+      if (userIndex != null) { //sono in modifica e non ho i campi password
+        return { controlPassword: true };
+      } else {
+        let confPassword = control.value;
+        if (confPassword != null && confPassword.trim() != '') {
+          return { controlPassword: true };
+        } else {
+          return null;
+        }
+      }
+    }
+  }
+
+
+
   private controlProfiloClienteRequired = (user: User) => {
     return (control: FormControl) => {
       let profiloCliente = control.value;
-      if (this.newUser != null && this.newUser.clienti != null && profiloCliente == null) {
+      if (user != null && user.clienti != null && profiloCliente == null) {
         return { controlprofiloCliente: true }
       }
       return null;
@@ -278,6 +295,7 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
   private checkForm(form) {
+    //alert(form.valid);
     this.formSubmitted = true;
     return form.valid;
   }
