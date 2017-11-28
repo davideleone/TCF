@@ -3,5 +3,5 @@
 @import url("assets/css/librerie/font-awesome.css"); 
 @import url("assets/css/_font.css"); 
 @import url("assets/css/_common.css"); 
-@import url("../node_modules/primeng/resources/themes/omega/theme.css");
 @import url("../node_modules/primeng/resources/primeng.css");
+@import url("assets/theme/ftc/theme.css"); 

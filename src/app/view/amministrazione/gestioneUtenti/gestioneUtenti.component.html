@@ -67,7 +67,7 @@
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-md-12">
                         <span class="ui-float-label">
-                            <p-calendar id="dataInizio" formControlName="dataInizio" class="btnPrimary" [(ngModel)]="newUser.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                            <p-calendar id="dataInizio" formControlName="dataInizio" styleClass="btnPrimary" [(ngModel)]="newUser.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
                             <label for="dataInizio" [ngStyle]="{'color': isValid('dataInizio')}">Data Inizio Validità (dd/mm/aaaa)</label>
                         </span>
                     </div>
@@ -75,7 +75,7 @@
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-md-12">
                         <span class="ui-float-label">
-                            <p-calendar id="dataFine" formControlName="dataFine"   [styleClass]="'btnPrimary'" [minDate]="newUser.data_inizio_validita" [(ngModel)]="newUser.data_fine_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                            <p-calendar id="dataFine" formControlName="dataFine"   [minDate]="newUser.data_inizio_validita" [(ngModel)]="newUser.data_fine_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
                             <label for="dataFine" [ngStyle]="{'color': isValid('dataFine')}">Data Fine Validità (dd/mm/aaaa)</label>
                         </span>
                     </div>

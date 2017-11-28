@@ -1,0 +1,6 @@
+
+::host ::ng-deep button[type="button"]{ 
+    background: #b10022;
+    color: #ffffff;
+    border-color: #b10022;
+}
