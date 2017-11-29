@@ -372,8 +372,8 @@ export class MonthGridComponent implements OnChanges {
     if (consuntiviToAdd.length > 0) {
       this.consuntivazioneService
         .addUpdateConsuntivi(consuntiviToAdd)
-        .subscribe(msg => {
-          alert(msg.body);
+        .subscribe(obj => {
+          alert(obj.msg);
         },
         err => alert(err)
         );
@@ -463,7 +463,7 @@ export class MonthGridComponent implements OnChanges {
         this.lst_attivita = [];
         this.attivitaService.getAttivitaByCliente(selCriteria).subscribe(attivita => {
           attivita.forEach(element => {
-            this.lst_attivita.push({ label: element.nome_attivita, value: element.codice_attivita });
+            this.lst_attivita.push({ label: element.nome_attivita, value: element._id });
           });
         })
         break;
