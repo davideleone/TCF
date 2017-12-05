@@ -117,6 +117,11 @@ export class GestioneAttivitaComponent implements OnInit {
         this.newActivity.nome_macro_area = this.lst_macro_aree.find(x => x.value == this.newActivity.id_macro_area).label;
         this.newActivity.nome_commessa_cliente = this.lst_commesse_clienti.find(x => x.value == this.newActivity.id_commessa_cliente).label;
         this.newActivity.nome_stato = this.lst_stati.find(x => x.value == this.newActivity.stato_attivita).label;
+        
+        if(this.newActivity.budget_euro==null)
+            this.newActivity.budget_euro = 0;
+        if(this.newActivity.budget_gg==null)
+            this.newActivity.budget_gg = 0;
 
         if (this.activityIndex == null) { //aggiunta
             this.attivitaService.addAttivita(this.newActivity).subscribe(event => {

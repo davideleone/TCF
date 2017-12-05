@@ -30,3 +30,11 @@
     appearance: none;
     margin: 0; 
 }
+
+/*per firefox > 57*/
+:host /deep/ input[type="number"]{
+    -webkit-appearance: none;
+    -moz-appearance:textfield;
+    appearance: none;
+    margin: 0; 
+}
