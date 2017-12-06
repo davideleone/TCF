@@ -570,7 +570,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   font-weight: 400;
   src: url("fonts/roboto-v15-latin-regular.eot");
   /* IE9 Compat Modes */
-  src: local("Roboto"), local("Roboto-Regular"), url("fonts/roboto-v15-latin-regular.eot?#iefix") format("embedded-opentype"), url("fonts/roboto-v15-latin-regular.woff2") format("woff2"), url("fonts/roboto-v15-latin-regular.woff") format("woff"), url("fonts/roboto-v15-latin-regular.ttf") format("truetype"), url("fonts/roboto-v15-latin-regular.svg#Roboto") format("svg");
+  src: local("Roboto"), lui-ocal("Roboto-Regular"), url("fonts/roboto-v15-latin-regular.eot?#iefix") format("embedded-opentype"), url("fonts/roboto-v15-latin-regular.woff2") format("woff2"), url("fonts/roboto-v15-latin-regular.woff") format("woff"), url("fonts/roboto-v15-latin-regular.ttf") format("truetype"), url("fonts/roboto-v15-latin-regular.svg#Roboto") format("svg");
   /* Legacy iOS */ }
 .ui-widget-header {
   background: #f6f7f9 0 0 repeat-x;
@@ -714,6 +714,14 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 .ui-progressbar .ui-progressbar-label {
   color: #222222; }
 
+.ui-button-text{
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  min-width: 120px;
+  padding: 0.5rem 1.5rem !important;
+  font-family: 'Raleway-Regular', sans-serif;
+}
+
 .ui-widget-header .ui-button,
 .ui-widget-content .ui-button,
 .ui-widget.ui-button,
@@ -721,6 +729,7 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   border: 1px solid #b10022;
   color: #FFFFFF;
   background: #b10022;
+  border-radius: 3px;
   -webkit-transition: background-color .2s;
   -moz-transition: background-color .2s;
   transition: background-color .2s; }
