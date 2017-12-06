@@ -4,7 +4,7 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra utenti">
     </div>
-    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" selectionMode="single" [paginator]="true"
+    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true"  [paginator]="true"
         [rows]="8" [globalFilter]="gb" responsive="true">
         <p-header>
             <div>
@@ -12,7 +12,7 @@
                 <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
             </div>
         </p-header>
-        <p-column header="Azioni" visible="true" [style]="{'width':'7%'}">
+        <p-column header="Azioni" visible="true" styleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
                         <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editRow(row, index)"></i>   
@@ -67,7 +67,7 @@
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-md-12">
                         <span class="ui-float-label">
-                            <p-calendar id="dataInizio" formControlName="dataInizio" styleClass="btnPrimary" [(ngModel)]="newUser.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                            <p-calendar id="dataInizio" formControlName="dataInizio" [(ngModel)]="newUser.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
                             <label for="dataInizio" [ngStyle]="{'color': isValid('dataInizio')}">Data Inizio Validità (dd/mm/aaaa)</label>
                         </span>
                     </div>
@@ -138,7 +138,7 @@
                     scrollHeight="200px">
                     <p-header>
                         <div>
-                            <button style="float: left;" pButton type="button" class="btnPrimary" icon="fa fa-plus" (click)="addCliente()" label="Aggiungi Cliente"></button>
+                            <button style="float: left;" pButton type="button" icon="fa fa-plus" (click)="addCliente()" label="Aggiungi Cliente"></button>
                             <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
                         </div>
                     </p-header>
@@ -179,8 +179,9 @@
                 </p-dataTable>
             </div>
             <p-footer>
-                <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                    <button type="submit" class="btn btnPrimary">{{this.btnDialog}}</button>
+                <div class="ui-dialog-buttonpane">
+                    <button pButton type="submit" label="Salva"></button>
+                    <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
                 </div>
             </p-footer>
         </form>

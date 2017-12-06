@@ -5,7 +5,7 @@ import { FormsModule }   from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { UserDetailComponent } from './userDetail.component';
-import { UserInfoComponent } from './userInfo/userInfo.component';
+import { UserInfoModule } from './userInfo/userInfo.module';
 import { MonthGridModule} from './monthGrid/monthGrid.module';
 import { MonthListComponent } from './monthList/monthList.component';
 
@@ -16,7 +16,7 @@ import { MonthListComponent } from './monthList/monthList.component';
 @NgModule({
   declarations: [
     UserDetailComponent,
-    UserInfoComponent,
+
     MonthListComponent,
 
   ],
@@ -26,7 +26,8 @@ import { MonthListComponent } from './monthList/monthList.component';
     //AppRoutingModule,
     NgbModule.forRoot(),
     FormsModule,
-    MonthGridModule
+    MonthGridModule,
+    UserInfoModule
   ],
   providers: [
     //CustomHttpProvider,

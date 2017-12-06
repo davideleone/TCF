@@ -12,7 +12,7 @@
                 <button style="float: left;" type="button" pButton (click)=addNewActivity() label="Aggiungi Attivita"></button>
             </div>
         </p-header>
-        <p-column header="Azioni" visible="true" [style]="{'width':'7%'}">
+        <p-column header="Azioni" visible="true" StyleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
                     <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editRow(row, index)"></i>   
@@ -172,8 +172,9 @@
                 </div>
             </div>
             <p-footer>
-                <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                    <button type="submit" class="btn btnPrimary aggiungi">{{this.btnDialog}}</button>
+                <div class="ui-dialog-buttonpane">
+                    <button pButton type="submit" label="Salva"></button>
+                    <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
                 </div>
             </p-footer>
         </form>

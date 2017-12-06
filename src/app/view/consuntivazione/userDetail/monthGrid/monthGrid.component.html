@@ -7,7 +7,7 @@
             <button style="float: left;" pButton (click)=showDialogToAdd() label="Aggiungi Attività"></button>
         </div>
     </p-header>
-    <p-column field="isEditable" header="" frozen="true" [editable]="isEditable" [style]="{'width':'30px','overflow':'visible'}">
+    <p-column field="isEditable" header="Azioni" frozen="true" [editable]="isEditable" styleClass="editable_col">
         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
             <span *ngIf="!row.isEditable">
                 <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="edit(row,index)"></i>
@@ -113,8 +113,8 @@
         </div>
         <p-footer>
             <div class="ui-dialog-buttonpane">
-                <button pButton type="submit" class="btn btnPrimary" label="Salva"></button>
-                <button pButton type="button" class="btn btnPrimary" (click)="abortNew()" label="Annulla"></button>
+                <button pButton type="submit" label="Salva"></button>
+                <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
             </div>
         </p-footer>
     </form>

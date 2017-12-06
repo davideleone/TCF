@@ -25,8 +25,8 @@ import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gest
 import { SubHeaderModule } from './subheader/subheader.module'
 import { AuthenticationService } from '../../service/authentication.service';
 
-import { ChangeEmailComponent } from '../user/changeemail/changeemail.component';
-import { ChangePwdComponent } from '../user/changepwd/changepwd.component';
+import { ChangeEmailModule } from '../user/changeemail/changeemail.module';
+import { ChangePwdModule } from '../user/changepwd/changepwd.module';
 import { InputTextModule } from 'primeng/primeng';
 
 @NgModule({
@@ -35,9 +35,7 @@ import { InputTextModule } from 'primeng/primeng';
     HomeComponent,
     ToggleComponent,
     LeftsideBarComponent,
-    RightsideBarComponent,
-    ChangeEmailComponent,
-    ChangePwdComponent
+    RightsideBarComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +49,8 @@ import { InputTextModule } from 'primeng/primeng';
     LoginModule,
     SubHeaderModule,
     InputTextModule,
+    ChangeEmailModule,
+    ChangePwdModule,
     NgbModule.forRoot()
   ],
   providers: [

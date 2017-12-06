@@ -29,7 +29,7 @@ export class GestioneAttivitaComponent implements OnInit {
     newActivity: Attivita;
     commessaCliente: CommessaCliente[];
     headerAttivita: string;
-    btnDialog: string;
+    //btnDialog: string;
     activityIndex: any;
     displayDialog: boolean;
     activityForm: FormGroup;
@@ -97,7 +97,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.newActivity = new Attivita();
         this.formSubmitted = false;
         this.headerAttivita = "Aggiungi Attivita";
-        this.btnDialog = "Aggiungi";
+        //this.btnDialog = "Aggiungi";
         this.activityIndex = null;
         this.displayDialog = true;
         this.activityForm.reset();
@@ -201,7 +201,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.newActivity.data_inizio_validita = new Date(rowData.data_inizio_validita);
         this.newActivity.data_fine_validita = rowData.data_fine_validita != null ? new Date(rowData.data_fine_validita) : null;
         this.headerAttivita = "Modifica attività - " + this.newActivity.nome_attivita;
-        this.btnDialog = "Modifica";
+        //this.btnDialog = "Modifica";
         this.activityIndex = rowIndex;
         this.displayDialog = true;
         this.formSubmitted = false;
@@ -266,4 +266,8 @@ export class GestioneAttivitaComponent implements OnInit {
     reset(dt: DataTable){
         dt.reset();
     }
+
+    private abortNew() {
+        this.displayDialog = false;
+      }
 }
