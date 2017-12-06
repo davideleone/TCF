@@ -266,3 +266,24 @@ input::-ms-clear {
 .rightGeneric {
     float: right;
 }
+
+.modifica:hover{
+    cursor: pointer;
+}
+
+.elimina:hover{
+    cursor: pointer;
+}
+
+.conferma:hover{
+    cursor: pointer;
+}
+
+.annulla:hover{
+    cursor: pointer;
+}
+
+.editable_col{
+    width: 50px;
+    overflow: visible;
+}

@@ -35,7 +35,7 @@ export class GestioneUtentiComponent implements OnInit {
   headerUtente: string;
   displayDialog: boolean = false;
   datePipe = new DatePipe('en-US');
-  btnDialog: any;
+  //btnDialog: any;
   startUserDate: string;
   endUserDate: string;
   startClientDate: Date[] = [];
@@ -121,7 +121,7 @@ export class GestioneUtentiComponent implements OnInit {
     });
   
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
-    this.btnDialog = "Modifica";
+    //this.btnDialog = "Modifica";
     this.userIndex = rowIndex;
     this.displayDialog = true;
   }
@@ -134,7 +134,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.newUser.data_inizio_validita = new Date();
     this.formSubmitted = false;
     this.headerUtente = "Aggiungi Utente";
-    this.btnDialog = "Aggiungi";
+    //this.btnDialog = "Aggiungi";
     this.userIndex = null;
     this.displayDialog = true;
     this.userForm.reset();
@@ -281,6 +281,7 @@ export class GestioneUtentiComponent implements OnInit {
     return this.userIndex != null;
   }
 
+<<<<<<< HEAD
   private editCliente(rowData, indexData) {
     this.CloseAllEditable();
     rowData.isEditable = true;
@@ -324,6 +325,12 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
 
+=======
+  private abortNew() {
+    this.displayDialog = false;
+  }
+
+>>>>>>> 6745e0aee3c6b745ba4e15e8e64e0cf20a29c60c
 }
 
 

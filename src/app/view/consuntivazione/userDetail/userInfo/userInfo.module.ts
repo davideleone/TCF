@@ -4,27 +4,24 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './login.component';
-import { InputTextModule, ButtonModule } from 'primeng/primeng';
-
+import { UserInfoComponent } from "./userInfo.component"
+import { ButtonModule } from 'primeng/primeng';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     NgbModule.forRoot(),
     FormsModule,
-    InputTextModule,
-    ButtonModule,
+    ButtonModule, 
     ReactiveFormsModule,
   ],
-  providers: [],
-  exports: [LoginComponent],
-  bootstrap: [LoginComponent]
+  exports: [UserInfoComponent],
+  bootstrap: [UserInfoComponent]
 })
-export class LoginModule { }
+export class UserInfoModule { }
