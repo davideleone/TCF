@@ -46,6 +46,7 @@ export class GestioneUtentiComponent implements OnInit {
   userForm: FormGroup;
   confirmPassword: string;
   formSubmitted: boolean = false;
+  clientiObject : any;
 
 
   constructor(private userService: UserService,
@@ -60,6 +61,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.users = null;
     this.sedi = null;
     this.newUser = new User();
+    this.clientiObject = new Array<Object>();
     this.userForm = this.formBuilder.group({
       cognome: new FormControl('', Validators.required),
       nome: new FormControl('', Validators.required),
@@ -99,6 +101,7 @@ export class GestioneUtentiComponent implements OnInit {
     //this.userService.getUsers().subscribe(users => this.allSistemUser = users);
   }
 
+
   /*Gestione click MODIFICA UTENTE*/
   editRow(rowData, rowIndex) {
     this.abilitaValidazioni();
@@ -110,6 +113,11 @@ export class GestioneUtentiComponent implements OnInit {
         element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
         element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
       }
+    });
+
+    this.clientiObject = this.newUser.clienti;
+    this.clientiObject.forEach(element => {
+      element.isEditable = false;
     });
   
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
@@ -149,26 +157,17 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/
   addCliente() {
-
-
-
-    var newCliente: any = {};
+    var newCliente: any;
+    newCliente = {};
     newCliente.cliente = {};
     newCliente.cliente._id = null;
     newCliente.profilo = null;
     newCliente.data_inizio_validita_cliente = new Date();
     newCliente.data_fine_validita_cliente = null;
+    newCliente.isEditable = true;
 
+    this.clientiObject.push(newCliente);
 
-    if (this.newUser.clienti == null) {
-      this.newUser.clienti = [{ cliente: new Object(), profilo: null, data_inizio_validita_cliente: new Date(), data_fine_validita_cliente: null }];
-    } else {
-      this.newUser.clienti.push(newCliente);
-    }
-
-    //this.newUser.clienti. =  new Tuple(_newUserClienti);
-    //JSON.parse(JSON.stringify(_newUserClienti)); //deepcopy
-    //this.changeFormatDate(this.newUser);
   }
 
   //DELETE ROW
@@ -281,6 +280,49 @@ export class GestioneUtentiComponent implements OnInit {
   private isModifica() {
     return this.userIndex != null;
   }
+
+  private editCliente(rowData, indexData) {
+    this.CloseAllEditable();
+    rowData.isEditable = true;
+  }
+
+  private CloseAllEditable() {
+    for (let item of this.clientiObject) 
+      if (item.isEditable) 
+        item.isEditable = false;   
+  }
+
+  private abortEditCliente(rowData, indexData) {
+    rowData.isEditable = false;
+  }
+
+  private saveEditCliente(rowData, indexData) {
+    var clienteTrovato;
+    clienteTrovato = this.newUser.clienti.find(x => x.cliente._id == rowData.cliente._id)
+    
+    if (clienteTrovato == null) {
+      var newCliente: any = {};
+      newCliente.cliente = rowData.cliente;
+      newCliente.cliente._id = rowData.cliente._id;
+      newCliente.profilo = rowData.profilo;
+      newCliente.data_inizio_validita_cliente = rowData.data_inizio_validita_cliente;
+      newCliente.data_fine_validita_cliente = rowData.data_fine_validita_cliente;
+      this.newUser.clienti.push(newCliente);
+    } else {
+      clienteTrovato.cliente = rowData.cliente;
+      clienteTrovato.cliente._id = rowData.cliente._id;
+      clienteTrovato.profilo = rowData.profilo;
+      clienteTrovato.data_inizio_validita_cliente = rowData.data_inizio_validita_cliente;
+      clienteTrovato.data_fine_validita_cliente = rowData.data_fine_validita_cliente;
+    }
+
+    rowData.isEditable = false;
+  }
+
+  private cloneClienteField(){
+
+  }
+
 
 }
 
