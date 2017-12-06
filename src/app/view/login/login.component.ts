@@ -98,8 +98,6 @@ export class LoginComponent implements OnInit {
                 alert("Errore di Login: " + error);
                 this.loading = false;
             });
-
-
     }
 
     ngOnDestroy() {
@@ -107,15 +105,14 @@ export class LoginComponent implements OnInit {
     }
 
     private checkForm(form) {
-        //alert(form.valid);
         this.formSubmitted = true;
         return form.valid;
     }
 
     private isValid(componentName: string) {
-        if (this.formSubmitted && this.loginForm.get(componentName).errors)
+        /*if (this.formSubmitted && this.loginForm.get(componentName).errors)
             return "#a94442";
         else
-            return "#898989"; //#d6d6d6
+            return "#898989"; //#d6d6d6*/
     }
 }

@@ -34,7 +34,7 @@
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12 ui-md-12">
                             <span class="ui-float-label">
-                                    <input id="username" formControlName="username"  type="text" pInputText [(ngModel)]="model.username">
+                                    <input formControlName="username"  type="text" pInputText [(ngModel)]="model.username">
                                     <label for="username" [ngStyle]="{'color': isValid('username')}">Nome Utente</label>
                                 </span>
                         </div>
@@ -42,13 +42,13 @@
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12 ui-md-12">
                             <span class="ui-float-label">
-                                    <input type="password" formControlName="password" id="password"  pInputText [(ngModel)]="model.password" >
+                                    <input type="password" formControlName="password" pInputText [(ngModel)]="model.password" >
                                     <label for="password" [ngStyle]="{'color': isValid('password')}">Password</label>
                                 </span>
                         </div>
                     </div>
                     <div>
-                        <button type="submit" class="btn btnPrimary">Login</button>
+                        <button [disabled]="loading" class="btn btn-primary btnPrimary">Login</button>
                         <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
                     </div>
                 </form>
