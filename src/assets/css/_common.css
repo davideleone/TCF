@@ -284,6 +284,6 @@ input::-ms-clear {
 }
 
 .editable_col{
-    width: 50px;
+    width: 60px;
     overflow: visible;
 }

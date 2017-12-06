@@ -715,10 +715,10 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
   color: #222222; }
 
 .ui-button-text{
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   min-width: 120px;
-  padding: 0.5rem 1.5rem !important;
+  padding: 0.4rem 1.5rem !important;
   font-family: 'Raleway-Regular', sans-serif;
 }
 

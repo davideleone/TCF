@@ -281,7 +281,6 @@ export class GestioneUtentiComponent implements OnInit {
     return this.userIndex != null;
   }
 
-<<<<<<< HEAD
   private editCliente(rowData, indexData) {
     this.CloseAllEditable();
     rowData.isEditable = true;
@@ -325,12 +324,10 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
 
-=======
   private abortNew() {
     this.displayDialog = false;
   }
 
->>>>>>> 6745e0aee3c6b745ba4e15e8e64e0cf20a29c60c
 }
 
 
