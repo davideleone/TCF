@@ -142,9 +142,9 @@
                         </div>
                     </p-header>
 
-                    <p-column [style]="{'width':'6%'}">
+                    <p-column [style]="{'width':'3%'}">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-                            <button style="display: inline-block;" pButton type="button" icon="fa fa-trash" (click)="deleteClientRow(row, index)"></button>
+                            <i style="display: inline-block;" class="fa fa-trash-o elimina" aria-hidden="true" (click)="deleteClientRow(row, index)"></i>
                         </ng-template>
                     </p-column>
                     <p-column field="cliente._id" header="Cliente">
