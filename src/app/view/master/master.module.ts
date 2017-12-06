@@ -16,7 +16,7 @@ import { LeftsideBarComponent } from './leftsidebar/leftsidebar.component';
 import { RightsideBarComponent } from './rightsidebar/rightsidebar.component';
 
 import { HomeComponent } from '../home/home.component';
-import { LoginComponent } from '../login/login.component';
+import { LoginModule } from '../login/login.module'
 import { ConsuntivazioneModule } from '../consuntivazione/consuntivazione.module';
 import { GestioneUtentiModule } from '../amministrazione/gestioneUtenti/gestioneUtenti.module';
 import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gestioneAttivita.module';
@@ -27,13 +27,12 @@ import { AuthenticationService } from '../../service/authentication.service';
 
 import { ChangeEmailComponent } from '../user/changeemail/changeemail.component';
 import { ChangePwdComponent } from '../user/changepwd/changepwd.component';
-
+import { InputTextModule } from 'primeng/primeng';
 
 @NgModule({
   declarations: [
     MasterComponent,
     HomeComponent,
-    LoginComponent,
     ToggleComponent,
     LeftsideBarComponent,
     RightsideBarComponent,
@@ -49,7 +48,9 @@ import { ChangePwdComponent } from '../user/changepwd/changepwd.component';
     ConsuntivazioneModule,
     GestioneUtentiModule,
     GestioneAttivitaModule,
+    LoginModule,
     SubHeaderModule,
+    InputTextModule,
     NgbModule.forRoot()
   ],
   providers: [

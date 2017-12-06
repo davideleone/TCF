@@ -11,8 +11,17 @@ export class SitemapComponent implements OnChanges{
     @Input() userLogged : any;
     @Input() menuSelected : any;
 
+    ngOnInit(){
+    }
+    
     ngOnChanges(){
-        if(this.menuSelected == null)
-            this.menuSelected = 'Home';
+        /*Da risistemare con implementazione cache*/
+        if(this.menuSelected == null) 
+            if(localStorage.getItem("currentMenu") == null)
+                this.menuSelected = 'Home';
+            else
+                this.menuSelected = localStorage.getItem("currentMenu"); 
+        else
+            localStorage.setItem("currentMenu", this.menuSelected);
     }
 }

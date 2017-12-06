@@ -42,7 +42,7 @@ export class GestioneUtentiComponent implements OnInit {
   endClientDate: Date[] = [];
   minClientDate: Date[] = [];
   maxClientDate: Date[] = [];
-  userIndex = null;
+  userIndex;
   userForm: FormGroup;
   confirmPassword: string;
   formSubmitted: boolean = false;
@@ -67,13 +67,13 @@ export class GestioneUtentiComponent implements OnInit {
       dataInizio: new FormControl('', Validators.required),
       dataFine: new FormControl('', this.controlDateValidator),
       username: new FormControl('', [Validators.required/*, this.usernameValidator*/]),
-      password: new FormControl('', this.controlPasswordRequired(this.userIndex)),
-      confPassword: new FormControl('', [this.controlPasswordRequired(this.userIndex), this.matchPasswordValidator]),
-      dataInizioCliente: new FormControl('', /*Validators.required*/this.controlClientStartDateValidator(this.newUser)/*Validators.required*/),
+      password: new FormControl('', Validators.required),
+      confPassword: new FormControl('', Validators.compose([Validators.required, this.matchPasswordValidator])),
+      dataInizioCliente: new FormControl('', Validators.required),
       dataFineCliente: new FormControl('', this.controlClientDateValidator),
       sede: new FormControl('', Validators.required),
-      idCliente: new FormControl('', this.controlClienteRequired(this.newUser)),
-      profiloCliente: new FormControl('', this.controlProfiloClienteRequired(this.newUser))
+      idCliente: new FormControl('', Validators.required),
+      profiloCliente: new FormControl('', Validators.required)
     });
   }
 
@@ -101,6 +101,7 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Gestione click MODIFICA UTENTE*/
   editRow(rowData, rowIndex) {
+    this.abilitaValidazioni();
     this.newUser = JSON.parse(JSON.stringify(rowData));
     this.newUser.data_inizio_validita = new Date(this.newUser.data_inizio_validita);
     this.newUser.data_fine_validita = this.newUser.data_fine_validita != null ? new Date(this.newUser.data_fine_validita) : null;
@@ -119,6 +120,7 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Gestione click AGGIUNTA UTENTE*/
   addNewUser() {
+    this.abilitaValidazioni();
     this.newUser = new User();
     this.newUser.isAdmin = false;
     this.newUser.data_inizio_validita = new Date();
@@ -242,68 +244,31 @@ export class GestioneUtentiComponent implements OnInit {
     return null;
   }
 
-  private controlClientStartDateValidator = (user: User) => {
-    return (control: FormControl) => {
-      let dataInizioCliente = control.value;
-      if (user != null && user.clienti != null && dataInizioCliente == null) {
-        return { controlClientStartDate: true }
-      }
-      return null;
-    };
-  }
-
-  private controlClienteRequired = (user: User) => {
-    return (control: FormControl) => {
-      let idCliente = control.value;
-      if (user != null && user.clienti != null && idCliente == null) {
-        return { controlCliente: true }
-      }
-      return null;
-    };
-  }
-
-  private controlPasswordRequired(userIndex) {
-    return (control: FormControl) => {
-      if (userIndex != null) { //sono in modifica e non ho i campi password
-        return { controlPassword: true };
-      } else {
-        let confPassword = control.value;
-        if (confPassword != null && confPassword.trim() != '') {
-          return { controlPassword: true };
-        } else {
-          return null;
-        }
-      }
-    }
-  }
-
-
-
-  private controlProfiloClienteRequired = (user: User) => {
-    return (control: FormControl) => {
-      let profiloCliente = control.value;
-      if (user != null && user.clienti != null && profiloCliente == null) {
-        return { controlprofiloCliente: true }
-      }
-      return null;
-    };
-  }
-
-  /*private usernameValidator(control: FormControl) {
-    let username = control.value;
-    if(this.allSistemUser != null)
-    this.allSistemUser.forEach(element => {
-        if(element._id == username)
-          return { usernameExist: true}
-    });
-    return null;
-  }*/
-
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
   private checkForm(form) {
-    //alert(form.valid);
+    //disabilito controlli in caso di modifica utente (psw non visibili)
+    if (this.userIndex != null) {
+      this.userForm.controls['password'].disable();
+      this.userForm.controls['confPassword'].disable();
+    }
+    //disabilito controlli in caso di nessun cliente inserito (posso inserire utente senza clienti)
+    if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 0))){
+      this.userForm.controls['idCliente'].disable();
+      this.userForm.controls['profiloCliente'].disable();
+      this.userForm.controls['dataInizioCliente'].disable();
+      this.userForm.controls['dataFineCliente'].disable();
+    }
     this.formSubmitted = true;
     return form.valid;
+  }
+
+  private abilitaValidazioni(){
+    this.userForm.controls['password'].enable();
+    this.userForm.controls['confPassword'].enable();
+    this.userForm.controls['idCliente'].enable();
+    this.userForm.controls['profiloCliente'].enable();
+    this.userForm.controls['dataInizioCliente'].enable();
+    this.userForm.controls['dataFineCliente'].enable();
   }
 
   private isValid(componentName: string) {
@@ -316,6 +281,7 @@ export class GestioneUtentiComponent implements OnInit {
   private isModifica() {
     return this.userIndex != null;
   }
+
 }
 
 

@@ -76,15 +76,23 @@
 /* Forms */
 .ui-inputtext {
   background: #ffffff;
-  color: #222222; }
+  color: #222222;
+  border-style: hidden hidden solid hidden; }
 
 .ui-inputtext:enabled:hover {
-  border-color: #c0c0c0; }
+  /* Modifica Davide Leone*/
+  border-style: hidden hidden solid hidden;
+  border-color: #c0c0c0; 
+  
+}
 
 .ui-inputtext.ui-state-focus,
 .ui-inputtext:focus {
   outline: 0 none;
-  border-color: #c0c0c0;
+  /* Modifica Davide Leone*/
+  border-style: hidden hidden solid hidden;
+  border-color: #c0c0c0; 
+  
   -moz-box-shadow: 0px 0px 5px #c0c0c0;
   -webkit-box-shadow: 0px 0px 5px #c0c0c0;
   box-shadow: 0px 0px 5px #c0c0c0; }
@@ -493,7 +501,9 @@ p-multiselect.ng-dirty.ng-invalid > .ui-multiselect,
 p-spinner.ng-dirty.ng-invalid > .ui-inputtext,
 p-selectbutton.ng-dirty.ng-invalid .ui-button,
 p-togglebutton.ng-dirty.ng-invalid .ui-button {
-  border-bottom-color: #f44336; }
+  /* Modifica Davide Leone*/
+  /* border-bottom-color: #f44336; } */
+}
 
 /* Cornering */
 .ui-corner-tl {
@@ -765,12 +775,18 @@ p-togglebutton.ng-dirty.ng-invalid .ui-button {
 .ui-inputtext {
   background: #ffffff;
   color: #222222;
+  /* Modifica Davide Leone*/
+  border-style: hidden hidden solid hidden;
+  border-color: #c0c0c0; 
   -webkit-transition: .2s;
   -moz-transition: .2s;
   transition: .2s; }
 
 .ui-inputtext.ui-state-focus,
 .ui-inputtext:focus {
+  /* Modifica Davide Leone*/
+  border-style: hidden hidden solid hidden;
+  border-color: #c0c0c0; 
   -moz-box-shadow: 0px 0px 5px #7C021A;
   -webkit-box-shadow: 0px 0px 5px #7C021A;
   box-shadow: 0px 0px 5px #7C021A; }
