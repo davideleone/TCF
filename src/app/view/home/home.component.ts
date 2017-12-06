@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { beforeMethod } from 'kaop-ts';import { LogAspect } from '../../helpers/logAspect';
-import { Chart } from "chart.js";
+
 
 @Component({
   selector: 'app-home',
