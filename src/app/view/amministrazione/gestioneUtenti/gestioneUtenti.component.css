@@ -1,6 +1,12 @@
 
-::host ::ng-deep button[type="button"]{ 
-    background: #b10022;
-    color: #ffffff;
-    border-color: #b10022;
+:host /deep/ .ui-datatable .ui-datatable-thead > tr > th {
+    height: 30px;
+    font-size: 12px;
+    text-align: center;
+    word-wrap: normal;
+}
+:host /deep/ .ui-datatable .ui-datatable-data > tr > td {
+    height: 40px;
+    font-size: 12px;
+    text-align: center;
 }

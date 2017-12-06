@@ -234,6 +234,10 @@
 .ui-paginator a {
   color: #555555; }
 
+.ui-datatable .ui-sortable-column-icon {
+    display: none;
+}
+
 .ui-datatable .ui-rowgroup-header a {
   color: #1b1d1f; }
 .ui-datatable .ui-sortable-column:not(.ui-state-active):hover {

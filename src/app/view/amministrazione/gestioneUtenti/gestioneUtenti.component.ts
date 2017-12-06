@@ -47,6 +47,7 @@ export class GestioneUtentiComponent implements OnInit {
   confirmPassword: string;
   formSubmitted: boolean = false;
 
+
   constructor(private userService: UserService,
     private domainService: DomainService,
     private clienteService: ClienteService,
@@ -109,6 +110,7 @@ export class GestioneUtentiComponent implements OnInit {
         element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
       }
     });
+  
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
     this.btnDialog = "Modifica";
     this.userIndex = rowIndex;
@@ -145,6 +147,9 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/
   addCliente() {
+
+
+
     var newCliente: any = {};
     newCliente.cliente = {};
     newCliente.cliente._id = null;
@@ -159,8 +164,9 @@ export class GestioneUtentiComponent implements OnInit {
       this.newUser.clienti.push(newCliente);
     }
 
-    this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
-    this.changeFormatDate(this.newUser);
+    //this.newUser.clienti. =  new Tuple(_newUserClienti);
+    //JSON.parse(JSON.stringify(_newUserClienti)); //deepcopy
+    //this.changeFormatDate(this.newUser);
   }
 
   //DELETE ROW
@@ -189,8 +195,8 @@ export class GestioneUtentiComponent implements OnInit {
       icon: 'fa fa-trash',
       accept: () => {
         this.newUser.clienti.splice(rowIndex, 1);
-        this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
-        this.changeFormatDate(this.newUser);
+        //this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
+        //this.changeFormatDate(this.newUser);
       }
     });
   }

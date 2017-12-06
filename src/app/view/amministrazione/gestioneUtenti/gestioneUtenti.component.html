@@ -133,7 +133,7 @@
                 </div> -->
             </div>
             <div style="clear:both;">
-                <p-dataTable [value]="newUser.clienti" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
+                <p-dataTable [value]="newUser.clienti" [immutable] = "false" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
                     scrollHeight="200px">
                     <p-header>
                         <div>
