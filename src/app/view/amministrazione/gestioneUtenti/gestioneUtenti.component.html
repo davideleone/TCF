@@ -7,7 +7,7 @@
     <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" selectionMode="single" [paginator]="true"
         [rows]="8" [globalFilter]="gb" responsive="true">
         <p-header>
-            <div>                
+            <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
                 <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
             </div>
@@ -37,7 +37,7 @@
 
 
     <p-dialog id="dialog" [(header)]="headerUtente" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
-         scrollable="true">
+        scrollable="true">
         <form [formGroup]="userForm" (ngSubmit)="checkForm(userForm) && saveNew()" novalidate>
             <div class="halfWidth noPaddingLeft">
                 <div class="ui-g ui-fluid">
@@ -102,9 +102,9 @@
                 <div class="ui-g ui-fluid" *ngIf="userIndex == null">
                     <div class="ui-g-12 ui-md-12">
                         <span class="ui-float-label">
-                                <input type="password" formControlName="confPassword" id="confPassword" pInputText [(ngModel)]="this.confirmPassword">
-                                <label for="confPassword" [ngStyle]="{'color': isValid('confPassword')}" >Conferma Password</label>
-                           </span>
+                            <input type="password" formControlName="confPassword" id="confPassword" pInputText [(ngModel)]="this.confirmPassword">
+                            <label for="confPassword" [ngStyle]="{'color': isValid('confPassword')}" >Conferma Password</label>
+                        </span>
                     </div>
                 </div>
                 <div class="ui-g ui-fluid">
@@ -123,7 +123,8 @@
                         <span class="ui-float-label">
                                 <label for="admin" style="top: -.60em;font-size:12px; color:#898989">Admin</label>
                             </span>
-                        <p-dropdown [ngModelOptions]="{standalone: true}" [options]="admins" [style]="{'width':'100%'}" placeholder="Amm. di Sistema" [(ngModel)]="newUser.isAdmin"></p-dropdown>
+                        <p-dropdown [ngModelOptions]="{standalone: true}" [options]="admins" [style]="{'width':'100%'}" placeholder="Amm. di Sistema"
+                            [(ngModel)]="newUser.isAdmin"></p-dropdown>
                     </div>
                 </div>
                 <!-- <div class="ui-g ui-fluid">
@@ -150,8 +151,8 @@
                     <p-column field="cliente._id" header="Cliente">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
-                            <p-dropdown formControlName="idCliente" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id"
-                                [style]="{'width':'100%'}" appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
+                            <p-dropdown formControlName="idCliente" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id" [style]="{'width':'100%'}"
+                                appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
                         </ng-template>
                     </p-column>
                     <p-column field="profilo" header="Profilo">
@@ -169,8 +170,9 @@
                     </p-column>
                     <p-column field="data_fine_validita_cliente" header="Data Fine">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-                            <p-calendar formControlName="dataFineCliente" [minDate]="row.data_inizio_validita_cliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
-                                dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
+                            <p-calendar formControlName="dataFineCliente" [minDate]="row.data_inizio_validita_cliente" placeholder="Data Fine (dd/mm/aa)"
+                                [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente" dateFormat="dd/mm/yy"
+                                [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
                         </ng-template>
                     </p-column>
 
