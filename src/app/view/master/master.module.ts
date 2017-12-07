@@ -20,6 +20,8 @@ import { LoginModule } from '../login/login.module'
 import { ConsuntivazioneModule } from '../consuntivazione/consuntivazione.module';
 import { GestioneUtentiModule } from '../amministrazione/gestioneUtenti/gestioneUtenti.module';
 import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gestioneAttivita.module';
+import { GestioneCommClienteModule } from '../amministrazione/gestioneCommCliente/gestioneCommCliente.module';
+import { GestioneCommFinconsModule } from '../amministrazione/gestioneCommFincons/gestioneCommFincons.module';
 
 
 import { SubHeaderModule } from './subheader/subheader.module'
@@ -46,6 +48,8 @@ import { InputTextModule } from 'primeng/primeng';
     ConsuntivazioneModule,
     GestioneUtentiModule,
     GestioneAttivitaModule,
+    GestioneCommClienteModule,
+    GestioneCommFinconsModule,
     LoginModule,
     SubHeaderModule,
     InputTextModule,

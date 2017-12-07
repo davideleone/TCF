@@ -10,6 +10,8 @@ import { ChangeEmailComponent } from './view/user/changeemail/changeemail.compon
 import { ChangePwdComponent } from './view/user/changepwd/changepwd.component';
 import { GestioneUtentiComponent } from './view/amministrazione/gestioneUtenti/gestioneUtenti.component';
 import { GestioneAttivitaComponent } from './view/amministrazione/gestioneAttivita/gestioneAttivita.component';
+import { GestioneCommClienteComponent } from './view/amministrazione/gestioneCommCliente/gestioneCommCliente.component';
+import { GestioneCommFinconsComponent } from './view/amministrazione/gestioneCommFincons/gestioneCommFincons.component';
 
 
 const routes: Routes = [
@@ -20,6 +22,8 @@ const routes: Routes = [
   { path: 'userChangeEmail', component: ChangeEmailComponent, canActivate: [AuthGuard] },
   { path: 'userChangePwd', component: ChangePwdComponent, canActivate: [AuthGuard] },
   { path: 'attivita', component: GestioneAttivitaComponent, canActivate: [AuthGuard]},
+  { path: 'commesse', component: GestioneCommClienteComponent, canActivate: [AuthGuard]},
+  { path: 'commesseFincons', component: GestioneCommFinconsComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' }
 ];
  
