@@ -7,6 +7,7 @@ export class Cliente{
 	data_fine_validita: Date;
 	ambiti: [{
 		id_ambito: string,
+		nome_ambito: string,
 		data_inizio_validita: Date,
 		data_fine_validita: Date
 	}];

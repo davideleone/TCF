@@ -22,6 +22,7 @@ import { GestioneUtentiModule } from '../amministrazione/gestioneUtenti/gestione
 import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gestioneAttivita.module';
 import { GestioneCommClienteModule } from '../amministrazione/gestioneCommCliente/gestioneCommCliente.module';
 import { GestioneCommFinconsModule } from '../amministrazione/gestioneCommFincons/gestioneCommFincons.module';
+import { GestioneClientiModule } from '../amministrazione/gestioneClienti/gestioneClienti.module';
 
 
 import { SubHeaderModule } from './subheader/subheader.module'
@@ -50,6 +51,7 @@ import { InputTextModule } from 'primeng/primeng';
     GestioneAttivitaModule,
     GestioneCommClienteModule,
     GestioneCommFinconsModule,
+    GestioneClientiModule,
     LoginModule,
     SubHeaderModule,
     InputTextModule,

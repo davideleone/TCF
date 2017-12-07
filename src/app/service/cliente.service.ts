@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {User} from '../model/user';
+import {Cliente} from '../model/cliente';
 import 'rxjs/add/operator/map';
 import { beforeMethod } from 'kaop-ts';import { LogAspect } from '../helpers/logAspect';
 
@@ -21,6 +21,30 @@ export class ClienteService {
   		.map(res=> res.json());
   }
 
+
+  @beforeMethod(LogAspect.log)
+  addCliente(clienteParam : Cliente){
+  	var headers = new Headers();
+  	headers.append('Content-Type', 'application/json');
+  	return this.http.post('/tcf/api/clienteController/CRUD/', clienteParam, {headers:headers})
+  		.map(res => res.json());
+  }
+
+  @beforeMethod(LogAspect.log)
+  deleteCliente(criteria){
+  	var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete('/tcf/api/clienteController/CRUD?criteria='+JSON.stringify(criteria), {headers:headers})
+  		.map(res => res.json());
+  }
+
+  @beforeMethod(LogAspect.log)
+  updateCliente(commessaParam, criteria){
+  	var headers = new Headers();
+  	headers.append('Content-Type', 'application/json');
+  	return this.http.put('/tcf/api/clienteController/CRUD/?criteria='+JSON.stringify(criteria), commessaParam, {headers:headers})
+  		.map(res => res.json());
+  }
 
 
   
