@@ -298,7 +298,8 @@ export class GestioneUtentiComponent implements OnInit {
 
   private saveEditCliente(rowData, indexData) {
     var clienteTrovato;
-    clienteTrovato = this.newUser.clienti.find(x => x.cliente._id == rowData.cliente._id)
+    if(this.newUser.clienti != null && this.newUser.clienti.length > 0)
+      clienteTrovato = this.newUser.clienti.find(x => x.cliente._id == rowData.cliente._id)
     
     if (clienteTrovato == null) {
       var newCliente: any = {};
@@ -307,7 +308,10 @@ export class GestioneUtentiComponent implements OnInit {
       newCliente.profilo = rowData.profilo;
       newCliente.data_inizio_validita_cliente = rowData.data_inizio_validita_cliente;
       newCliente.data_fine_validita_cliente = rowData.data_fine_validita_cliente;
-      this.newUser.clienti.push(newCliente);
+      if(this.newUser.clienti != null)
+        this.newUser.clienti.push(newCliente);
+      else
+        this.newUser.clienti = [{cliente:newCliente.cliente, profilo:newCliente.profilo, data_inizio_validita_cliente:newCliente.data_inizio_validita_cliente, data_fine_validita_cliente:newCliente.data_fine_validita_cliente}]
     } else {
       clienteTrovato.cliente = rowData.cliente;
       clienteTrovato.cliente._id = rowData.cliente._id;
