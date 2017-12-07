@@ -61,7 +61,7 @@ h3 {
     min-width: 120px;
     margin: 1rem 0;
     padding: 0.5rem 1.5rem;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     border-radius: 3px;
     cursor: pointer;
@@ -284,6 +284,6 @@ input::-ms-clear {
 }
 
 .editable_col{
-    width: 50px;
+    width: 60px;
     overflow: visible;
 }

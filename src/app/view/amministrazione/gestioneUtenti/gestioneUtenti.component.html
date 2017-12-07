@@ -142,7 +142,7 @@
                             <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
                         </div>
                     </p-header>
-                    <p-column field="isEditable" header="Azioni" visible="true" [style]="{'width':'7%'}">
+                    <p-column field="isEditable" header="Azioni" visible="true" styleClass="editable_col">
                         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <span *ngIf="!row.isEditable">
                                 <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editCliente(row,index)"></i>
