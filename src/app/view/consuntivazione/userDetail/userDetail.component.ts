@@ -22,6 +22,7 @@ export class UserDetailComponent implements OnInit{
   monthSelected : Number;
   yearSelected : Number;
   yearSelection : boolean;
+  monthOpened : boolean;
 
   ngOnInit(){
     this.consuntivatore = this.isConsuntivatore();
@@ -32,20 +33,27 @@ export class UserDetailComponent implements OnInit{
     this.yearSelected = $monthParams.year;
     this.backToMonthEvent = false;
     this.yearSelection = false;
+    this.monthOpened = false;
   }
 
   selectYear($event){
     this.yearSelection = true;
+    this.monthOpened = false;
   }
 
   backToMonth($event){
     this.monthSelected = null;
     this.yearSelected = null;
     this.backToMonthEvent = true;
+    this.monthOpened = false;
   }
 
   changeUser(){
     this.userChanged.emit();
+  }
+
+  refreshMonthList(){
+    this.monthOpened = true;
   }
 
   isConsuntivatore() : boolean {

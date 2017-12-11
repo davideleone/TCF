@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, Inject } from '@angular/core';
+import { Component, OnChanges, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { Consuntivo } from '../../../../model/consuntivo';
@@ -27,6 +27,7 @@ export class MonthGridComponent implements OnChanges {
   yearSelected: number = 2017;
   @Input()
   userSelected: User;
+  @Output() newMonthOpened = new EventEmitter();
 
 
   displayDialog: boolean;
@@ -308,11 +309,16 @@ export class MonthGridComponent implements OnChanges {
         err => {
           alert("errore nell'inserimento del mese")
         }
-      );
+      );     
+      this.refreshMonthList();
     } else {
       this.addConsuntivo();
     }
+  }
 
+  private refreshMonthList(){
+    alert("Sono entrato nell'eventEmitter");
+    this.newMonthOpened.emit();
   }
 
   private addConsuntivo() {

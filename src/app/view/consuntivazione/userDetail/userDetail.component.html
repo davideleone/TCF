@@ -1,6 +1,6 @@
 <section class="userDetail">
     <user-info  [userSelected] = "this.userSelected" [isConsuntivatore] = "this.consuntivatore" (userChanged)="changeUser($event)"></user-info>
-    <month-list [userSelected] = "this.userSelected" (monthSelect)="selectMonth($event)" (yearSelect)="selectYear($event)" [backToMonthEvent]="this.backToMonthEvent"></month-list>
-    <month-grid class="monthGrid" [userSelected] = "this.userSelected" [monthSelected]="this.monthSelected" [yearSelected]="this.yearSelected"  (backToMonthEvent)="backToMonth($event)" 
+    <month-list [userSelected] = "this.userSelected" (monthSelect)="selectMonth($event)" (yearSelect)="selectYear($event)" [backToMonthEvent]="this.backToMonthEvent" [monthOpened]="this.monthOpened"></month-list>
+    <month-grid class="monthGrid" [userSelected] = "this.userSelected" [monthSelected]="this.monthSelected" [yearSelected]="this.yearSelected"  (backToMonthEvent)="backToMonth($event)" (newMonthOpened)="refreshMonthList()"
     *ngIf='this.monthSelected != null && this.yearSelected != null'></month-grid>
 </section>

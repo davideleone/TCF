@@ -16,6 +16,7 @@ import { MeseConsuntivoService } from '../../../../service/meseConsuntivo.servic
 export class MonthListComponent implements OnChanges, OnInit{
   @Input() userSelected : User;
   @Input() backToMonthEvent : boolean;
+  @Input() monthOpened : boolean;
   @Output() monthSelect = new EventEmitter();
   @Output() yearSelect = new EventEmitter();
   todayYear = (new Date()).getFullYear();
@@ -35,6 +36,14 @@ export class MonthListComponent implements OnChanges, OnInit{
   }
   
   ngOnChanges(){
+
+    
+    if(this.monthOpened){
+      var comboYear = $('.today').val();
+      alert("Aperto nuovo mese per anno "+comboYear);
+      this.meseConsuntivoService.getMesiConsuntiviUtente(this.userSelected._id, comboYear).subscribe(months => this.monthsOfUser = months);  
+      this.monthOpened = false;
+    }
     /*Da capire come gestire la popolazione della tendina anni*/
     if(this.userSelected != null){
       this.years.pop(); 

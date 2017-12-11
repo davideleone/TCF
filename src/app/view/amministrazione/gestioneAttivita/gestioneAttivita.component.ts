@@ -162,6 +162,8 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (elem != null)
                         this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
                 });
+                this.newActivity.stato_attivita = "OPEN";
+                this.newActivity.nome_stato = "Aperto";
                 break;
             case 'commessa_cliente':
                 this.lst_commesse_clienti = [];
