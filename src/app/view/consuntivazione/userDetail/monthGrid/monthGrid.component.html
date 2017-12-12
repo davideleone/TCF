@@ -44,10 +44,10 @@
         </ng-template>
     </p-column>
 
-    <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [style]="{'width':'20px', 'overflow':'inherit'}">
+    <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [styleClass]="col.cellStyle">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable">{{row[col.field].ore}}</span>
-            <span *ngIf="row.isEditable">
+            <span *ngIf="row.isEditable" >
                 <input type="number" min="0" max="23" class="from-control input inputDay" [(ngModel)]="row[col.field].ore">
             </span>
         </ng-template>

@@ -11,6 +11,7 @@ import { AttivitaService } from '../../../../service/attivita.service';
 import { SelectItem, ConfirmationService } from 'primeng/primeng';
 import { ClienteService } from '../../../../service/cliente.service';
 import { MeseConsuntivoService } from '../../../../service/meseConsuntivo.service';
+import * as Holidays from 'date-holidays';
 
 @Component({
   selector: 'month-grid',
@@ -54,6 +55,8 @@ export class MonthGridComponent implements OnChanges {
   lst_attivita: SelectItem[];
   lst_deliverable: SelectItem[];
   consuntivoForm: FormGroup;
+
+  hd: any;
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -104,7 +107,8 @@ export class MonthGridComponent implements OnChanges {
     this.domainService.getAmbiti().subscribe(domain => {
       this.ambiti = domain;
     });
-
+    
+    this.hd = new Holidays('IT');
 
   }
 
@@ -133,7 +137,6 @@ export class MonthGridComponent implements OnChanges {
 
   }
 
-
   //GRID - LOAD
 
   //Inizializzazione header colonne dinamiche (giorni del mese)
@@ -142,11 +145,18 @@ export class MonthGridComponent implements OnChanges {
     this.cols = new Array(this.nDays);
 
     var i = 0;
-
+this.hd.g
     while (i < this.nDays) {
       this.cols[i] = {};
       this.cols[i].field = (i).toString();
       this.cols[i].header = ((i) + 1).toString();
+      //Identifico festività
+      let date: Date = new Date(this.yearSelected, this.monthSelected - 1, i+1);
+      if(this.hd.isHoliday(date) || date.getDay() == 0 || date.getDay() == 6 ){
+        this.cols[i].cellStyle = "cellHoliday";
+      }else{
+        this.cols[i].cellStyle = "cellDay";
+      }
       this.cols[i].isFrozen = false;
       i++;
     }
@@ -229,6 +239,9 @@ export class MonthGridComponent implements OnChanges {
             consuntivoDayOfMonth = -1;
           }
 
+
+          
+          //inserire class girgio in html se isHoliday = true
           if ((j + 1) == consuntivoDayOfMonth) { //aggiungo 1 visto che l'indice parte da 0;
 
             row[j] = _userDays[i];
@@ -239,6 +252,7 @@ export class MonthGridComponent implements OnChanges {
 
             row[j] = blankItem;
           }
+          
         }
         //rowsCollection[i] = row;    
         rowsCollection.push(row);
