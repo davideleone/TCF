@@ -117,6 +117,11 @@
 .ui-float-label input.ng-dirty.ng-invalid ~ label {
   color: #cd0a0a; }
 
+/*CUSTOM*/
+.ui-float-label{
+  font-size: 13px;
+}
+
 .ui-autocomplete .ui-autocomplete-multiple-container:not(.ui-state-disabled):hover {
   border-color: #c0c0c0; }
 .ui-autocomplete .ui-autocomplete-multiple-container:not(.ui-state-disabled).ui-state-focus {
