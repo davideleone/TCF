@@ -317,7 +317,6 @@ export class MonthGridComponent implements OnChanges {
   }
 
   private refreshMonthList(){
-    alert("Sono entrato nell'eventEmitter");
     this.newMonthOpened.emit();
   }
 
