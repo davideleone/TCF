@@ -40,7 +40,6 @@ export class MonthListComponent implements OnChanges, OnInit{
     
     if(this.monthOpened){
       var comboYear = $('.today').val();
-      alert("Aperto nuovo mese per anno "+comboYear);
       this.meseConsuntivoService.getMesiConsuntiviUtente(this.userSelected._id, comboYear).subscribe(months => this.monthsOfUser = months);  
       this.monthOpened = false;
     }

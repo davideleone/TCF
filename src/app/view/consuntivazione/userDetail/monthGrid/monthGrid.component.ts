@@ -331,7 +331,6 @@ this.hd.g
   }
 
   private refreshMonthList(){
-    alert("Sono entrato nell'eventEmitter");
     this.newMonthOpened.emit();
   }
 
