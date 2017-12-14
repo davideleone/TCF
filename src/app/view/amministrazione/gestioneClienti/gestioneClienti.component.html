@@ -4,7 +4,7 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra Clienti">
     </div>
-    <p-dataTable [value]="clients" emptyMessage="Nessun cliente trovato" scrollable="true"  [paginator]="true"
+    <p-dataTable [value]="clients" emptyMessage="Nessun cliente trovato" scrollable="true"  [paginator]="true" [immutable]="false"
         [rows]="8" [globalFilter]="gb" responsive="true">
         <p-header>
             <div>
@@ -26,8 +26,8 @@
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                 <ng-container *ngIf="clients[index].ambiti != null">
                     <span *ngFor="let c of row.ambiti; let i=index">
-                        <ng-container *ngIf="c != null && c.ambiti != null">
-                            {{c.cliente.nome_ambito}}{{i+1 < row.ambiti.length ? ', ' : null}}
+                        <ng-container *ngIf="c != null">
+                            {{c.nome_ambito}}{{i+1 < row.ambiti.length ? ', ' : null}}
                         </ng-container>  
                     </span>
                 </ng-container>
@@ -37,13 +37,13 @@
 
 
     <p-dialog id="dialog" [(header)]="headerCliente" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
-        scrollable="true">
+        >
         <form [formGroup]="clientForm" (ngSubmit)="checkForm(clientForm) && saveNew()" novalidate>
             <div class="fullWidth noPaddingLeft">
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12">
                         <span class="ui-float-label">
-                            <input type="text" id="nome_cliente" formControlName="nome_cliente" pInputText [(ngModel)]="newClient.nome_cliente" >
+                            <input type="text" id="nome_cliente" formControlName="nome_cliente" pInputText [(ngModel)]="newClient.nome_cliente" (ngChange)="newClient.nome_cliente = newClient.nome_cliente.toUpperCase();">
                             <label for="nome_cliente" [ngStyle]="{'color': isValid('nome_cliente')}">Nome Cliente</label>
                         </span>
                     </div>
@@ -67,7 +67,7 @@
 
                 <div class="ui-g ui-fluid">
                     <p-multiSelect class="ui-g-12" [options]="ambitiComboBox" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAmbitis" [panelStyle]="{minWidth:'12em'}"
-                        defaultLabel="Seleziona ambiti" maxSelectedLabels="10" scrollable="false">
+                        defaultLabel="Seleziona ambiti" maxSelectedLabels="10" scrollable="false" appendTo="body" [filter]="false" [disabled]="isDisabled('ambiti')">
                     </p-multiSelect>
                 </div>
                 

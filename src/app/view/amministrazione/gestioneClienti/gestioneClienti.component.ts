@@ -22,13 +22,13 @@ export class GestioneClientiComponent implements OnInit {
   newClient: Cliente;
   ambitiComboBox: SelectItem[] = [];
   headerCliente: string;
-  displayDialog: boolean = false;  
+  displayDialog: boolean = false;
   startClientDate: string;
   endClientDate: string;
   clientIndex;
-  clientForm: FormGroup;  
+  clientForm: FormGroup;
   formSubmitted: boolean = false;
-  selectedAmbitis: SelectItem[] = [];
+  selectedAmbitis: any;
 
 
   constructor(
@@ -36,9 +36,9 @@ export class GestioneClientiComponent implements OnInit {
     private domainService: DomainService,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
-    private confirmationService:ConfirmationService,
+    private confirmationService: ConfirmationService,
     private changeDetectionRef: ChangeDetectorRef) {
-    
+
     this.newClient = new Cliente();
     this.selectedAmbitis = [];
 
@@ -48,29 +48,30 @@ export class GestioneClientiComponent implements OnInit {
       dataFine: new FormControl('', this.controlDateValidator),
     });
 
-    domainService.getAmbiti().subscribe(ambiti =>
-      {
-        this.ambitiComboBox = ambiti;      
-      }
+    domainService.getAmbiti().subscribe(ambiti => {
+      this.ambitiComboBox = ambiti;
+    }
     );
   }
 
   ngOnInit() {
     this.clientService.getClienti().subscribe(clients =>
-      this.clients = clients);
+      this.clients = clients
+    );
   }
 
 
   /*Gestione click MODIFICA UTENTE*/
   editRow(rowData, rowIndex) {
+    this.selectedAmbitis = [];
     this.newClient = JSON.parse(JSON.stringify(rowData));
     this.newClient.data_inizio_validita = new Date(this.newClient.data_inizio_validita);
     this.newClient.data_fine_validita = this.newClient.data_fine_validita != null ? new Date(this.newClient.data_fine_validita) : null;
     this.newClient.ambiti.forEach(ambito => {
-      if(ambito.id_ambito!=null)
-        this.selectedAmbitis.push({ label: ambito.id_ambito, value: ambito.id_ambito }); //TODO charge also nome_ambito in service backend
+      if (ambito.id_ambito != null) {
+        this.selectedAmbitis.push(this.ambitiComboBox.find(x => x.value == ambito.id_ambito).value);
+      }
     });
-
     this.headerCliente = "Modifica Cliente - " + this.newClient.nome_cliente;
     this.clientIndex = rowIndex;
     this.displayDialog = true;
@@ -78,34 +79,37 @@ export class GestioneClientiComponent implements OnInit {
 
   /*Gestione click AGGIUNTA CLIENTE*/
   addNewClient() {
-    this.newClient = new Cliente(); 
-    this.newClient.ambiti = [{nome_ambito: null, id_ambito: null, data_inizio_validita: null, data_fine_validita: null}];   
+    this.newClient = new Cliente();
     this.newClient.data_inizio_validita = new Date();
     this.formSubmitted = false;
     this.headerCliente = "Aggiungi Cliente";
     this.clientIndex = null;
     this.displayDialog = true;
     this.clientForm.reset();
+    this.selectedAmbitis = [];
   }
 
   saveNew() {
-    let _ambito: SelectItem;
-    
-    this.selectedAmbitis.forEach(elem => {
-      //this.newActivity.nome_cliente = this.lst_clienti.find(x => x.value == this.newActivity.id_cliente).label;
-      this.newClient.ambiti.push({nome_ambito: elem.label, id_ambito: elem.value, data_inizio_validita: null, data_fine_validita: null});
+    this.selectedAmbitis.forEach((elem, index) => {
+      if (index == 0) {
+        this.newClient.ambiti = [{ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null }];
+      } else {
+        this.newClient.ambiti.push({ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null });
+      }
     });
-    
+
     this.clientService.addCliente(this.newClient).subscribe(
-      client => {
-        if (this.clientIndex == null) { //aggiunta
-          this.clients.push(client);
-        } else {
-          this.clients[this.clientIndex] = client;
-        }
-        this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy        
-      });
+    cliente => {
+      if (this.clientIndex == null) { //aggiunta
+        this.clients.push(cliente);
+      } else {
+        this.clients[this.clientIndex] = cliente;
+      }
+      this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy  
+      this.changeFormatDate(this.clients);
+    });
     this.displayDialog = false;
+    this.selectedAmbitis = [];
   }
 
 
@@ -122,13 +126,13 @@ export class GestioneClientiComponent implements OnInit {
         this.clientService.deleteCliente(selCriteria).subscribe(event => {
           this.clients.splice(rowIndex, 1);
           this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy
-          
+
         });
       }
     });
   }
 
-  
+
   //VALIDATOR & UTILITY
 
 
@@ -144,15 +148,10 @@ export class GestioneClientiComponent implements OnInit {
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
   private checkForm(form) {
-    //disabilito controlli in caso di modifica utente (psw non visibili)
-    if (this.clientIndex != null) {
-      this.clientForm.controls['password'].disable();
-      this.clientForm.controls['confPassword'].disable();
-    }    
     this.formSubmitted = true;
     return form.valid;
   }
-  
+
 
   private isValid(componentName: string) {
     if ((this.clientForm.get(componentName).touched || this.formSubmitted) && this.clientForm.get(componentName).errors)
@@ -165,10 +164,37 @@ export class GestioneClientiComponent implements OnInit {
     return this.clientIndex != null;
   }
 
+  private isDisabled(componentName) {
+    switch (componentName) {
+      case 'ambiti':
+        if (this.newClient.nome_cliente == null)
+          return true;
+        else
+          return false;
+    }
+  }
 
-
- private abortNew() {
+  private abortNew() {
     this.displayDialog = false;
+  }
+
+  private createAmbito() {
+    var ambito: any;
+    ambito = {};
+    ambito.id_ambito = null;
+    ambito.nome_ambito = null;
+    ambito.data_inizio_validita = new Date();
+    ambito.data_fine_validita = null;
+    return ambito;
+  }
+
+  private changeFormatDate(cliente : Cliente){
+    if (cliente.ambiti != null) {
+      cliente.ambiti.forEach(element => {
+        element.data_inizio_validita = element.data_inizio_validita != null ? new Date(element.data_inizio_validita) : null;
+        element.data_fine_validita = element.data_fine_validita != null ? new Date(element.data_fine_validita) : null;
+      });
+    }
   }
 
 }

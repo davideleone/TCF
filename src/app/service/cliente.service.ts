@@ -26,7 +26,7 @@ export class ClienteService {
   addCliente(clienteParam : Cliente){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
-  	return this.http.post('/tcf/api/clienteController/CRUD/', clienteParam, {headers:headers})
+  	return this.http.post('/tcf/api/clienteController/cliente', clienteParam, {headers:headers})
   		.map(res => res.json());
   }
 
