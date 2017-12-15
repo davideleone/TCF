@@ -3,7 +3,9 @@ import { DatePipe } from '@angular/common';
 import { DomainService } from '../../../service/domain.service';
 import { SelectItem } from 'primeng/primeng';
 import { ClienteService } from '../../../service/cliente.service';
+import { AttivitaService } from '../../../service/attivita.service'
 import { Cliente } from '../../../model/cliente';
+import { Attivita } from '../../../model/attivita';
 
 import { ConfirmationService } from 'primeng/primeng';
 import { AuthenticationService } from '../../../service/authentication.service';
@@ -13,7 +15,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, Valid
   selector: 'gestioneClienti',
   templateUrl: './gestioneClienti.component.html',
   styleUrls: ['./gestioneClienti.component.css'],
-  providers: [FormBuilder, AuthenticationService, DomainService, ClienteService, ConfirmationService]
+  providers: [AttivitaService, FormBuilder, AuthenticationService, DomainService, ClienteService, ConfirmationService]
 })
 
 export class GestioneClientiComponent implements OnInit {
@@ -32,6 +34,7 @@ export class GestioneClientiComponent implements OnInit {
 
 
   constructor(
+    private attivitaService: AttivitaService,
     private clientService: ClienteService,
     private domainService: DomainService,
     private authenticationService: AuthenticationService,
@@ -52,6 +55,7 @@ export class GestioneClientiComponent implements OnInit {
       this.ambitiComboBox = ambiti;
     }
     );
+
   }
 
   ngOnInit() {
@@ -92,18 +96,16 @@ export class GestioneClientiComponent implements OnInit {
   saveNew() {
     this.popolaAmbitiCliente(this.selectedAmbitis);
 
-    console.log(this.clients);
-    console.log(JSON.stringify(this.clients));
     this.clientService.addCliente(this.newClient).subscribe(
-    cliente => {
-      if (this.clientIndex == null) { //aggiunta
-        this.clients.push(cliente);
-      } else { //modifica
-        this.clients[this.clientIndex] = cliente;
-      }
-      this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy  
-      this.changeFormatDate(this.clients);
-    });
+      cliente => {
+        if (this.clientIndex == null) { //aggiunta
+          this.clients.push(cliente);
+        } else { //modifica
+          this.clients[this.clientIndex] = cliente;
+        }
+        this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy  
+        this.changeFormatDate(this.clients);
+      });
     this.displayDialog = false;
     this.selectedAmbitis = [];
   }
@@ -112,26 +114,43 @@ export class GestioneClientiComponent implements OnInit {
   //DELETE ROW
   private deleteRow(rowData, rowIndex) {
     var selCriteria;
+    var attivitaCount = 0;
     selCriteria = new Object();
-    selCriteria._id = rowData._id;
-    this.confirmationService.confirm({
-      message: "Sei sicuro di voler eliminare il cliente '" + rowData.nome_cliente + "' ?",
-      header: 'Elimina utente',
-      icon: 'fa fa-trash',
-      accept: () => {
-        this.clientService.deleteCliente(selCriteria).subscribe(event => {
-          this.clients.splice(rowIndex, 1);
-          this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy
+    selCriteria.id_cliente = rowData._id;
 
+    this.attivitaService.getAttivitaByCliente(selCriteria).subscribe(
+      attivita => {
+        attivita.forEach(element => {
+          if (element.stato_attivita == 'OPEN' || element.stato_attivita == 'CHECK')
+          attivitaCount++;
         });
+        
+        if (attivitaCount == 0) {
+          this.confirmationService.confirm({
+            message: "Sei sicuro di voler eliminare il cliente '" + rowData.nome_cliente + "' ?",
+            header: 'Elimina utente',
+            icon: 'fa fa-trash',
+            accept: () => {
+              this.clientService.deleteCliente(selCriteria).subscribe(event => {
+                this.clients.splice(rowIndex, 1);
+                this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy
+              });
+            }
+          });
+        }
+        else
+          alert("Impossibile eliminare cliente, attività IN CORSO"); 
       }
-    });
+    )
+    console.log(attivitaCount);
+    
+
   }
 
 
   //VALIDATOR & UTILITY
 
-  private popolaAmbitiCliente(ambitiSelezionati){
+  private popolaAmbitiCliente(ambitiSelezionati) {
     ambitiSelezionati.forEach((elem, index) => {
       if (index == 0) {
         this.newClient.ambiti = [{ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null }];
@@ -193,7 +212,7 @@ export class GestioneClientiComponent implements OnInit {
     return ambito;
   }
 
-  private changeFormatDate(cliente : Cliente){
+  private changeFormatDate(cliente: Cliente) {
     if (cliente.ambiti != null) {
       cliente.ambiti.forEach(element => {
         element.data_inizio_validita = element.data_inizio_validita != null ? new Date(element.data_inizio_validita) : null;
