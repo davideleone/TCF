@@ -120,8 +120,8 @@ export class GestioneAttivitaComponent implements OnInit {
         
         if(this.newActivity.budget_euro==null)
             this.newActivity.budget_euro = 0;
-        if(this.newActivity.budget_gg==null)
-            this.newActivity.budget_gg = 0;
+        if(this.newActivity.budget_ore==null)
+            this.newActivity.budget_ore = 0;
 
         if (this.activityIndex == null) { //aggiunta
             this.attivitaService.addAttivita(this.newActivity).subscribe(event => {
@@ -261,7 +261,7 @@ export class GestioneAttivitaComponent implements OnInit {
         attivita.data_fine_validita = null;
         attivita.stato_attivita = this.lst_stati[0].value;
         attivita.nome_stato = this.lst_stati[0].label;
-        attivita.budget_gg = null;
+        attivita.budget_ore = null;
         attivita.budget_euro = null;
     }
 

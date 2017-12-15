@@ -90,19 +90,15 @@ export class GestioneClientiComponent implements OnInit {
   }
 
   saveNew() {
-    this.selectedAmbitis.forEach((elem, index) => {
-      if (index == 0) {
-        this.newClient.ambiti = [{ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null }];
-      } else {
-        this.newClient.ambiti.push({ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null });
-      }
-    });
+    this.popolaAmbitiCliente(this.selectedAmbitis);
 
+    console.log(this.clients);
+    console.log(JSON.stringify(this.clients));
     this.clientService.addCliente(this.newClient).subscribe(
     cliente => {
       if (this.clientIndex == null) { //aggiunta
         this.clients.push(cliente);
-      } else {
+      } else { //modifica
         this.clients[this.clientIndex] = cliente;
       }
       this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy  
@@ -135,6 +131,15 @@ export class GestioneClientiComponent implements OnInit {
 
   //VALIDATOR & UTILITY
 
+  private popolaAmbitiCliente(ambitiSelezionati){
+    ambitiSelezionati.forEach((elem, index) => {
+      if (index == 0) {
+        this.newClient.ambiti = [{ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null }];
+      } else {
+        this.newClient.ambiti.push({ nome_ambito: this.ambitiComboBox.find(x => x.value == elem).label, id_ambito: elem, data_inizio_validita: null, data_fine_validita: null });
+      }
+    });
+  }
 
   private controlDateValidator(control: FormControl) {
     let dataInizio = control.root.value['dataInizio'] != null ? control.root.value['dataInizio'] : null;

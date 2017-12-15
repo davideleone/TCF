@@ -11,7 +11,7 @@ export class Attivita{
     codice_attivita: string;
     descrizione: string;
     budget_euro: number;
-    budget_gg: number;
+    budget_ore: number;
     data_inizio_validita: Date;
     data_fine_validita: Date;
     stato_attivita: string;

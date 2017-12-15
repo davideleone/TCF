@@ -43,7 +43,7 @@
                 {{row.data_fine_validita | date:'dd/MM/yy'}}
             </ng-template>
         </p-column>
-        <p-column field="budget_gg" header="Budget giorni" [sortable]="true"></p-column>
+        <p-column field="budget_ore" header="Budget ore" [sortable]="true"></p-column>
         <p-column field="budget_euro" header="Budget euro" [sortable]="true">
             <ng-template let-row="rowData" pTemplate="body">
                 {{row.budget_euro}} €
@@ -148,8 +148,8 @@
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-md-12">
                         <span class="ui-float-label">
-                            <input type="number" id="budget_gg" [ngModelOptions]="{standalone: true}" pInputText [(ngModel)]="newActivity.budget_gg">
-                            <label for="budget_gg">Budget giorni</label>
+                            <input type="number" id="budget_ore" [ngModelOptions]="{standalone: true}" pInputText [(ngModel)]="newActivity.budget_ore">
+                            <label for="budget_ore">Budget giorni</label>
                         </span>
                     </div>
                 </div>
