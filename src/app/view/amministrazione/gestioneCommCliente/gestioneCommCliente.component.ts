@@ -9,12 +9,12 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, Valid
 import { CommessaCliente } from '../../../model/commessaCliente';
 import { CommessaClienteService } from '../../../service/commessaCliente.service';
 import { CommessaFinconsService } from '../../../service/commessaFincons.service';
-
+import { AttivitaService } from '../../../service/attivita.service';
 @Component({
     selector: 'gestioneCommessaCliente',
     templateUrl: './gestioneCommCliente.component.html',
     styleUrls: ['./gestioneCommCliente.component.css'],
-    providers: [ CommessaClienteService, CommessaFinconsService, FormBuilder, AuthenticationService, ClienteService, ConfirmationService],
+    providers: [AttivitaService, CommessaClienteService, CommessaFinconsService, FormBuilder, AuthenticationService, ClienteService, ConfirmationService],
     // encapsulation: ViewEncapsulation.None
 })
 
@@ -33,12 +33,15 @@ export class GestioneCommClienteComponent implements OnInit {
     lst_clienti: SelectItem[] = [];
     commesseFnc: SelectItem[]; //TODO: full list to avoid other call. sostituire con hide/show degli elementi tramite css
     lst_commesse_fnc: SelectItem[] = [];
-    
+    alertDialog: boolean = false;
+    alertMsg: string;
+
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
         private confirmationService: ConfirmationService,
         private commessaClienteService: CommessaClienteService,
-        private commessaFinconsService: CommessaFinconsService
+        private commessaFinconsService: CommessaFinconsService,
+        private attivitaService: AttivitaService
     ) {
 
         this.newCommCli = new CommessaCliente();
@@ -48,7 +51,7 @@ export class GestioneCommClienteComponent implements OnInit {
             cliente: new FormControl('', Validators.required),
             nome_commCliente: new FormControl('', Validators.required),
             cod_commCliente: new FormControl('', Validators.required),
-            ddl_commesse_fnc: new FormControl('', Validators.required),            
+            ddl_commesse_fnc: new FormControl('', Validators.required),
             data_inizio: new FormControl('', Validators.required),
             data_fine: new FormControl('', this.controlDateValidator),
         });
@@ -88,7 +91,7 @@ export class GestioneCommClienteComponent implements OnInit {
         this.displayDialog = true;
         this.CommCliForm.reset();
         this.newCommCli.data_inizio_validita = new Date();
-        
+
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
@@ -101,10 +104,10 @@ export class GestioneCommClienteComponent implements OnInit {
         console.log("save");
         this.newCommCli.nome_cliente = this.lst_clienti.find(x => x.value == this.newCommCli.id_cliente).label;
         this.newCommCli.nome_commessa_fnc = this.lst_commesse_fnc.find(x => x.value == this.newCommCli.id_commessa_fnc).label;
-       
-        if(this.newCommCli.budget_euro==null)
+
+        if (this.newCommCli.budget_euro == null)
             this.newCommCli.budget_euro = 0;
-        if(this.newCommCli.budget_gg==null)
+        if (this.newCommCli.budget_gg == null)
             this.newCommCli.budget_gg = 0;
 
         if (this.CommCliIndex == null) { //aggiunta
@@ -128,21 +131,43 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
-        var selCriteria;
+        var selCriteria, attivitaCount = 0;
         selCriteria = new Object();
-        selCriteria.codice_commCliente = rowData.codice_commCliente;
-        this.confirmationService.confirm({
-            message: "Sei sicuro di voler eliminare la commessa '" + rowData.nome_commCliente + "' ?",
-            header: 'Elimina Commessa Cliente',
-            icon: 'fa fa-trash',
-            accept: () => {
-                this.commessaClienteService.deleteCommessaCliente(selCriteria).subscribe(event => {
-                    this.commClientes.splice(rowIndex, 1);
-                    this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
-                    this.changeFormatDate(this.commClientes);
+        //selCriteria.codice_commCliente = rowData.codice_commCliente;
+        selCriteria.id_commessa_cliente = rowData._id;
+        this.attivitaService.getAttivitaByCliente(selCriteria).subscribe(
+            attivita => {
+                attivita.forEach(element => {
+                    if (element.stato_attivita == 'OPEN' || element.stato_attivita == 'CHECK')
+                    attivitaCount++;
                 });
+
+                if (attivitaCount == 0) { //nessuna attivita collegata
+                    selCriteria = new Object();
+                    selCriteria.codice_commessa = rowData.codice_commessa;
+                    this.confirmationService.confirm({
+                        message: "Sei sicuro di voler eliminare la commessa '" + rowData.nome_commessa + "' ?",
+                        header: 'Elimina Commessa Cliente',
+                        icon: 'fa fa-trash',
+                        accept: () => {
+                            this.commessaClienteService.deleteCommessaCliente(selCriteria).subscribe(event => {
+                                this.commClientes.splice(rowIndex, 1);
+                                this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
+                                this.changeFormatDate(this.commClientes);
+                            });
+                        }
+                    });
+                }
+                else {
+                    this.alertDialog = true;
+                    this.alertMsg = "Impossibile eliminare la commessa, presenti attivita' collegate!";
+                }
             }
-        });
+
+
+        )
+
+
     }
 
 
@@ -183,13 +208,13 @@ export class GestioneCommClienteComponent implements OnInit {
             case 'ambito': disabled = this.newCommCli.id_cliente == null;
                 break;
             case 'macroArea': disabled = this.newCommCli.id_cliente == null;
-                break;            
+                break;
         }
 
         return disabled;
     }
 
-//TODO da gestire esternamente con CSS!!
+    //TODO da gestire esternamente con CSS!!
     private isValid(componentName: string) {
         if ((this.CommCliForm.get(componentName).touched || this.formSubmitted) && this.CommCliForm.get(componentName).errors)
             return "#a94442";
@@ -199,7 +224,7 @@ export class GestioneCommClienteComponent implements OnInit {
 
     private resetCommCli(commCliente: CommessaCliente) {
         commCliente.budget_euro = null;
-        commCliente.budget_gg = null;        
+        commCliente.budget_gg = null;
         commCliente.codice_offerta = null;
         commCliente.codice_ordine = null;
         commCliente.data_fine_validita = null;
@@ -210,14 +235,14 @@ export class GestioneCommClienteComponent implements OnInit {
         commCliente.id_commessa_fnc = null;
         commCliente.nome_commessa_fnc = null;
         commCliente.codice_commessa = null;
-        commCliente.nome_commessa = null;        
+        commCliente.nome_commessa = null;
     }
 
-    reset(dt: DataTable){
+    reset(dt: DataTable) {
         dt.reset();
     }
 
     private abortNew() {
         this.displayDialog = false;
-      }
+    }
 }
