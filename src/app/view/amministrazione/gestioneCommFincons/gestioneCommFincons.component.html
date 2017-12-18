@@ -1,115 +1,123 @@
-
 <section class="containerCommFincons">
-    
-        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
-            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-            <input #gb type="text" pInputText size="30" placeholder="Filtra Commessa Fincons">
-        </div>
-        <p-dataTable #dt [value]="commFinconss" emptyMessage="Nessuna Commessa Fincons trovata" scrollable="true"
-            [paginator]="true" [rows]="8" [globalFilter]="gb" responsive="true">
-            <p-header>
-                <div>
-                    <label style="vertical-align: middle;text-align: center;">Lista Commesse Fincons</label>
-                    <button style="float: left;" type="button" pButton (click)=addNewCommFincons() label="Aggiungi Commessa Fincons"></button>
-                </div>
-            </p-header>
-            <p-column header="Azioni" visible="true" styleClass="editable_col">
-                <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
-                    <span style="display: inline-block;">
+
+    <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="30" placeholder="Filtra Commessa Fincons">
+    </div>
+    <p-dataTable #dt [value]="commFinconss" emptyMessage="Nessuna Commessa Fincons trovata" scrollable="true" [paginator]="true"
+        [rows]="8" [globalFilter]="gb" responsive="true">
+        <p-header>
+            <div>
+                <label style="vertical-align: middle;text-align: center;">Lista Commesse Fincons</label>
+                <button style="float: left;" type="button" pButton (click)=addNewCommFincons() label="Aggiungi Commessa Fincons"></button>
+            </div>
+        </p-header>
+        <p-column header="Azioni" visible="true" styleClass="editable_col">
+            <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
+                <span style="display: inline-block;">
                         <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editRow(row, index)"></i>   
                         <i class="fa fa-trash-o elimina" aria-hidden="true" (click)="deleteRow(row, index)"></i>
                     </span>
-                </ng-template>
-            </p-column>            
-            <p-column field="codice_commessa" header="Cod. Commessa" [sortable]="true"></p-column>
-            <p-column field="nome_commessa" header="Commessa" [sortable]="true"></p-column>           
-            <p-column field="budget_gg" header="Budget giorni" [sortable]="true">
-                <ng-template let-row="rowData" pTemplate="body">
-                    {{row.budget_gg}} €
-                </ng-template>
-            </p-column>
-            <p-column field="budget_euro" header="Budget euro" [sortable]="true">
-                <ng-template let-row="rowData" pTemplate="body">
-                    {{row.budget_euro}} €
-                </ng-template>
-            </p-column>
-            <p-column field="data_inizio_validita" header="Data Inizio" [sortable]="true">
-                <ng-template let-row="rowData" pTemplate="body">
-                    {{row.data_inizio_validita | date:'dd/MM/yy'}}
-                </ng-template>
-            </p-column>
-            <p-column field="data_fine_validita" header="Data Fine" [sortable]="true">
-                <ng-template let-row="rowData" pTemplate="body">
-                    {{row.data_fine_validita | date:'dd/MM/yy'}}
-                </ng-template>
-            </p-column>            
-        </p-dataTable>
-    
-    
-        <p-dialog id="dialog" [(header)]="headerCommFincons" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body" scrollable="true" >
-            <form [formGroup]="CommFinconsForm" (ngSubmit)="checkForm(CommFinconsForm) && saveNew()" novalidate>
-                <div class="halfWidth noPaddingLeft">
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+            </ng-template>
+        </p-column>
+        <p-column field="codice_commessa" header="Cod. Commessa" [sortable]="true"></p-column>
+        <p-column field="nome_commessa" header="Commessa" [sortable]="true"></p-column>
+        <p-column field="budget_gg" header="Budget giorni" [sortable]="true">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.budget_gg}} €
+            </ng-template>
+        </p-column>
+        <p-column field="budget_euro" header="Budget euro" [sortable]="true">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.budget_euro}} €
+            </ng-template>
+        </p-column>
+        <p-column field="data_inizio_validita" header="Data Inizio" [sortable]="true">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.data_inizio_validita | date:'dd/MM/yy'}}
+            </ng-template>
+        </p-column>
+        <p-column field="data_fine_validita" header="Data Fine" [sortable]="true">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.data_fine_validita | date:'dd/MM/yy'}}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+
+    <p-dialog id="dialog" [(header)]="headerCommFincons" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
+        scrollable="true">
+        <form [formGroup]="CommFinconsForm" (ngSubmit)="checkForm(CommFinconsForm) && saveNew()" novalidate>
+            <div class="halfWidth noPaddingLeft">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <input id="cod_commFincons" formControlName="cod_commFincons" type="text" pInputText [(ngModel)]="newCommFincons.codice_commessa">
                                 <label for="cod_commFincons" [ngStyle]="{'color': isValid('cod_commFincons')}">Cod. Commessa Fincons</label>
                             </span>
-                        </div>
                     </div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <input id="nome_commFincons" formControlName="nome_commFincons" type="text" pInputText [(ngModel)]="newCommFincons.nome_commessa">
                                 <label for="nome_commFincons" [ngStyle]="{'color': isValid('nome_commFincons')}">Nome Commessa Fincons</label>
                             </span>
-                        </div>
                     </div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <input type="number" id="budget_gg" [ngModelOptions]="{standalone: true}" pInputText [(ngModel)]="newCommFincons.budget_gg">
                                 <label for="budget_gg">Budget giorni</label>
                             </span>
-                        </div>
                     </div>
                 </div>
-    
-                <div class="halfWidth noPaddingRight">
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+            </div>
+
+            <div class="halfWidth noPaddingRight">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <p-calendar id="data_inizio" formControlName="data_inizio" [(ngModel)]="newCommFincons.data_inizio_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
                                 <label for="data_inizio" [ngStyle]="{'color': isValid('data_inizio')}">Data Inizio Validità (dd/mm/aaaa)</label>
                             </span>
-                        </div>
                     </div>
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <p-calendar id="data_fine" formControlName="data_fine" [minDate]="newCommFincons.data_inizio_validita" [(ngModel)]="newCommFincons.data_fine_validita" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
                                 <label for="data_fine" [ngStyle]="{'color': isValid('data_fine')}">Data Fine Validità (dd/mm/aaaa)</label>
                             </span>
-                        </div>
-                    </div>                    
-                    <div class="ui-g ui-fluid">
-                        <div class="ui-g-12">
-                            <span class="ui-float-label">
+                    </div>
+                </div>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <span class="ui-float-label">
                                 <input type="number" step="0.5" id="budget_euro" [ngModelOptions]="{standalone: true}" pInputText [(ngModel)]="newCommFincons.budget_euro">
                                 <label for="budget_euro" >Budget euro</label>
                             </span>
-                        </div>
-                    </div>                    
-                </div>
-                <p-footer>
-                    <div class="ui-dialog-buttonpane">
-                        <button pButton type="submit" label="Salva"></button>
-                        <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
                     </div>
-                </p-footer>
-            </form>
-        </p-dialog>
-    
-        <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
-    
-    </section>
+                </div>
+            </div>
+            <p-footer>
+                <div class="ui-dialog-buttonpane">
+                    <button pButton type="submit" label="Salva"></button>
+                    <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
+                </div>
+            </p-footer>
+        </form>
+    </p-dialog>
+
+    <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
+
+    <p-dialog [(visible)]="alertDialog" modal="true" responsive="true" appendTo="body" (onHide)="this.alertDialog = false;">
+        <p-header>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ATTENZIONE
+        </p-header>
+        <div>
+            {{alertMsg}}
+        </div>
+    </p-dialog>
+</section>

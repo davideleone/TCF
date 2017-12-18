@@ -6,12 +6,13 @@ import { AuthenticationService } from '../../../service/authentication.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { CommessaFincons } from '../../../model/commessaFincons';
 import { CommessaFinconsService } from '../../../service/commessaFincons.service';
+import { CommessaClienteService } from '../../../service/commessaCliente.service';
 
 @Component({
     selector: 'gestioneCommessaFincons',
     templateUrl: './gestioneCommFincons.component.html',
     styleUrls: ['./gestioneCommFincons.component.css'],
-    providers: [CommessaFinconsService, FormBuilder, AuthenticationService, ConfirmationService],
+    providers: [ CommessaClienteService, CommessaFinconsService, FormBuilder, AuthenticationService, ConfirmationService],
     // encapsulation: ViewEncapsulation.None
 })
 
@@ -27,11 +28,13 @@ export class GestioneCommFinconsComponent implements OnInit {
     CommFinconsForm: FormGroup;
     formSubmitted: boolean = false;   
     commesseFnc: SelectItem[]; //TODO: full list to avoid other call. sostituire con hide/show degli elementi tramite css
-    
+    alertDialog: boolean = false;
+    alertMsg: string;
     
     constructor(private formBuilder: FormBuilder,
         private confirmationService: ConfirmationService,
-        private commessaFinconsService: CommessaFinconsService
+        private commessaFinconsService: CommessaFinconsService,
+        private commessaClienteService: CommessaClienteService
     ) {
 
         this.newCommFincons = new CommessaFincons();
@@ -102,21 +105,42 @@ export class GestioneCommFinconsComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
-        var selCriteria;
+        var selCriteria, commesseCount = 0;
         selCriteria = new Object();
-        selCriteria.codice_commFincons = rowData.codice_commFincons;
-        this.confirmationService.confirm({
-            message: "Sei sicuro di voler eliminare la commessa '" + rowData.nome_commFincons + "' ?",
-            header: 'Elimina Commessa Cliente',
-            icon: 'fa fa-trash',
-            accept: () => {
-                this.commessaFinconsService.deletecommessaFincons(selCriteria).subscribe(event => {
-                    this.commFinconss.splice(rowIndex, 1);
-                    this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
-                    this.changeFormatDate(this.commFinconss);
+        selCriteria.id_commessa_fnc = rowData._id;
+
+        this.commessaClienteService.getCommessaConCriteria(selCriteria).subscribe(
+            commesse =>{
+                commesse.forEach(element => {
+                    if(element != null)
+                        commesseCount++;
+                });
+
+            if(commesseCount == 0){ //nessuna commessa cliente collegata
+                selCriteria = new Object();
+                selCriteria._id = rowData._id;
+                this.confirmationService.confirm({
+                    message: "Sei sicuro di voler eliminare la commessa '" + rowData.nome_commessa + "' ?",
+                    header: 'Elimina Commessa Cliente',
+                    icon: 'fa fa-trash',
+                    accept: () => {
+                        this.commessaFinconsService.deletecommessaFincons(selCriteria).subscribe(event => {
+                            this.commFinconss.splice(rowIndex, 1);
+                            this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
+                            this.changeFormatDate(this.commFinconss);
+                        });
+                    }
                 });
             }
-        });
+            else{
+                this.alertDialog = true;
+                this.alertMsg = "Impossibile eliminare la commessa, presenti commesse cliente collegate!";
+            }
+
+            }
+        )
+
+        
     }
 
 

@@ -28,6 +28,12 @@ export class CommessaClienteService {
   }
 
   @beforeMethod(LogAspect.log)
+  getCommessaConCriteria(idParam){
+  	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify(idParam))
+  		.map(res=> res.json());
+  }
+
+  @beforeMethod(LogAspect.log)
   addCommessaCliente(commessaParam : CommessaCliente){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
