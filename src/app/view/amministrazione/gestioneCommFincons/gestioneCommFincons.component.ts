@@ -109,7 +109,7 @@ export class GestioneCommFinconsComponent implements OnInit {
         selCriteria = new Object();
         selCriteria.id_commessa_fnc = rowData._id;
 
-        this.commessaClienteService.getCommessaConCriteria(selCriteria).subscribe(
+        this.commessaClienteService.getCommessaWithCriteria(selCriteria).subscribe(
             commesse =>{
                 commesse.forEach(element => {
                     if(element != null)

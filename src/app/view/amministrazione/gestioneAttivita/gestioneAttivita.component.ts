@@ -184,7 +184,7 @@ export class GestioneAttivitaComponent implements OnInit {
         selCriteria = new Object();
         selCriteria.id_attivita = rowData._id;
 
-        this.consuntivazioneSerice.getConsuntiviByAttivita(selCriteria).subscribe(
+        this.consuntivazioneSerice.getConsuntiviWithCriteria(selCriteria).subscribe(
             consuntivi => {
                 consuntivi.forEach(element => {
                     if (element != null)

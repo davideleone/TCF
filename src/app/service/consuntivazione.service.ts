@@ -62,7 +62,7 @@ export class ConsuntivazioneService {
   }
 
   @beforeMethod(LogAspect.log)
-  getConsuntiviByAttivita(criteria){
+  getConsuntiviWithCriteria(criteria){
   	return this.http.get('/tcf/api/consuntivoController/CRUD?criteria='+JSON.stringify(criteria))
   		.map(res=> res.json());
   }

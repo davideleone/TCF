@@ -16,16 +16,16 @@ export class CommessaFinconsService {
   }
 
   @beforeMethod(LogAspect.log)
-  getCommessaByCliente(idParam){
+  getCommessaFinconsWithCriteria(idParam){
   	return this.http.get('/tcf/api/commessaFinconsController/CRUD?criteria='+JSON.stringify(idParam))
   		.map(res=> res.json());
   }
 
-  @beforeMethod(LogAspect.log)
+  /*@beforeMethod(LogAspect.log)
   getClienteByCommessa(idParam){
   	return this.http.get('/tcf/api/commessaFinconsController/CRUD?criteria='+JSON.stringify(idParam))
   		.map(res=> res.json());
-  }
+  }*/
 
   @beforeMethod(LogAspect.log)
   addcommessaFincons(commessaParam : CommessaFincons){

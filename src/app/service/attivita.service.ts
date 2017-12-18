@@ -42,7 +42,7 @@ export class AttivitaService {
   }
   
   @beforeMethod(LogAspect.log)
-  getAttivitaByCliente(criteria){
+  getAttivitaWithCriteria(criteria){
   	return this.http.get('/tcf/api/attivitaController/CRUD?criteria='+JSON.stringify(criteria))
   		.map(res=> res.json());
   }

@@ -323,11 +323,6 @@ export class GestioneUtentiComponent implements OnInit {
     rowData.isEditable = false;
   }
 
-  private cloneClienteField(){
-
-  }
-
-
   private abortNew() {
     this.displayDialog = false;
   }

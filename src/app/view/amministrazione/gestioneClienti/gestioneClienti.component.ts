@@ -121,7 +121,7 @@ export class GestioneClientiComponent implements OnInit {
     selCriteria = new Object();
     selCriteria.id_cliente = rowData._id;
 
-    this.attivitaService.getAttivitaByCliente(selCriteria).subscribe(
+    this.attivitaService.getAttivitaWithCriteria(selCriteria).subscribe(
       attivita => {
         attivita.forEach(element => {
           if (element.stato_attivita == 'OPEN' || element.stato_attivita == 'CHECK')
