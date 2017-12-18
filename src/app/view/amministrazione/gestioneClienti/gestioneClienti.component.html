@@ -84,4 +84,14 @@
 
     <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
 
+    <p-dialog [(visible)]="alertDialog" modal="true" responsive="true" appendTo="body" (onHide)="this.alertDialog = false;">
+        <p-header>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+             ATTENZIONE
+        </p-header>
+        <div>
+            {{alertMsg}}
+        </div>
+    </p-dialog>
+
 </section>

@@ -31,6 +31,9 @@ export class GestioneClientiComponent implements OnInit {
   clientForm: FormGroup;
   formSubmitted: boolean = false;
   selectedAmbitis: any;
+  alertDialog : boolean = false;
+  alertMsg : string;
+
 
 
   constructor(
@@ -122,10 +125,12 @@ export class GestioneClientiComponent implements OnInit {
       attivita => {
         attivita.forEach(element => {
           if (element.stato_attivita == 'OPEN' || element.stato_attivita == 'CHECK')
-          attivitaCount++;
+            attivitaCount++;
         });
-        
+
         if (attivitaCount == 0) {
+          selCriteria = new Object();
+          selCriteria._id = rowData._id;
           this.confirmationService.confirm({
             message: "Sei sicuro di voler eliminare il cliente '" + rowData.nome_cliente + "' ?",
             header: 'Elimina utente',
@@ -138,12 +143,13 @@ export class GestioneClientiComponent implements OnInit {
             }
           });
         }
-        else
-          alert("Impossibile eliminare cliente, attività IN CORSO"); 
+        else {
+          this.alertDialog = true;
+          this.alertMsg = 'Impossibile eliminare il cliente, presenti attività IN CORSO!';
+        }
       }
     )
-    console.log(attivitaCount);
-    
+
 
   }
 
