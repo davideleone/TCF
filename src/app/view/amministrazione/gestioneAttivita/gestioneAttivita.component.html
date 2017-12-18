@@ -4,8 +4,8 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra attivita">
     </div>
-    <p-dataTable #dt [value]="activities" emptyMessage="Nessuna attivita trovata" scrollable="true"
-        [paginator]="true" [rows]="8" [globalFilter]="gb" responsive="true">
+    <p-dataTable #dt [value]="activities" emptyMessage="Nessuna attivita trovata" scrollable="true" [paginator]="true" [rows]="8"
+        [globalFilter]="gb" responsive="true">
         <p-header>
             <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Attivita</label>
@@ -56,7 +56,7 @@
 
 
     <p-dialog id="dialog" [(header)]="headerAttivita" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
-        scrollable="true" >
+        scrollable="true">
         <form [formGroup]="activityForm" (ngSubmit)="checkForm(activityForm) && saveNew()" novalidate>
             <div class="halfWidth noPaddingLeft">
                 <div class="ui-g ui-fluid">
@@ -182,4 +182,12 @@
 
     <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
 
+    <p-dialog [(visible)]="alertDialog" modal="true" responsive="true" appendTo="body" (onHide)="this.alertDialog = false;">
+        <p-header>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ATTENZIONE
+        </p-header>
+        <div>
+            {{alertMsg}}
+        </div>
+    </p-dialog>
 </section>

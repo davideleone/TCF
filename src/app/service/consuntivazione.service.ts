@@ -61,6 +61,12 @@ export class ConsuntivazioneService {
   		.map(res => res.json());
   }
 
+  @beforeMethod(LogAspect.log)
+  getConsuntiviByAttivita(criteria){
+  	return this.http.get('/tcf/api/consuntivoController/CRUD?criteria='+JSON.stringify(criteria))
+  		.map(res=> res.json());
+  }
+
   //TODO: delete Consentuivo
   /*TODOdeleteConsuntivo(id){
     return this.http.delete('/tcf/api/user')

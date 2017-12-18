@@ -12,17 +12,18 @@ import { CommessaCliente } from '../../../model/commessaCliente';
 import { Domain } from '../../../model/domain';
 import { CommessaClienteService } from '../../../service/commessaCliente.service';
 import { AttivitaService } from '../../../service/attivita.service';
+import { ConsuntivazioneService } from '../../../service/consuntivazione.service';
 
 @Component({
     selector: 'gestioneAttivita',
     templateUrl: './gestioneAttivita.component.html',
     styleUrls: ['./gestioneAttivita.component.css'],
-    providers: [DomainService, CommessaClienteService, FormBuilder, AuthenticationService, ClienteService, ConfirmationService],
+    providers: [ConsuntivazioneService, DomainService, CommessaClienteService, FormBuilder, AuthenticationService, ClienteService, ConfirmationService],
     // encapsulation: ViewEncapsulation.None
 })
 
 export class GestioneAttivitaComponent implements OnInit {
-    
+
     commesse: CommessaCliente[];
     activityClone: Attivita;
     activities: Attivita[];
@@ -41,13 +42,16 @@ export class GestioneAttivitaComponent implements OnInit {
     lst_macro_aree: SelectItem[] = [];
     lst_commesse_clienti: SelectItem[] = [];
     lst_stati: SelectItem[] = [{ label: 'Aperto', value: 'OPEN' }, { label: 'In Verifica', value: 'CHECK' }, { label: 'Chiuso', value: 'CLOSE' }];
+    alertDialog: boolean = false;
+    alertMsg: string;
 
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
         private domainService: DomainService,
         private confirmationService: ConfirmationService,
         private commessaClienteService: CommessaClienteService,
-        private attivitaService: AttivitaService) {
+        private attivitaService: AttivitaService,
+        private consuntivazioneSerice: ConsuntivazioneService) {
 
         this.newActivity = new Attivita();
         this.activities = new Array<Attivita>();
@@ -83,7 +87,7 @@ export class GestioneAttivitaComponent implements OnInit {
 
         this.domainService.getAree().subscribe(aree => {
             this.lst_macro_aree = aree;
-          });
+        });
 
         this.domainService.getAmbiti().subscribe(ambiti => {
             this.ambiti = ambiti;
@@ -117,10 +121,10 @@ export class GestioneAttivitaComponent implements OnInit {
         this.newActivity.nome_macro_area = this.lst_macro_aree.find(x => x.value == this.newActivity.id_macro_area).label;
         this.newActivity.nome_commessa_cliente = this.lst_commesse_clienti.find(x => x.value == this.newActivity.id_commessa_cliente).label;
         this.newActivity.nome_stato = this.lst_stati.find(x => x.value == this.newActivity.stato_attivita).label;
-        
-        if(this.newActivity.budget_euro==null)
+
+        if (this.newActivity.budget_euro == null)
             this.newActivity.budget_euro = 0;
-        if(this.newActivity.budget_ore==null)
+        if (this.newActivity.budget_ore == null)
             this.newActivity.budget_ore = 0;
 
         if (this.activityIndex == null) { //aggiunta
@@ -156,9 +160,9 @@ export class GestioneAttivitaComponent implements OnInit {
                 }
                 this.lst_ambiti = [];
                 let ambitiCliente: any[] = this.clienti.find(x => x._id == this.newActivity.id_cliente).ambiti;
-                
+
                 this.ambiti.forEach(ambito => {
-                    let elem: SelectItem = ambitiCliente.find(x=> x.id_ambito == ambito.value); 
+                    let elem: SelectItem = ambitiCliente.find(x => x.id_ambito == ambito.value);
                     if (elem != null)
                         this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
                 });
@@ -176,21 +180,41 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
-        var selCriteria;
+        var selCriteria, consuntivoCount = 0;
         selCriteria = new Object();
-        selCriteria.codice_attivita = rowData.codice_attivita;
-        this.confirmationService.confirm({
-            message: "Sei sicuro di voler eliminare l'attività '" + rowData.nome_attivita + "' ?",
-            header: 'Elimina attività',
-            icon: 'fa fa-trash',
-            accept: () => {
-                this.attivitaService.deleteAttivita(selCriteria).subscribe(event => {
-                    this.activities.splice(rowIndex, 1);
-                    this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
-                    this.changeFormatDate(this.activities);
+        selCriteria.id_attivita = rowData._id;
+
+        this.consuntivazioneSerice.getConsuntiviByAttivita(selCriteria).subscribe(
+            consuntivi => {
+                consuntivi.forEach(element => {
+                    if (element != null)
+                        consuntivoCount++;
                 });
+                console.log("Cliente: "+rowData.nome_attivita+" #Consuntivi: "+consuntivoCount+" Id_attivita: "+rowData._id);
+                if (consuntivoCount == 0) {
+                    selCriteria = new Object();
+                    selCriteria.codice_attivita = rowData.codice_attivita;
+                    this.confirmationService.confirm({
+                        message: "Sei sicuro di voler eliminare l'attività '" + rowData.nome_attivita + "' ?",
+                        header: 'Elimina attività',
+                        icon: 'fa fa-trash',
+                        accept: () => {
+                            this.attivitaService.deleteAttivita(selCriteria).subscribe(event => {
+                                this.activities.splice(rowIndex, 1);
+                                this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
+                                this.changeFormatDate(this.activities);
+                            });
+                        }
+                    });
+                }
+                else{
+                    this.alertDialog = true;
+                    this.alertMsg = "Impossibile eliminare l'attivita', presenti consuntivi collegati!";
+                }
             }
-        });
+        );
+
+
     }
 
 
@@ -242,7 +266,7 @@ export class GestioneAttivitaComponent implements OnInit {
         return disabled;
     }
 
-//TODO da gestire esternamente con CSS!!
+    //TODO da gestire esternamente con CSS!!
     private isValid(componentName: string) {
         if ((this.activityForm.get(componentName).touched || this.formSubmitted) && this.activityForm.get(componentName).errors)
             return "#a94442";
@@ -265,11 +289,11 @@ export class GestioneAttivitaComponent implements OnInit {
         attivita.budget_euro = null;
     }
 
-    reset(dt: DataTable){
+    reset(dt: DataTable) {
         dt.reset();
     }
 
     private abortNew() {
         this.displayDialog = false;
-      }
+    }
 }

@@ -128,7 +128,7 @@ export class GestioneClientiComponent implements OnInit {
             attivitaCount++;
         });
 
-        if (attivitaCount == 0) {
+        if (attivitaCount == 0) { //nessun attivita in corso
           selCriteria = new Object();
           selCriteria._id = rowData._id;
           this.confirmationService.confirm({
@@ -145,7 +145,7 @@ export class GestioneClientiComponent implements OnInit {
         }
         else {
           this.alertDialog = true;
-          this.alertMsg = 'Impossibile eliminare il cliente, presenti attività IN CORSO!';
+          this.alertMsg = 'Impossibile eliminare il cliente, presenti attività in corso collegate!';
         }
       }
     )
