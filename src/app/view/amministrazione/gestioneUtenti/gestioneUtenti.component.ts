@@ -155,6 +155,7 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/
   addCliente() {
+    this.abilitaValidazioni();
     this.CloseAllEditable();
     var newCliente: any;
     newCliente = {};
@@ -258,6 +259,12 @@ export class GestioneUtentiComponent implements OnInit {
       this.userForm.controls['dataFineCliente'].disable();
     }
     this.formSubmitted = true;
+    /*var invalidElements: string[] = this.findInvalidControls();
+    if (invalidElements != null) {*/
+    if(!form.valid){
+      this.alertDialog = true;
+      this.alertMsg = "Alcuni campi non stati compilati correttamente!";
+    }
     return form.valid;
   }
 
@@ -362,7 +369,20 @@ export class GestioneUtentiComponent implements OnInit {
     clienteTarget.data_fine_validita_cliente = clienteSource.data_fine_validita_cliente;
   }
 
+  private findInvalidControls() {
+    var invalid = [];
+    var controls = this.userForm.controls;
+    for (let name in controls) {
+      if (controls[name].invalid) {
+        name = name.charAt(0).toUpperCase()+name.substring(1);
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
 }
+
+
 
 
 

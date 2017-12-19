@@ -70,13 +70,13 @@
     left: 0;
 }
 .riassuntoMesi ul li .mese .fa-calendar-check-o {
-    color: green;
+    color: red;
 }
 .riassuntoMesi ul li .mese .fa-calendar-minus-o {
     color: orange;
 }
 .riassuntoMesi ul li .mese .fa-calendar-plus-o {
-    color: blue;
+    color: green;
 }
 .riassuntoMesi ul li .mese .fa-calendar-o {
     color: grey;
