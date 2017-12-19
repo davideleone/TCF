@@ -154,10 +154,7 @@
                             </span>
                         </ng-template>
                     </p-column>
-                    <!-- <p-column field="isEditable" visible="true" header="Azioni" frozen="true" [style]="{'width':'6%'}">
-                        
-                    </p-column> -->
-                    <p-column field="cliente._id" header="Cliente">
+                    <p-column field="clienti" header="Cliente">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
                             <span *ngIf="!row.isEditable">{{row.cliente.nome_cliente}}</span>

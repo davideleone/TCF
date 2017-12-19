@@ -26,7 +26,7 @@ export class GestioneUtentiComponent implements OnInit {
   users: any;
   newUser: User;
   sedi: any;
-  clienti: Cliente[] = [];
+  clientiList: Cliente[] = [];
   admins: SelectItem[] = [{ label: "Si", value: true }, { label: "No", value: false }];
   sediList: SelectItem[] = [];
   clientiComboBox: SelectItem[] = [];
@@ -46,7 +46,7 @@ export class GestioneUtentiComponent implements OnInit {
   userForm: FormGroup;
   confirmPassword: string;
   formSubmitted: boolean = false;
-  clientiObject : any;
+  clientiObject: any;
 
 
   constructor(private userService: UserService,
@@ -88,7 +88,7 @@ export class GestioneUtentiComponent implements OnInit {
     });
 
     this.clienteService.getClienti().subscribe(clienti => {
-      this.clienti = clienti;
+      this.clientiList = clienti;
       clienti.forEach(cliente => {
         /*Come value gli devo passare la stringa e non l'oggetto.
         * Se passassi l'oggetto andrebbe a confrontare la stringa (clientSelected)
@@ -119,7 +119,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.clientiObject.forEach(element => {
       element.isEditable = false;
     });
-  
+
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
     //this.btnDialog = "Modifica";
     this.userIndex = rowIndex;
@@ -128,6 +128,7 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Gestione click AGGIUNTA UTENTE*/
   addNewUser() {
+    this.clientiObject = [];
     this.abilitaValidazioni();
     this.newUser = new User();
     this.newUser.isAdmin = false;
@@ -251,7 +252,7 @@ export class GestioneUtentiComponent implements OnInit {
       this.userForm.controls['confPassword'].disable();
     }
     //disabilito controlli in caso di nessun cliente inserito (posso inserire utente senza clienti)
-    if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 0))){
+    if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 0))) {
       this.userForm.controls['idCliente'].disable();
       this.userForm.controls['profiloCliente'].disable();
       this.userForm.controls['dataInizioCliente'].disable();
@@ -261,7 +262,7 @@ export class GestioneUtentiComponent implements OnInit {
     return form.valid;
   }
 
-  private abilitaValidazioni(){
+  private abilitaValidazioni() {
     this.userForm.controls['password'].enable();
     this.userForm.controls['confPassword'].enable();
     this.userForm.controls['idCliente'].enable();
@@ -287,9 +288,9 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   private CloseAllEditable() {
-    for (let item of this.clientiObject) 
-      if (item.isEditable) 
-        item.isEditable = false;   
+    for (let item of this.clientiObject)
+      if (item.isEditable)
+        item.isEditable = false;
   }
 
   private abortEditCliente(rowData, indexData) {
@@ -298,26 +299,30 @@ export class GestioneUtentiComponent implements OnInit {
 
   private saveEditCliente(rowData, indexData) {
     var clienteTrovato;
-    if(this.newUser.clienti != null && this.newUser.clienti.length > 0)
+
+    if (this.newUser.clienti != null && this.newUser.clienti.length > 0)
       clienteTrovato = this.newUser.clienti.find(x => x.cliente._id == rowData.cliente._id)
-    
+
     if (clienteTrovato == null) {
       var newCliente: any = {};
-      newCliente.cliente = rowData.cliente;
-      newCliente.cliente._id = rowData.cliente._id;
+      newCliente.cliente = this.clientiList.filter(cliente => cliente._id == rowData.cliente._id)[0];
       newCliente.profilo = rowData.profilo;
       newCliente.data_inizio_validita_cliente = rowData.data_inizio_validita_cliente;
       newCliente.data_fine_validita_cliente = rowData.data_fine_validita_cliente;
-      if(this.newUser.clienti != null)
+      if (this.newUser.clienti != null)
         this.newUser.clienti.push(newCliente);
       else
-        this.newUser.clienti = [{cliente:newCliente.cliente, profilo:newCliente.profilo, data_inizio_validita_cliente:newCliente.data_inizio_validita_cliente, data_fine_validita_cliente:newCliente.data_fine_validita_cliente}]
+        this.newUser.clienti = [{ cliente: newCliente.cliente, profilo: newCliente.profilo, data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente, data_fine_validita_cliente: newCliente.data_fine_validita_cliente }]
+
+      this.clientiObject = this.newUser.clienti;
+
     } else {
-      clienteTrovato.cliente = rowData.cliente;
-      clienteTrovato.cliente._id = rowData.cliente._id;
+      clienteTrovato.cliente = this.clientiList.filter(cliente => cliente._id == rowData.cliente._id)[0];
       clienteTrovato.profilo = rowData.profilo;
       clienteTrovato.data_inizio_validita_cliente = rowData.data_inizio_validita_cliente;
       clienteTrovato.data_fine_validita_cliente = rowData.data_fine_validita_cliente;
+    
+      this.clientiObject[indexData] = clienteTrovato;
     }
 
     rowData.isEditable = false;
