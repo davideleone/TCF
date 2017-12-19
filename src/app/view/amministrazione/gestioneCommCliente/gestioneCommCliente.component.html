@@ -28,12 +28,12 @@
         <p-column field="codice_offerta" header="Cod. Offerta" [sortable]="true"></p-column>
         <p-column field="budget_gg" header="Budget giorni" [sortable]="true">
             <ng-template let-row="rowData" pTemplate="body">
-                {{row.budget_gg}} €
+                {{row.budget_gg != null ? row.budget_gg : 0}}
             </ng-template>
         </p-column>
         <p-column field="budget_euro" header="Budget euro" [sortable]="true">
             <ng-template let-row="rowData" pTemplate="body">
-                {{row.budget_euro}} €
+                    {{row.budget_euro != null ? row.budget_euro : 0}} €
             </ng-template>
         </p-column>
         <p-column field="data_inizio_validita" header="Data Inizio" [sortable]="true">

@@ -43,10 +43,14 @@
                 {{row.data_fine_validita | date:'dd/MM/yy'}}
             </ng-template>
         </p-column>
-        <p-column field="budget_ore" header="Budget ore" [sortable]="true"></p-column>
+        <p-column field="budget_ore" header="Budget ore" [sortable]="true">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.budget_ore != null ? row.budget_ore : 0}}
+            </ng-template>
+        </p-column>
         <p-column field="budget_euro" header="Budget euro" [sortable]="true">
             <ng-template let-row="rowData" pTemplate="body">
-                {{row.budget_euro}} €
+                {{row.budget_euro != null ? row.budget_euro : 0}} €
             </ng-template>
         </p-column>
         <!-- <p-column field="descrizione" header="Descrizione" [sortable]="true"></p-column> -->
