@@ -4,8 +4,8 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra utenti">
     </div>
-    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true"  [paginator]="true"
-        [rows]="8" [globalFilter]="gb" responsive="true">
+    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="8" [globalFilter]="gb"
+        responsive="true">
         <p-header>
             <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
@@ -138,7 +138,7 @@
                     scrollHeight="200px">
                     <p-header>
                         <div>
-                            <button style="float: left;" pButton type="button" icon="fa fa-plus" (click)="addCliente()" label="Aggiungi Cliente"></button>
+                            <button style="float: left;" pButton type="button" (click)="addCliente()" label="Aggiungi Cliente"></button>
                             <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
                         </div>
                     </p-header>
@@ -159,7 +159,7 @@
                             <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
                             <span *ngIf="!row.isEditable">{{row.cliente.nome_cliente}}</span>
                             <span *ngIf="row.isEditable">
-                                <p-dropdown formControlName="idCliente" [options]="clientiComboBox" [autoWidth]="false" [(ngModel)]="row.cliente._id" [style]="{'width':'100%'}"
+                                <p-dropdown formControlName="idCliente" [options]="clientiComboBoxClone" [autoWidth]="false" [(ngModel)]="row.cliente._id" [style]="{'width':'100%'}"
                                 appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
                             </span>
                         </ng-template>
@@ -208,4 +208,12 @@
 
     <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
 
+    <p-dialog [(visible)]="alertDialog" modal="true" responsive="true" appendTo="body" (onHide)="this.alertDialog = false;">
+        <p-header>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ATTENZIONE
+        </p-header>
+        <div>
+            {{alertMsg}}
+        </div>
+    </p-dialog>
 </section>
