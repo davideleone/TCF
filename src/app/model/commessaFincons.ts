@@ -1,5 +1,5 @@
 export class CommessaFincons{
-    _id: Number;
+    _id: any;
     codice_commessa: string;
     nome_commessa: string;
     budget_euro: Number;

@@ -1,11 +1,11 @@
 export class Attivita{
     id_ambito: string;
     nome_ambito: string;
-    id_commessa_cliente: string;
+    id_commessa_cliente: any;
     nome_commessa_cliente: string;
-    id_cliente: string;
+    id_cliente: any;
     nome_cliente: string;
-    id_macro_area: string;
+    id_macro_area: any;
     nome_macro_area: string;
     nome_attivita: string;
     codice_attivita: string;

@@ -1,6 +1,7 @@
 export class User{
-	_id:  string
-	id_sede:number;
+	_id:  any;
+	username: string;
+	id_sede:any;
 	desc_sede:string;
 	password:string;
 	cognome:string;

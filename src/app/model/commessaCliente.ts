@@ -1,8 +1,8 @@
 export class CommessaCliente{
-    _id: Number;
-    id_cliente: string;
+    _id: any;
+    id_cliente: any;
     nome_cliente: string;
-    id_commessa_fnc: string;
+    id_commessa_fnc: any;
     nome_commessa_fnc: string;
     codice_commessa: string;
     nome_commessa: string;
