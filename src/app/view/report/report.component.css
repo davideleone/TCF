@@ -1,0 +1,7 @@
+:host /deep/ .ui-inputtext{
+    max-width: 250px;
+}
+
+:host /deep/ .ui-dropdown{
+    max-width: 275px;
+}

@@ -13,6 +13,7 @@ import { GestioneAttivitaComponent } from './view/amministrazione/gestioneAttivi
 import { GestioneCommClienteComponent } from './view/amministrazione/gestioneCommCliente/gestioneCommCliente.component';
 import { GestioneCommFinconsComponent } from './view/amministrazione/gestioneCommFincons/gestioneCommFincons.component';
 import { GestioneClientiComponent } from './view/amministrazione/gestioneClienti/gestioneClienti.component';
+import { ReportComponent } from './view/report/report.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'commesse', component: GestioneCommClienteComponent, canActivate: [AuthGuard]},
   { path: 'commesseFincons', component: GestioneCommFinconsComponent, canActivate: [AuthGuard]},
   { path: 'clienti', component: GestioneClientiComponent, canActivate: [AuthGuard]},
+  { path: 'report', component: ReportComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '' }
 ];
  

@@ -23,8 +23,7 @@ import { GestioneAttivitaModule } from '../amministrazione/gestioneAttivita/gest
 import { GestioneCommClienteModule } from '../amministrazione/gestioneCommCliente/gestioneCommCliente.module';
 import { GestioneCommFinconsModule } from '../amministrazione/gestioneCommFincons/gestioneCommFincons.module';
 import { GestioneClientiModule } from '../amministrazione/gestioneClienti/gestioneClienti.module';
-
-
+import { ReportModule } from '../report/report.module';
 import { SubHeaderModule } from './subheader/subheader.module'
 import { AuthenticationService } from '../../service/authentication.service';
 
@@ -57,6 +56,7 @@ import { InputTextModule } from 'primeng/primeng';
     InputTextModule,
     ChangeEmailModule,
     ChangePwdModule,
+    ReportModule,
     HomeModule,
     NgbModule.forRoot()
   ],

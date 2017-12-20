@@ -1,0 +1,54 @@
+<section class="containerReport">
+    <form [formGroup]="reportForm" (ngSubmit)="checkForm(reportForm) && createReport()" novalidate>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <span class="ui-float-label">
+                    <p-calendar id="dataInizio" formControlName="dataInizio" [(ngModel)]="dataInizio" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                    <label for="dataInizio" [ngStyle]="{'color': isValid('dataInizio')}">Data Inizio (dd/mm/aaaa)</label>
+                </span>
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <span class="ui-float-label">
+                    <p-calendar id="dataFine" formControlName="dataFine" [(ngModel)]="dataFine" dateFormat="dd/mm/yy" [showIcon]="true" appendTo="body"></p-calendar>
+                    <label for="dataFine" [ngStyle]="{'color': isValid('dataFine')}">Data Fine (dd/mm/aaaa)</label>
+                </span>
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <span class="ui-float-label">
+                    <label for="cliente" [ngStyle]="{'color': isValid('cliente')}" style="top: -.60em;font-size:12px;" >Cliente</label>
+                </span>
+                <p-dropdown id="cliente" formControlName="cliente" [options]="lst_clienti" [style]="{'width':'100%'}" placeholder="Seleziona cliente"
+                    [(ngModel)]="clienteSelected">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <span class="ui-float-label">
+                    <label for="modalita" [ngStyle]="{'color': isValid('modalita')}" style="top: -.60em;font-size:12px;" >Modalita di Report</label>
+                </span>
+                <p-dropdown id="modalita" formControlName="modalita" [options]="lst_modalita" [style]="{'width':'100%'}" placeholder="Seleziona modalita"
+                    [(ngModel)]="modalitaSelected">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <button pButton type="submit" label="Crea Report"></button>
+        </div>
+
+    </form>
+
+    <p-dialog [(visible)]="alertDialog" modal="true" responsive="true" appendTo="body" (onHide)="this.alertDialog = false;">
+        <p-header>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ATTENZIONE
+        </p-header>
+        <div>
+            {{alertMsg}}
+        </div>
+    </p-dialog>
+
+</section>
