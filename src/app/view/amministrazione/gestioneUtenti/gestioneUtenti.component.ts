@@ -61,7 +61,7 @@ export class GestioneUtentiComponent implements OnInit {
     private changeDetectionRef: ChangeDetectorRef) {
     this.authenticationService.user$.subscribe(user => { this.userLogged = user });
     this.allSistemUser = [];
-    this.users = null;
+    this.users = [];
     this.sedi = null;
     this.newUser = new User();
     this.clientiObject = new Array<Object>();
@@ -143,7 +143,10 @@ export class GestioneUtentiComponent implements OnInit {
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
         if (this.userIndex == null) { //aggiunta
-          this.users.push(user);
+          if(this.users != null)
+            this.users.push(user);
+          else
+            this.users = this.newUser;  
         } else {
           this.users[this.userIndex] = user;
         }
@@ -177,7 +180,7 @@ export class GestioneUtentiComponent implements OnInit {
     selCriteria = new Object();
     selCriteria._id = rowData._id;
     this.confirmationService.confirm({
-      message: "Sei sicuro di voler eliminare l'utente '" + rowData._id + "' ?",
+      message: "Sei sicuro di voler eliminare l'utente '" + rowData.username + "' ?",
       header: 'Elimina utente',
       icon: 'fa fa-trash',
       accept: () => {
