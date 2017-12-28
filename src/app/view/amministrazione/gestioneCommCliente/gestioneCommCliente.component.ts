@@ -95,7 +95,7 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-    private checkForm(form) {
+    public checkForm(form) {
         this.formSubmitted = true;
         return form.valid;
     }
@@ -201,7 +201,7 @@ export class GestioneCommClienteComponent implements OnInit {
         return null;
     }
 
-    private isDisabled(componentName): boolean {
+    public isDisabled(componentName): boolean {
         var disabled = false;
 
         switch (componentName) {
@@ -215,7 +215,7 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     //TODO da gestire esternamente con CSS!!
-    private isValid(componentName: string) {
+    public isValid(componentName: string) {
         if ((this.CommCliForm.get(componentName).touched || this.formSubmitted) && this.CommCliForm.get(componentName).errors)
             return "#a94442";
         else
@@ -242,7 +242,7 @@ export class GestioneCommClienteComponent implements OnInit {
         dt.reset();
     }
 
-    private abortNew() {
+    public abortNew() {
         this.displayDialog = false;
     }
 }

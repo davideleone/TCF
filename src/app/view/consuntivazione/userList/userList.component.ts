@@ -31,6 +31,7 @@ export class SearchUser implements PipeTransform {
 export class UserListComponent implements OnChanges{
 
   users: User[];
+  query: any;
   @Input() userLogged : User;
   @Input() maxUserLoggedProfile : string;
   @Input() selected;

@@ -248,7 +248,7 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-  private checkForm(form) {
+  public checkForm(form) {
     //disabilito controlli in caso di modifica utente (psw non visibili)
     if (this.userIndex != null) {
       this.userForm.controls['password'].disable();
@@ -280,7 +280,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.userForm.controls['dataFineCliente'].enable();
   }
 
-  private isValid(componentName: string) {
+  public isValid(componentName: string) {
     if ((this.userForm.get(componentName).touched || this.formSubmitted) && this.userForm.get(componentName).errors)
       return "#a94442";
     else
@@ -346,7 +346,7 @@ export class GestioneUtentiComponent implements OnInit {
     }
   }
 
-  private abortNew() {
+  public abortNew() {
     this.displayDialog = false;
   }
 

@@ -49,7 +49,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
         });
     }
 
-    private checkForm(form) {
+    public checkForm(form) {
         this.formSubmitted = true;
         if(!form.valid){
             this.alertDialog = true;
@@ -68,11 +68,11 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
         return null;
     }
 
-    private createReport(){
+    public createReport(){
         alert("Creo Report");
     }
 
-    private isValid(componentName: string) {
+    public isValid(componentName: string) {
         if ((this.reportForm.get(componentName).touched || this.formSubmitted) && this.reportForm.get(componentName).errors)
             return "#a94442";
         else

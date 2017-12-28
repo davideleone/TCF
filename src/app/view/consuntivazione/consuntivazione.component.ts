@@ -53,7 +53,7 @@ export class ConsuntivazioneComponent implements OnInit {
     this.userDetail.fadeIn().show('slow');
   }
 
-  changeUser() {
+  changeUser(event) {
     this.userSelected = null;
     this.userDetail.slideDown().fadeOut().hide('slow');
     this.userList.fadeIn().show('slow');

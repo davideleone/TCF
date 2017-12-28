@@ -7,7 +7,7 @@
             <button style="float: left;" pButton (click)=showDialogToAdd() label="Aggiungi Attività"></button>
         </div>
     </p-header>
-    <p-column field="isEditable" header="Azioni" frozen="true" [editable]="isEditable" styleClass="editable_col">
+    <p-column field="edit" header="Azioni" frozen="true" styleClass="editable_col">
         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
             <span *ngIf="!row.isEditable">
                 <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="edit(row,index)"></i>
@@ -20,7 +20,7 @@
         </ng-template>
     </p-column>
 
-    <p-column frozen="true" header="Cliente/Ambito/Area" [editable]="isEditable">
+    <p-column frozen="true" header="Cliente/Ambito/Area" >
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span>{{row.nome_cliente}} - {{row.nome_ambito}} - {{row.nome_macro_area}}</span>
         </ng-template>
@@ -35,7 +35,7 @@
         </ng-template>
     </p-column>
 
-    <p-column field="deliverable" frozen="true" header="Tipo Deliverable" [editable]="isEditable">
+    <p-column field="deliverable" frozen="true" header="Tipo Deliverable">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">

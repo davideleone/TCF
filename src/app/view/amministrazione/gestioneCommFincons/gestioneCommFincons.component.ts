@@ -73,7 +73,7 @@ export class GestioneCommFinconsComponent implements OnInit {
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-    private checkForm(form) {
+    public checkForm(form) {
         this.formSubmitted = true;
         return form.valid;
     }
@@ -176,7 +176,7 @@ export class GestioneCommFinconsComponent implements OnInit {
 
 
 //TODO da gestire esternamente con CSS!!
-    private isValid(componentName: string) {
+    public isValid(componentName: string) {
         if ((this.CommFinconsForm.get(componentName).touched || this.formSubmitted) && this.CommFinconsForm.get(componentName).errors)
             return "#a94442";
         else
@@ -197,7 +197,7 @@ export class GestioneCommFinconsComponent implements OnInit {
         dt.reset();
     }
 
-    private abortNew() {
+    public abortNew() {
         this.displayDialog = false;
       }
 }

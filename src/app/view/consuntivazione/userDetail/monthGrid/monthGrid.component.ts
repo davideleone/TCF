@@ -271,7 +271,7 @@ this.hd.g
   //GRID - ACTION
 
   //NEW ROW
-  private showDialogToAdd() {
+  public showDialogToAdd() {
     //Inizializzazione dei parametri di input
     this.lst_clienti = [];
     //TODO: gestire clienteuser.cliente.id == null
@@ -290,12 +290,12 @@ this.hd.g
 
   }
 
-  private abortNew() {
+  public abortNew() {
     this.displayDialog = false;
   }
 
   //SAVE NEW ROW
-  private saveNew() {
+  public saveNew() {
     //Inserisco solo il primo giorno 0 per effettuare lo store dell'activity su DB 
     this.newRowConsuntivo.id_utente = this.userSelected._id.toString();
     this.newRowConsuntivo.nome_cliente = this.lst_clienti.find(x => x.value == this.newRowConsuntivo.id_cliente).label;
@@ -467,7 +467,7 @@ this.hd.g
   }
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-  private checkForm(form) {
+  public checkForm(form) {
     this.formSubmitted = true;
     return form.valid;
   }
@@ -504,7 +504,7 @@ this.hd.g
     }
   }
 
-  private isDisabled(componentName): boolean {
+  public isDisabled(componentName): boolean {
     var disabled = false;
 
     switch (componentName) {
@@ -521,7 +521,7 @@ this.hd.g
     return disabled;
   }
 
-  private isValid(componentName: string) {
+  public isValid(componentName: string) {
     if ((this.consuntivoForm.get(componentName).touched || this.formSubmitted) && this.consuntivoForm.get(componentName).errors)
       return "#a94442";
     else

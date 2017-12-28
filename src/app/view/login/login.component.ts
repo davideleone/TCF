@@ -104,12 +104,12 @@ export class LoginComponent implements OnInit {
         //$('.rightSidebar').css("width",this.saveWidth);
     }
 
-    private checkForm(form) {
+    public checkForm(form) {
         this.formSubmitted = true;
         return form.valid;
     }
 
-    private isValid(componentName: string) {
+    public isValid(componentName: string) {
         /*if (this.formSubmitted && this.loginForm.get(componentName).errors)
             return "#a94442";
         else

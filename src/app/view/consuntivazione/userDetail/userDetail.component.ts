@@ -48,7 +48,7 @@ export class UserDetailComponent implements OnInit{
     this.monthOpened = false;
   }
 
-  changeUser(){
+  changeUser(event){
     this.userChanged.emit();
   }
 

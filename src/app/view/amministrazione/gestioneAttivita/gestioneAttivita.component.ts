@@ -110,7 +110,7 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-    private checkForm(form) {
+    public checkForm(form) {
         this.formSubmitted = true;
         return form.valid;
     }
@@ -147,7 +147,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.displayDialog = false;
     }
 
-    private selectFromCliente(componentName, isEdit) {
+    public selectFromCliente(componentName, isEdit) {
         var selCriteria;
         selCriteria = new Object();
         selCriteria.id_cliente = this.newActivity.id_cliente;
@@ -251,7 +251,7 @@ export class GestioneAttivitaComponent implements OnInit {
         return null;
     }
 
-    private isDisabled(componentName): boolean {
+    public isDisabled(componentName): boolean {
         var disabled = false;
 
         switch (componentName) {
@@ -267,7 +267,7 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     //TODO da gestire esternamente con CSS!!
-    private isValid(componentName: string) {
+    public isValid(componentName: string) {
         if ((this.activityForm.get(componentName).touched || this.formSubmitted) && this.activityForm.get(componentName).errors)
             return "#a94442";
         else
@@ -293,7 +293,7 @@ export class GestioneAttivitaComponent implements OnInit {
         dt.reset();
     }
 
-    private abortNew() {
+    public abortNew() {
         this.displayDialog = false;
     }
 }

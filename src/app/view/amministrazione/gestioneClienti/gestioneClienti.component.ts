@@ -177,13 +177,13 @@ export class GestioneClientiComponent implements OnInit {
 
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
-  private checkForm(form) {
+  public checkForm(form) {
     this.formSubmitted = true;
     return form.valid;
   }
 
 
-  private isValid(componentName: string) {
+  public isValid(componentName: string) {
     if ((this.clientForm.get(componentName).touched || this.formSubmitted) && this.clientForm.get(componentName).errors)
       return "#a94442";
     else
@@ -194,7 +194,7 @@ export class GestioneClientiComponent implements OnInit {
     return this.clientIndex != null;
   }
 
-  private isDisabled(componentName) {
+  public isDisabled(componentName) {
     switch (componentName) {
       case 'ambiti':
         if (this.newClient.nome_cliente == null)
@@ -204,7 +204,7 @@ export class GestioneClientiComponent implements OnInit {
     }
   }
 
-  private abortNew() {
+  public abortNew() {
     this.displayDialog = false;
   }
 
