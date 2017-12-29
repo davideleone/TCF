@@ -168,33 +168,43 @@ this.hd.g
     try {
 
 
-      //ordino la _userDays per attività, data.
+      //ordino la _userDays per attività, tipodeliverable, data.
 
       const consuntivoComparator_AttivitaData = function (a: Consuntivo, b: Consuntivo): number {
 
         if (a.id_attivita == b.id_attivita) {
-          return a.data_consuntivo > b.data_consuntivo ? 1 : a.data_consuntivo < b.data_consuntivo ? -1 : 0;
+          if(a.id_tipo_deliverable == b.id_tipo_deliverable){
+            return a.data_consuntivo > b.data_consuntivo ? 1 : a.data_consuntivo < b.data_consuntivo ? -1 : 0;
+          }else{
+            return a.id_tipo_deliverable > b.id_tipo_deliverable ? 1 : -1;
+          }
+        }else{
+          return a.id_attivita > b.id_attivita ? 1 : -1;
         }
-
-        return a.id_attivita > b.id_attivita ? 1 : -1;
       }
 
       _userDays.sort(consuntivoComparator_AttivitaData);
 
 
+
       var rowCount: number = 0;
       var last: Consuntivo;
+      var groupedActivities: any[] = new Array(0);;
+
       //conto il numero di attività (righe della tabella) --> come fare un distinct su id_attivita/id_tipo_deliverable
       for (let current_cons of _userDays) {
         if (!last) {
           //primo elemento;
           last = current_cons;
-          rowCount++;
+          groupedActivities.push(current_cons);
+          //rowCount++;
+
           continue;
         }
 
         if (current_cons.id_attivita != last.id_attivita || current_cons.id_tipo_deliverable != last.id_tipo_deliverable) {
-          rowCount++;
+          //rowCount++;
+          groupedActivities.push(current_cons);
         }
         last = current_cons;
 
@@ -206,59 +216,54 @@ this.hd.g
       var row: any;
 
       var i = 0;
-      while (i < rowCount) {
+
+
+      //while (i < rowCount) {
+      groupedActivities.forEach((group_act, index) => {
 
         row = new Object();
 
-        row.id_cliente = _userDays[i].id_cliente;
-        row.nome_cliente = _userDays[i].nome_cliente;
-        row.id_ambito = _userDays[i].id_ambito;
-        row.nome_ambito = _userDays[i].nome_ambito;
-        row.id_macro_area = _userDays[i].id_macro_area;
-        row.nome_macro_area = _userDays[i].nome_macro_area;
-        row.id_attivita = _userDays[i].id_attivita;
-        row.nome_attivita = _userDays[i].nome_attivita;
-        row.id_tipo_deliverable = _userDays[i].id_tipo_deliverable;
-        row.nome_tipo_deliverable = _userDays[i].nome_tipo_deliverable;
+        row.id_cliente = group_act.id_cliente;
+        row.nome_cliente = group_act.nome_cliente;
+        row.id_ambito = group_act.id_ambito;
+        row.nome_ambito = group_act.nome_ambito;
+        row.id_macro_area = group_act.id_macro_area;
+        row.nome_macro_area = group_act.nome_macro_area;
+        row.id_attivita = group_act.id_attivita;
+        row.nome_attivita = group_act.nome_attivita;
+        row.id_tipo_deliverable = group_act.id_tipo_deliverable;
+        row.nome_tipo_deliverable = group_act.nome_tipo_deliverable;
         row.id_utente = this.userSelected._id;
         row.isEditable = false;
 
         this.cloneConsuntivoField(row, this.blankConsuntivo);
         this.blankConsuntivo.ore = 0;
 
+        //filtro solo i consuntivi relativi a questo group_act
+        let filtered_userDays : Consuntivo[] = _userDays.filter(
+          (consuntivo: Consuntivo) => consuntivo.id_attivita == group_act.id_attivita   
+                                   && consuntivo.id_tipo_deliverable == group_act.id_tipo_deliverable);
 
-        //ciclo sulle colonne
+        //inizializzo tutte le colonne a blank
         for (let j = 0; j < _days; j++) {
-
-          let consuntivoDayOfMonth = -1;
-
-          if (i < _userDays.length) {
-            let consuntivoDateFull = _userDays[i].data_consuntivo;
-            consuntivoDayOfMonth = new Date(consuntivoDateFull).getUTCDate();
-          } else {
-            consuntivoDayOfMonth = -1;
-          }
-
-
-          
-          //inserire class girgio in html se isHoliday = true
-          if ((j + 1) == consuntivoDayOfMonth) { //aggiungo 1 visto che l'indice parte da 0;
-
-            row[j] = _userDays[i];
-            i++; //scorro la lista, potrei fare un pop dalla testa.
-          } else {
-            var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
-            blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 1, 0, 1, 0);
-
-            row[j] = blankItem;
-          }
-          
+          var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
+          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 1, 0, 1, 0);
+          row[j] = blankItem;
         }
+
+        //sostituisco con i valori passati dal server
+        filtered_userDays.forEach((userDay, index)=>{
+
+          let consuntivoDateFull = userDay.data_consuntivo;
+          let consuntivoDayOfMonth = new Date(consuntivoDateFull).getUTCDate();
+
+          row[consuntivoDayOfMonth-1] = userDay;
+   
+        });
         //rowsCollection[i] = row;    
         rowsCollection.push(row);
-      }
+      });
 
-      console.log(rowsCollection);
 
     } catch (error) {
       alert(error);
