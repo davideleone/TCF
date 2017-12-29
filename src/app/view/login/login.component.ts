@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
     saveWidth: any;
+    alertMsg : string;
+    alertDialog : boolean  = false;
     /*@ViewChild('loginSliding') 
     private loginSliding: ElementRef;
     
@@ -95,7 +97,8 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([this.returnUrl]);
             },
             error => {
-                alert("Errore di Login: " + error);
+                this.alertDialog = true;
+                this.alertMsg = error;
                 this.loading = false;
             });
     }
