@@ -1,4 +1,4 @@
-<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)" columnResizeMode="fit"
+<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" resizableColumns="true" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)" columnResizeMode="fit"
     [style]="{'margin-top':'30px'}">
 
     <p-header>
@@ -22,13 +22,13 @@
 
     <p-column frozen="true" header="Cliente/Ambito/Area" >
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span>{{row.nome_cliente}} - {{row.nome_ambito}} - {{row.nome_macro_area}}</span>
+            <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_cliente}} - {{row.nome_ambito}} - {{row.nome_macro_area}}</span>
         </ng-template>
     </p-column>
 
     <p-column field="activity" frozen="true" header="Attività">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable">{{row.nome_attivita}}</span>
+            <span *ngIf="!row.isEditable" [title]="row.nome_attivita" >{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_attivita" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
