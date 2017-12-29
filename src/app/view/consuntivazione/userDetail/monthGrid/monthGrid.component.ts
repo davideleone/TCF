@@ -248,7 +248,7 @@ this.hd.g
             i++; //scorro la lista, potrei fare un pop dalla testa.
           } else {
             var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
-            blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 0, 0, 0, 0);
+            blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 1, 0, 1, 0);
 
             row[j] = blankItem;
           }
@@ -342,11 +342,11 @@ this.hd.g
         //inizializzo la nuova riga con 0 ore su tutti i gg 
         this.cloneConsuntivoField(this.newRowConsuntivo, this.blankConsuntivo);
         this.blankConsuntivo.ore = 0;
-        this.blankConsuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 0, 0, 0, 0);
+        this.blankConsuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
         //inizializzo la table
         for (let i = 0; i < this.nDays; i++) {
           var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
-          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, i + 1, 0, 0, 0, 0);
+          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, i + 1, 1, 0, 1, 0);
           newCons[i] = blankItem;
         }
         //var deepCopyObj = JSON.parse(JSON.stringify(this.newConsuntivo));
@@ -446,7 +446,7 @@ this.hd.g
     consuntivo.nome_attivita = null;
     consuntivo.id_tipo_deliverable = null;
     consuntivo.nome_tipo_deliverable = null;
-    consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 0, 0, 0, 0);
+    consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
 
   }
 
