@@ -6,7 +6,7 @@ import { SelectItem } from 'primeng/primeng';
 import { ClienteService } from '../../service/cliente.service';
 import { ConsuntivazioneService } from '../../service/consuntivazione.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Angular2Csv } from 'angular2-csv/Angular2-csv';
+/*import { Angular2Csv } from 'angular2-csv/Angular2-csv';*/
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -73,7 +73,7 @@ export class ReportComponent implements OnInit {
         return null;
     }
 
-    public createReport() {
+    /*public createReport() {
         var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
@@ -82,7 +82,6 @@ export class ReportComponent implements OnInit {
             quoteStrings: '"',
             decimalseparator: '.',
             showLabels: true,  
-            headers: ['Prova1', 'Prova2']
           };
 
         switch (this.modalitaSelected) {
@@ -103,7 +102,7 @@ export class ReportComponent implements OnInit {
                 })
                 break;
         }
-    }
+    }*/
 
     public isValid(componentName: string) {
         if ((this.reportForm.get(componentName).touched || this.formSubmitted) && this.reportForm.get(componentName).errors)
