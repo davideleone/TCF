@@ -39,6 +39,8 @@ export class UserDetailComponent implements OnInit{
   selectYear($event){
     this.yearSelection = true;
     this.monthOpened = false;
+    this.monthSelected = null;
+    this.yearSelected = null;
   }
 
   backToMonth($event){
@@ -50,6 +52,8 @@ export class UserDetailComponent implements OnInit{
 
   changeUser(event){
     this.userChanged.emit();
+    this.monthSelected = null;
+    this.yearSelected = null;
   }
 
   refreshMonthList(){
