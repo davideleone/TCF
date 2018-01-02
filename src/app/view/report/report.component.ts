@@ -73,8 +73,8 @@ export class ReportComponent implements OnInit {
         return null;
     }
 
-    /*public createReport() {
-        var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
+    public createReport() {
+        /*var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
         var options = { 
@@ -101,8 +101,9 @@ export class ReportComponent implements OnInit {
                     new Angular2Csv(report, 'ReportTotale_'+cliente+'_'+date, options);
                 })
                 break;
-        }
-    }*/
+        }*/
+        alert("Creo Report");
+    }
 
     public isValid(componentName: string) {
         if ((this.reportForm.get(componentName).touched || this.formSubmitted) && this.reportForm.get(componentName).errors)
