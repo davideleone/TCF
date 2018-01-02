@@ -20,13 +20,13 @@
         </ng-template>
     </p-column>
 
-    <p-column frozen="true" header="Cliente/Ambito/Area" >
+    <p-column frozen="true" header="Cliente" styleClass="cliente_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_cliente}} - {{row.nome_ambito}} - {{row.nome_macro_area}}</span>
+            <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_cliente}}</span>
         </ng-template>
     </p-column>
 
-    <p-column field="activity" frozen="true" header="Attività">
+    <p-column field="activity" frozen="true" header="Attività" styleClass="attivita_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable" [title]="row.nome_attivita" >{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
@@ -35,7 +35,7 @@
         </ng-template>
     </p-column>
 
-    <p-column field="deliverable" frozen="true" header="Tipo Deliverable">
+    <p-column field="deliverable" frozen="true" header="Tipo Deliverable" styleClass="deliverable_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">

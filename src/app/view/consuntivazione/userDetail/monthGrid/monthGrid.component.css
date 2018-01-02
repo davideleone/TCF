@@ -26,6 +26,7 @@
     overflow: inherit !important;
     background-color: grey !important;
     color: white !important;
+    border-color: grey !important;
 }
 
 :host /deep/ .cellDay {
@@ -54,4 +55,12 @@
     -moz-appearance:textfield;
     appearance: none;
     margin: 0; 
+}
+
+:host /deep/ .cliente_col{
+    width: 100px;
+}
+
+:host /deep/ .deliverable_col{
+    width: 85px;
 }
