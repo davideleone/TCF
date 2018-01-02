@@ -1,5 +1,5 @@
-<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)" columnResizeMode="fit"
-    [style]="{'margin-top':'30px'}">
+<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)"
+    columnResizeMode="fit" [style]="{'margin-top':'30px'}">
 
     <p-header>
         <div>
@@ -7,7 +7,17 @@
             <button style="float: left;" pButton (click)=showDialogToAdd() label="Aggiungi Attività"></button>
         </div>
     </p-header>
-    <p-column field="edit" header="Azioni" frozen="true" styleClass="editable_col">
+
+    <p-headerColumnGroup frozen="true">
+        <p-row>
+            <p-column header="Azioni" styleClass="editable_col"></p-column>
+            <p-column header="Cliente" styleClass="cliente_col"></p-column>
+            <p-column header="Attività" styleClass="attivita_col"></p-column>
+            <p-column header="Tipo Deliverable" styleClass="deliverable_col"></p-column>
+        </p-row>
+    </p-headerColumnGroup>
+
+    <p-column frozen="true" styleClass="editable_col">
         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
             <span *ngIf="!row.isEditable">
                 <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="edit(row,index)"></i>
@@ -20,40 +30,47 @@
         </ng-template>
     </p-column>
 
-    <p-column frozen="true" header="Cliente" styleClass="cliente_col">
+    <p-column frozen="true" styleClass="cliente_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_cliente}}</span>
         </ng-template>
     </p-column>
 
-    <p-column field="activity" frozen="true" header="Attività" styleClass="attivita_col">
+    <p-column frozen="true" styleClass="attivita_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable" [title]="row.nome_attivita" >{{row.nome_attivita}}</span>
+            <span *ngIf="!row.isEditable" [title]="row.nome_attivita">{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_attivita" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
         </ng-template>
     </p-column>
 
-    <p-column field="deliverable" frozen="true" header="Tipo Deliverable" styleClass="deliverable_col">
+    <p-column header="Tipo Deliverable" frozen="true" styleClass="deliverable_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable">{{row.nome_tipo_deliverable}}</span>
+            <span *ngIf="!row.isEditable" [title]="row.nome_tipo_deliverable">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">
-                    <p-dropdown [options]="lst_deliverable" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown [options]="lst_deliverable" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
         </ng-template>
     </p-column>
 
-    <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [styleClass]="col.cellStyle">
+    <p-column *ngFor="let col of cols" [header]="col.header" [field]="col.field" [styleClass]="col.cellStyle">
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable">{{row[col.field].ore}}</span>
-            <span *ngIf="row.isEditable" >
+            <span *ngIf="row.isEditable">
                 <input type="number" min="0" max="23" class="from-control input inputDay" [(ngModel)]="row[col.field].ore">
             </span>
         </ng-template>
+        <ng-template let-col let-row="rowData" pTemplate="footer">
+            <div [class]="(calculateGroupTotal(col.field) < 8) ? 'error_col' : 'correct_col'">{{calculateGroupTotal(col.field)}}</div>
+        </ng-template>
     </p-column>
 
-    
+    <p-footerColumnGroup frozen="true">
+        <p-row>
+            <p-column footer="Totali" colspan="4"></p-column>           
+        </p-row>
+    </p-footerColumnGroup>
 
 </p-dataTable>
 
@@ -65,7 +82,7 @@
                     <span class="ui-float-label">
                             <label for="ddl_clienti" [ngStyle]="{'color': isValid('ddl_clienti')}" style="top: -.60em;font-size:12px;">Clienti</label>
                         </span>
-                    <p-dropdown id="ddl_clienti" formControlName="ddl_clienti" [options]="lst_clienti" [(ngModel)]="newRowConsuntivo.id_cliente" 
+                    <p-dropdown id="ddl_clienti" formControlName="ddl_clienti" [options]="lst_clienti" [(ngModel)]="newRowConsuntivo.id_cliente"
                         appendTo="body" placeholder="Seleziona Cliente" [autoWidth]="false" [style]="{'width':'100%'}" (onChange)="selectFromCliente('ambito')"></p-dropdown>
                 </div>
             </div>
@@ -76,7 +93,7 @@
                         <label for="ddl_ambiti" [ngStyle]="{'color': isValid('ddl_ambiti')}" style="top: -.60em;font-size:12px;">Ambito</label>
                     </span>
                     <p-dropdown id="ddl_ambiti" formControlName="ddl_ambiti" [options]="lst_ambiti" [(ngModel)]="newRowConsuntivo.id_ambito"
-                        appendTo="body" placeholder="Seleziona Ambito" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('ambito')" ></p-dropdown>
+                        appendTo="body" placeholder="Seleziona Ambito" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('ambito')"></p-dropdown>
                 </div>
             </div>
             <div class="ui-grid-row">
@@ -85,8 +102,9 @@
                     <span class="ui-float-label">
                         <label for="ddl_aree" [ngStyle]="{'color': isValid('ddl_aree')}"  style="top: -.60em;font-size:12px;">Macro Area</label>
                     </span>
-                    <p-dropdown id="ddl_aree" formControlName="ddl_aree" [options]="lst_aree" [(ngModel)]="newRowConsuntivo.id_macro_area" 
-                        appendTo="body" placeholder="Seleziona Area" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('macro_area')" (onChange)="selectFromCliente('attivita')"></p-dropdown>
+                    <p-dropdown id="ddl_aree" formControlName="ddl_aree" [options]="lst_aree" [(ngModel)]="newRowConsuntivo.id_macro_area" appendTo="body"
+                        placeholder="Seleziona Area" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('macro_area')"
+                        (onChange)="selectFromCliente('attivita')"></p-dropdown>
                 </div>
             </div>
             <div class="ui-grid-row">
@@ -95,7 +113,7 @@
                     <span class="ui-float-label">
                         <label for="ddl_attivita" [ngStyle]="{'color': isValid('ddl_attivita')}"  style="top: -.60em;font-size:12px;">Attività</label>
                     </span>
-                    <p-dropdown id="ddl_attivita" formControlName="ddl_attivita" [options]="lst_attivita" [(ngModel)]="newRowConsuntivo.id_attivita" 
+                    <p-dropdown id="ddl_attivita" formControlName="ddl_attivita" [options]="lst_attivita" [(ngModel)]="newRowConsuntivo.id_attivita"
                         appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('attivita')"></p-dropdown>
                 </div>
             </div>

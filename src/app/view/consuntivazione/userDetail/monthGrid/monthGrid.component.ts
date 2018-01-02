@@ -145,7 +145,6 @@ export class MonthGridComponent implements OnChanges {
     this.cols = new Array(this.nDays);
 
     var i = 0;
-this.hd.g
     while (i < this.nDays) {
       this.cols[i] = {};
       this.cols[i].field = (i).toString();
@@ -532,6 +531,19 @@ this.hd.g
     else
       return "#898989"; //#d6d6d6
   }
+
+  public calculateGroupTotal(col: number) {
+    let total = 0;
+    if(this.consuntivi) {
+        for(let cons of this.consuntivi) {
+            if(cons[col].ore != null) {
+                total += cons[col].ore;
+            }
+        }
+    }
+
+    return total;
+}
 
 
 }

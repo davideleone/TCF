@@ -12,6 +12,12 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
+:host /deep/ .ui-datatable .ui-datatable-tfoot > tr > td {
+    height: 30px;
+    font-size: 10px;
+    text-align: center;
+    word-wrap: normal;
+}
 
 .inputDay {
     width: 12px;
@@ -63,4 +69,27 @@
 
 :host /deep/ .deliverable_col{
     width: 85px;
+}
+
+
+:host /deep/ .editable_col{
+    width: 45px;
+}
+
+:host /deep/ .error_col{
+    color: red;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";       /* IE 8 */
+    filter: alpha(opacity=50);  /* IE 5-7 */
+    -moz-opacity: 0.5;          /* Netscape */
+    -khtml-opacity: 0.5;        /* Safari 1.x */
+    opacity: 0.5;               /* Good browsers */
+}
+
+:host /deep/ .correct_col{
+    color: green;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";       /* IE 8 */
+    filter: alpha(opacity=50);  /* IE 5-7 */
+    -moz-opacity: 0.5;          /* Netscape */
+    -khtml-opacity: 0.5;        /* Safari 1.x */
+    opacity: 0.5;               /* Good browsers */
 }
