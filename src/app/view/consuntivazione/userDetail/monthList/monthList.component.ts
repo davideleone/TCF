@@ -29,6 +29,7 @@ export class MonthListComponent implements OnChanges, OnInit {
   yearChanged: boolean = false;
   yearOld = null;
   userSelectedOld = null;
+  monthClicked : boolean = false;
 
 
   constructor(private meseConsuntivoService: MeseConsuntivoService) {
@@ -47,7 +48,9 @@ export class MonthListComponent implements OnChanges, OnInit {
     if (this.userSelected._id != this.userSelectedOld) {
       $('.riassuntoMesiSection p').text('');
       $('.today').val(this.todayYear);
-      this.openMonthsClone();
+      if(!this.monthClicked){
+        this.openMonthsClone();
+      }
       this.userSelectedOld = this.userSelected._id;
       this.years = [];
       this.assunzione = (new Date(this.userSelected.data_inizio_validita)).getFullYear();
@@ -76,6 +79,7 @@ export class MonthListComponent implements OnChanges, OnInit {
 
   /*Gestione click arrow anno*/
   changeDate() {
+    this.monthClicked = false;
     $('.allList').slideToggle();
     $('i').toggleClass('active');
   }
@@ -91,6 +95,7 @@ export class MonthListComponent implements OnChanges, OnInit {
 
   /*Gestione click dell'anno nella combobox*/
   changeYear(yearParam) {
+    this.monthClicked = false;
     //Se seleziono lo stesso anno non chiudo e riapro la lista mesi
     if (yearParam != this.yearOld) {
       this.closeMonths();
@@ -109,6 +114,7 @@ export class MonthListComponent implements OnChanges, OnInit {
   }
 
   openMonths() {
+    this.monthClicked = false;
     if ($('.toggleRight').hasClass('deactive'))
       $('.toggleRight').removeClass('deactive').addClass('active');
     else
@@ -119,6 +125,7 @@ export class MonthListComponent implements OnChanges, OnInit {
   }
 
   openMonthsClone() {
+    this.monthClicked = false;
     if ($('.toggleRight').hasClass('deactive')) {
       $('.toggleRight').removeClass('deactive').addClass('active');
       $('.riassuntoMesi ul').slideToggle();
@@ -129,6 +136,7 @@ export class MonthListComponent implements OnChanges, OnInit {
     if ($('.toggleRight').hasClass('active')) {
       $('.toggleRight').removeClass('active').addClass('deactive');
       $('.riassuntoMesi ul').slideToggle();
+      this.monthClicked = true;
     }
   }
 
