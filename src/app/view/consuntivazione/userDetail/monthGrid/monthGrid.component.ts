@@ -12,6 +12,7 @@ import { SelectItem, ConfirmationService } from 'primeng/primeng';
 import { ClienteService } from '../../../../service/cliente.service';
 import { MeseConsuntivoService } from '../../../../service/meseConsuntivo.service';
 import * as Holidays from 'date-holidays';
+import { Attivita } from '../../../../model/attivita';
 
 @Component({
   selector: 'month-grid',
@@ -53,10 +54,13 @@ export class MonthGridComponent implements OnChanges {
   ambiti: SelectItem[];
   lst_aree: SelectItem[];
   lst_attivita: SelectItem[];
+  lst_attivita_clone: SelectItem[] = [];
   lst_deliverable: SelectItem[];
   consuntivoForm: FormGroup;
 
+  attivitaList: Attivita[];
   hd: any;
+  attivitaDeliverableList : any = [];
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -90,6 +94,7 @@ export class MonthGridComponent implements OnChanges {
 
     this.lst_attivita = new Array<SelectItem>();
     this.attivitaService.getAttivita().subscribe(attivitas => {
+      this.attivitaList = attivitas;
       attivitas.forEach((item, index) => {
         this.lst_attivita.push({ label: item.nome_attivita, value: item._id });
       });
@@ -107,9 +112,10 @@ export class MonthGridComponent implements OnChanges {
     this.domainService.getAmbiti().subscribe(domain => {
       this.ambiti = domain;
     });
-    
+
     this.hd = new Holidays('IT');
 
+    this.attivitaDeliverableList = new Object();
   }
 
 
@@ -150,10 +156,10 @@ export class MonthGridComponent implements OnChanges {
       this.cols[i].field = (i).toString();
       this.cols[i].header = ((i) + 1).toString();
       //Identifico festività
-      let date: Date = new Date(this.yearSelected, this.monthSelected - 1, i+1);
-      if(this.hd.isHoliday(date) || date.getDay() == 0 || date.getDay() == 6 ){
+      let date: Date = new Date(this.yearSelected, this.monthSelected - 1, i + 1);
+      if (this.hd.isHoliday(date) || date.getDay() == 0 || date.getDay() == 6) {
         this.cols[i].cellStyle = "cellHoliday";
-      }else{
+      } else {
         this.cols[i].cellStyle = "cellDay";
       }
       this.cols[i].isFrozen = false;
@@ -172,12 +178,12 @@ export class MonthGridComponent implements OnChanges {
       const consuntivoComparator_AttivitaData = function (a: Consuntivo, b: Consuntivo): number {
 
         if (a.id_attivita == b.id_attivita) {
-          if(a.id_tipo_deliverable == b.id_tipo_deliverable){
+          if (a.id_tipo_deliverable == b.id_tipo_deliverable) {
             return a.data_consuntivo > b.data_consuntivo ? 1 : a.data_consuntivo < b.data_consuntivo ? -1 : 0;
-          }else{
+          } else {
             return a.id_tipo_deliverable > b.id_tipo_deliverable ? 1 : -1;
           }
-        }else{
+        } else {
           return a.id_attivita > b.id_attivita ? 1 : -1;
         }
       }
@@ -239,9 +245,9 @@ export class MonthGridComponent implements OnChanges {
         this.blankConsuntivo.ore = 0;
 
         //filtro solo i consuntivi relativi a questo group_act
-        let filtered_userDays : Consuntivo[] = _userDays.filter(
-          (consuntivo: Consuntivo) => consuntivo.id_attivita == group_act.id_attivita   
-                                   && consuntivo.id_tipo_deliverable == group_act.id_tipo_deliverable);
+        let filtered_userDays: Consuntivo[] = _userDays.filter(
+          (consuntivo: Consuntivo) => consuntivo.id_attivita == group_act.id_attivita
+            && consuntivo.id_tipo_deliverable == group_act.id_tipo_deliverable);
 
         //inizializzo tutte le colonne a blank
         for (let j = 0; j < _days; j++) {
@@ -251,13 +257,13 @@ export class MonthGridComponent implements OnChanges {
         }
 
         //sostituisco con i valori passati dal server
-        filtered_userDays.forEach((userDay, index)=>{
+        filtered_userDays.forEach((userDay, index) => {
 
           let consuntivoDateFull = userDay.data_consuntivo;
           let consuntivoDayOfMonth = new Date(consuntivoDateFull).getUTCDate();
 
-          row[consuntivoDayOfMonth-1] = userDay;
-   
+          row[consuntivoDayOfMonth - 1] = userDay;
+
         });
         //rowsCollection[i] = row;    
         rowsCollection.push(row);
@@ -277,18 +283,22 @@ export class MonthGridComponent implements OnChanges {
   //NEW ROW
   public showDialogToAdd() {
     //Inizializzazione dei parametri di input
+    this.CloseAllEditable();
     this.lst_clienti = [];
     //TODO: gestire clienteuser.cliente.id == null
     this.clienti.forEach(clienteAll => {
       this.userSelected.clienti.forEach(clienteUser => {
+        //if (!this.isAdminSystem())
         if (clienteAll._id == clienteUser.cliente._id)
           this.lst_clienti.push({ label: clienteAll.nome_cliente, value: clienteAll._id });
       });
     });
-    
+
     this.resetConsuntivo(this.newRowConsuntivo);
     this.newRowConsuntivo.id_utente = this.userSelected._id;
     this.consuntivoForm.reset();
+    this.lst_attivita_clone = [];
+    this.filtraAttivitaCombo(false, null, null, null);
     this.formSubmitted = false;
     this.displayDialog = true;
 
@@ -327,14 +337,14 @@ export class MonthGridComponent implements OnChanges {
         err => {
           alert("errore nell'inserimento del mese")
         }
-      );     
+      );
       this.refreshMonthList();
     } else {
       this.addConsuntivo();
     }
   }
 
-  private refreshMonthList(){
+  private refreshMonthList() {
     this.newMonthOpened.emit();
   }
 
@@ -368,8 +378,11 @@ export class MonthGridComponent implements OnChanges {
   private edit(r, i) {
     console.log(r);
     this.CloseAllEditable();
+    this.lst_attivita_clone = [];
+    this.filtraAttivitaCombo(true, r.id_tipo_deliverable, r.id_cliente, { label: r.nome_attivita, value: r.id_attivita });
     r.isEditable = true;
   }
+
   private CloseAllEditable() {
     for (let item of this.consuntivi) {
       if (item.isEditable) {
@@ -382,7 +395,7 @@ export class MonthGridComponent implements OnChanges {
   private saveEdit(editRowConsuntivo, index) {
     editRowConsuntivo.nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
     editRowConsuntivo.nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
-
+    //this.attivitaDeliverableList.push({id_attivita : editRowConsuntivo.id_attivita, id_deliverable: editRowConsuntivo.id_tipo_deliverable});
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
     for (let i = 0; i < this.nDays; i++) {
@@ -401,11 +414,13 @@ export class MonthGridComponent implements OnChanges {
         err => alert(err)
         );
     }
+    this.lst_attivita_clone = [];
     editRowConsuntivo.isEditable = false;
   }
 
   private abortEdit(r, i) {
     //TODO: logica di annullo modifiche (annullo modifiche parziali e ripristino riga precedente)
+    this.lst_attivita_clone = [];
     r.isEditable = false;
   }
 
@@ -431,6 +446,17 @@ export class MonthGridComponent implements OnChanges {
         });
       }
     });
+
+    if (i == 0) {
+      var meseConsuntivo = new MeseConsuntivo();
+      meseConsuntivo.anno_consuntivo = this.yearSelected.toString();
+      meseConsuntivo.mese_consuntivo = this.monthSelected.toString();
+      meseConsuntivo.id_utente = this.userSelected._id.toString();
+      this.meseConsuntivoService.deleteMeseConsuntivo(meseConsuntivo).subscribe(obj => {
+        this.refreshMonthList();
+      })
+    }
+  
   }
 
   //UTILITY
@@ -451,7 +477,6 @@ export class MonthGridComponent implements OnChanges {
     consuntivo.id_tipo_deliverable = null;
     consuntivo.nome_tipo_deliverable = null;
     consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
-
   }
 
 
@@ -482,29 +507,29 @@ export class MonthGridComponent implements OnChanges {
     selCriteria.id_cliente = this.newRowConsuntivo.id_cliente;
 
     switch (componentname) {
-      case 'attivita':        
-        this.lst_attivita = [];
-        this.attivitaService.getAttivitaWithCriteria(selCriteria).subscribe(attivita => {
+      case 'attivita':
+        this.lst_attivita_clone = [];
+        this.filtraAttivitaComboPerCliente(selCriteria.id_cliente);
+        /*this.attivitaService.getAttivitaWithCriteria(selCriteria).subscribe(attivita => {
           attivita.forEach(element => {
-            this.lst_attivita.push({ label: element.nome_attivita, value: element._id });
+            this.att({ label: element.nome_attivita, value: element._id });
           });
-        })
+        })*/
         break;
       case 'ambito':
         this.consuntivoForm.reset();
         this.resetConsuntivo(this.newRowConsuntivo);
-        this.newRowConsuntivo.id_cliente = selCriteria.id_cliente;       
+        this.newRowConsuntivo.id_cliente = selCriteria.id_cliente;
         this.lst_ambiti = [];
-        
+
         let ambitiCliente: any[] = this.clienti.find(x => x._id == this.newRowConsuntivo.id_cliente).ambiti;
-        
+
         this.ambiti.forEach(ambito => {
-            let elem: SelectItem = ambitiCliente.find(x=> x.id_ambito == ambito.value); 
-            if (elem != null)
-                this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
+          let elem: SelectItem = ambitiCliente.find(x => x.id_ambito == ambito.value);
+          if (elem != null)
+            this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
         });
         break;
-
     }
   }
 
@@ -534,16 +559,52 @@ export class MonthGridComponent implements OnChanges {
 
   public calculateGroupTotal(col: number) {
     let total = 0;
-    if(this.consuntivi) {
-        for(let cons of this.consuntivi) {
-            if(cons[col].ore != null) {
-                total += cons[col].ore;
-            }
+    if (this.consuntivi) {
+      for (let cons of this.consuntivi) {
+        if (cons[col].ore != null) {
+          total += cons[col].ore;
         }
+      }
     }
 
     return total;
-}
+  }
+
+  /*private isAdminSystem(): boolean {
+    var userLogged: User = this.user
+    var profiles = Array<string>();
+
+    if (userLogged.clienti != null) {
+      for (let i = 0; i < userLogged.clienti.length; i++)
+        profiles.push(userLogged.clienti[i].profilo);
+
+      return (profiles.includes('AS') || userLogged.isAdmin) ? true : false;
+
+    }*/
+
+  private filtraAttivitaCombo(isEdit, idDeliverable, idCliente, editedObject) {
+    this.lst_attivita.forEach(elements => {
+        if (isEdit){
+          if ((this.attivitaList.find(x => x.id_cliente == idCliente && x._id == elements.value) != undefined))
+            this.lst_attivita_clone.push(elements);
+        }
+        else
+          this.lst_attivita_clone.push(elements);
+    });
+
+  }
+
+  private filtraAttivitaComboPerCliente(idCliente) {
+    var attivitaTrovata = null;
+    this.attivitaList.forEach(attivita => {
+      /*this.attivitaDeliverableList.forEach(attivitaDeliverable => {
+        attivitaTrovata = this.consuntivi.find(x => x.id_attivita == attivitaDeliverable.id_attivita && x.id_tipo_deliverable == attivitaDeliverable.id_deliverable)
+      });*/
+      if (attivita.id_cliente == idCliente)
+        this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
+    });
+
+  }
 
 
 }

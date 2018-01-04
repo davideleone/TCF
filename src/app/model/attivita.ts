@@ -1,4 +1,5 @@
 export class Attivita{
+    _id : any;
     id_ambito: string;
     nome_ambito: string;
     id_commessa_cliente: any;

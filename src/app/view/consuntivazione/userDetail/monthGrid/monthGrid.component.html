@@ -40,7 +40,7 @@
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable" [title]="row.nome_attivita">{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
-                <p-dropdown [options]="lst_attivita" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown [options]="lst_attivita_clone" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
         </ng-template>
     </p-column>
@@ -113,7 +113,7 @@
                     <span class="ui-float-label">
                         <label for="ddl_attivita" [ngStyle]="{'color': isValid('ddl_attivita')}"  style="top: -.60em;font-size:12px;">Attività</label>
                     </span>
-                    <p-dropdown id="ddl_attivita" formControlName="ddl_attivita" [options]="lst_attivita" [(ngModel)]="newRowConsuntivo.id_attivita"
+                    <p-dropdown id="ddl_attivita" formControlName="ddl_attivita" [options]="lst_attivita_clone" [(ngModel)]="newRowConsuntivo.id_attivita"
                         appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('attivita')"></p-dropdown>
                 </div>
             </div>
