@@ -16,6 +16,12 @@ export class AttivitaService {
   	return this.http.get('/tcf/api/attivitaController/CRUD')
   		.map(res=> res.json());
   }
+
+  @beforeMethod(LogAspect.log)
+  getAttivitaByUser(clienteCriteria : string[]){
+  	return this.http.get('/tcf/api/attivitaController/CRUD?criteria='+JSON.stringify({id_cliente:{$in:clienteCriteria}}))
+  		.map(res=> res.json());
+  }
   
   @beforeMethod(LogAspect.log)
   addAttivita(attivitaParam : Attivita){

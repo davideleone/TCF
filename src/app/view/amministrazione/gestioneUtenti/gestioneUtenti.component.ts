@@ -90,14 +90,36 @@ export class GestioneUtentiComponent implements OnInit {
       this.sediList = sedi;
     });
 
-    this.clienteService.getClienti().subscribe(clienti => {
-      this.clientiList = clienti;
-      clienti.forEach(cliente => {
-        this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
-        this.minClientDate.push(cliente.data_inizio_validita);
-        this.maxClientDate.push(cliente.data_fine_validita);
-      });
+    this.authenticationService.user$.subscribe(user => {
+      this.userLogged = user;
     });
+    //se non è admin, per essere in amministrazione, può essere solo admin di progetto
+    if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
+      var selClientiCriteria = []
+
+      this.userLogged.clienti.forEach(clientiUser => {
+        selClientiCriteria.push(clientiUser.cliente._id);
+      });
+
+      this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clienti => {
+        this.clientiList = clienti;
+        clienti.forEach(cliente => {
+          this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
+          this.minClientDate.push(cliente.data_inizio_validita);
+          this.maxClientDate.push(cliente.data_fine_validita);
+        });
+      });
+    }
+    else{ //Nessun filtro
+      this.clienteService.getClienti().subscribe(clienti => {
+        this.clientiList = clienti;
+        clienti.forEach(cliente => {
+          this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
+          this.minClientDate.push(cliente.data_inizio_validita);
+          this.maxClientDate.push(cliente.data_fine_validita);
+        });
+      });
+    }
   }
 
 
@@ -143,10 +165,10 @@ export class GestioneUtentiComponent implements OnInit {
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
         if (this.userIndex == null) { //aggiunta
-          if(this.users != null)
+          if (this.users != null)
             this.users.push(user);
           else
-            this.users = this.newUser;  
+            this.users = this.newUser;
         } else {
           this.users[this.userIndex] = user;
         }
@@ -264,7 +286,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.formSubmitted = true;
     /*var invalidElements: string[] = this.findInvalidControls();
     if (invalidElements != null) {*/
-    if(!form.valid){
+    if (!form.valid) {
       this.alertDialog = true;
       this.alertMsg = "Alcuni campi non stati compilati correttamente!";
     }
@@ -377,7 +399,7 @@ export class GestioneUtentiComponent implements OnInit {
     var controls = this.userForm.controls;
     for (let name in controls) {
       if (controls[name].invalid) {
-        name = name.charAt(0).toUpperCase()+name.substring(1);
+        name = name.charAt(0).toUpperCase() + name.substring(1);
         invalid.push(name);
       }
     }

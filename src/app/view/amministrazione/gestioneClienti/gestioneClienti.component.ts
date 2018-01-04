@@ -10,6 +10,7 @@ import { Attivita } from '../../../model/attivita';
 import { ConfirmationService } from 'primeng/primeng';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { User } from '../../../model/user';
 
 @Component({
   selector: 'gestioneClienti',
@@ -19,7 +20,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, Valid
 })
 
 export class GestioneClientiComponent implements OnInit {
-
+  userLogged: User;
   clients: any;
   newClient: Cliente;
   ambitiComboBox: SelectItem[] = [];
@@ -31,8 +32,8 @@ export class GestioneClientiComponent implements OnInit {
   clientForm: FormGroup;
   formSubmitted: boolean = false;
   selectedAmbitis: any;
-  alertDialog : boolean = false;
-  alertMsg : string;
+  alertDialog: boolean = false;
+  alertMsg: string;
 
 
 
@@ -62,9 +63,29 @@ export class GestioneClientiComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clientService.getClienti().subscribe(clients =>
-      this.clients = clients
-    );
+
+    this.authenticationService.user$.subscribe(user => {
+      this.userLogged = user;
+    });
+
+
+    //se non è admin, per essere in amministrazione, può essere solo admin di progetto
+    if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
+      var selClientiCriteria = [];
+
+      this.userLogged.clienti.forEach(clientiUser => {
+        selClientiCriteria.push(clientiUser.cliente._id);
+      });
+
+      this.clientService.getClientiByUser(selClientiCriteria).subscribe(clients =>
+        this.clients = clients
+      );
+    }
+    else { //nessun filtro
+      this.clientService.getClienti().subscribe(clients =>
+        this.clients = clients
+      );
+    }
   }
 
 

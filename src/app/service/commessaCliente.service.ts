@@ -26,7 +26,12 @@ export class CommessaClienteService {
   	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify(idParam))
   		.map(res=> res.json());
   }*/
-
+  
+  @beforeMethod(LogAspect.log)
+  getCommessaClienteByUser(clienteCriteria){
+  	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify({id_cliente:{$in:clienteCriteria}}))
+  		.map(res=> res.json());
+  }  
   @beforeMethod(LogAspect.log)
   getCommessaWithCriteria(idParam){
   	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify(idParam))

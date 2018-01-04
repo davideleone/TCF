@@ -15,6 +15,12 @@ export class ClienteService {
   		.map(res=> res.json());
   }
 
+  @beforeMethod(LogAspect.log)
+  getClientiByUser(clienteCriteria : string[]){
+  	return this.http.get('/tcf/api/clienteController/CRUD?criteria='+JSON.stringify({_id:{$in:clienteCriteria}}))
+  		.map(res=> res.json());
+  }
+
   @beforeMethod(LogAspect.log)//TODO Retrieve on server side the array of cliente ambiti
   getAmbitiCliente(criteria){
   	return this.http.get('/tcf/api/clienteController/clienti')

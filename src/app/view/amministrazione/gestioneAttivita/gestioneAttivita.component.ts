@@ -13,6 +13,7 @@ import { Domain } from '../../../model/domain';
 import { CommessaClienteService } from '../../../service/commessaCliente.service';
 import { AttivitaService } from '../../../service/attivita.service';
 import { ConsuntivazioneService } from '../../../service/consuntivazione.service';
+import { User } from '../../../model/user';
 
 @Component({
     selector: 'gestioneAttivita',
@@ -24,6 +25,7 @@ import { ConsuntivazioneService } from '../../../service/consuntivazione.service
 
 export class GestioneAttivitaComponent implements OnInit {
 
+    userLogged: User;
     commesse: CommessaCliente[];
     activityClone: Attivita;
     activities: Attivita[];
@@ -51,7 +53,10 @@ export class GestioneAttivitaComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private commessaClienteService: CommessaClienteService,
         private attivitaService: AttivitaService,
-        private consuntivazioneSerice: ConsuntivazioneService) {
+        private consuntivazioneSerice: ConsuntivazioneService,
+        private authenticationService: AuthenticationService) {
+
+
 
         this.newActivity = new Attivita();
         this.activities = new Array<Attivita>();
@@ -74,16 +79,43 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     getInformations() {
-        this.attivitaService.getAttivita().subscribe(attivita => {
-            this.activities = attivita;
-        });
 
-        this.clienteService.getClienti().subscribe(clienti => {
-            this.clienti = clienti;
-            clienti.forEach(clienti => {
-                this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
-            });
+        this.authenticationService.user$.subscribe(user => {
+            this.userLogged = user;
         });
+        //se non è admin, per essere in amministrazione, può essere solo admin di progetto
+        if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
+            var selClientiCriteria = []
+
+            this.userLogged.clienti.forEach(clientiUser => {
+                selClientiCriteria.push(clientiUser.cliente._id);
+            });
+
+            this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clientiAll => {
+                this.clienti = clientiAll;
+                clientiAll.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+
+            this.attivitaService.getAttivitaByUser(selClientiCriteria).subscribe(attivita => {
+                this.activities = attivita;
+            });
+        }
+        else {//nessun filtro
+            this.clienteService.getClienti().subscribe(clientiAll => {
+                this.clienti = clientiAll;
+                clientiAll.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+
+            this.attivitaService.getAttivita().subscribe(attivita => {
+                this.activities = attivita;
+            });
+        }
+
+
 
         this.domainService.getAree().subscribe(aree => {
             this.lst_macro_aree = aree;
@@ -190,7 +222,7 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (element != null)
                         consuntivoCount++;
                 });
-                console.log("Cliente: "+rowData.nome_attivita+" #Consuntivi: "+consuntivoCount+" Id_attivita: "+rowData._id);
+                console.log("Cliente: " + rowData.nome_attivita + " #Consuntivi: " + consuntivoCount + " Id_attivita: " + rowData._id);
                 if (consuntivoCount == 0) {
                     selCriteria = new Object();
                     selCriteria.codice_attivita = rowData.codice_attivita;
@@ -207,7 +239,7 @@ export class GestioneAttivitaComponent implements OnInit {
                         }
                     });
                 }
-                else{
+                else {
                     this.alertDialog = true;
                     this.alertMsg = "Impossibile eliminare l'attivita', presenti consuntivi collegati!";
                 }

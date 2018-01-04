@@ -10,6 +10,8 @@ import { CommessaCliente } from '../../../model/commessaCliente';
 import { CommessaClienteService } from '../../../service/commessaCliente.service';
 import { CommessaFinconsService } from '../../../service/commessaFincons.service';
 import { AttivitaService } from '../../../service/attivita.service';
+import { User } from '../../../model/user';
+
 @Component({
     selector: 'gestioneCommessaCliente',
     templateUrl: './gestioneCommCliente.component.html',
@@ -20,6 +22,7 @@ import { AttivitaService } from '../../../service/attivita.service';
 
 export class GestioneCommClienteComponent implements OnInit {
 
+    userLogged: User;
     CommCliClone: CommessaCliente;
     commClientes: CommessaCliente[];
     newCommCli: CommessaCliente;
@@ -41,7 +44,8 @@ export class GestioneCommClienteComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private commessaClienteService: CommessaClienteService,
         private commessaFinconsService: CommessaFinconsService,
-        private attivitaService: AttivitaService
+        private attivitaService: AttivitaService,
+        private authenticationService: AuthenticationService
     ) {
 
         this.newCommCli = new CommessaCliente();
@@ -62,16 +66,45 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     getInformations() {
-        this.commessaClienteService.getCommesse().subscribe(commesse => {
-            this.commClientes = commesse;
+
+        this.authenticationService.user$.subscribe(user => {
+            this.userLogged = user;
         });
 
-        this.clienteService.getClienti().subscribe(clienti => {
-            this.clienti = clienti;
-            clienti.forEach(clienti => {
-                this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+
+        //se non è admin, per essere in amministrazione, può essere solo admin di progetto
+        if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
+
+            var selClientiCriteria = [];
+
+            this.userLogged.clienti.forEach(clientiUser => {
+                selClientiCriteria.push(clientiUser.cliente._id);
             });
-        });
+
+            this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clientiAll => {
+                this.clienti = clientiAll;
+                clientiAll.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+
+            this.commessaClienteService.getCommessaClienteByUser(selClientiCriteria).subscribe(commesse => {
+                this.commClientes = commesse;
+            });
+        }
+        else { //nessun filtro
+            this.clienteService.getClienti().subscribe(clientiAll => {
+                this.clienti = clientiAll;
+                clientiAll.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+
+            this.commessaClienteService.getCommesse().subscribe(commesse => {
+                this.commClientes = commesse;
+            });
+        }
+
 
         this.commessaFinconsService.getCommesse().subscribe(commesse => {
             this.commesseFnc = commesse;
@@ -139,7 +172,7 @@ export class GestioneCommClienteComponent implements OnInit {
             attivita => {
                 attivita.forEach(element => {
                     if (element.stato_attivita == 'OPEN' || element.stato_attivita == 'CHECK')
-                    attivitaCount++;
+                        attivitaCount++;
                 });
 
                 if (attivitaCount == 0) { //nessuna attivita collegata
