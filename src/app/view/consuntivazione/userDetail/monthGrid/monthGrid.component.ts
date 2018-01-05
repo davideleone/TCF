@@ -56,11 +56,12 @@ export class MonthGridComponent implements OnChanges {
   lst_attivita: SelectItem[];
   lst_attivita_clone: SelectItem[] = [];
   lst_deliverable: SelectItem[];
+  lst_deliverable_clone: SelectItem[] = [];
   consuntivoForm: FormGroup;
 
   attivitaList: Attivita[];
   hd: any;
-  attivitaDeliverableList : any = [];
+  attivitaDeliverableList: any = [];
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -288,7 +289,6 @@ export class MonthGridComponent implements OnChanges {
     //TODO: gestire clienteuser.cliente.id == null
     this.clienti.forEach(clienteAll => {
       this.userSelected.clienti.forEach(clienteUser => {
-        //if (!this.isAdminSystem())
         if (clienteAll._id == clienteUser.cliente._id)
           this.lst_clienti.push({ label: clienteAll.nome_cliente, value: clienteAll._id });
       });
@@ -299,6 +299,7 @@ export class MonthGridComponent implements OnChanges {
     this.consuntivoForm.reset();
     this.lst_attivita_clone = [];
     this.filtraAttivitaCombo(false, null, null, null);
+    this.lst_deliverable_clone = [];
     this.formSubmitted = false;
     this.displayDialog = true;
 
@@ -380,6 +381,8 @@ export class MonthGridComponent implements OnChanges {
     this.CloseAllEditable();
     this.lst_attivita_clone = [];
     this.filtraAttivitaCombo(true, r.id_tipo_deliverable, r.id_cliente, { label: r.nome_attivita, value: r.id_attivita });
+    this.lst_deliverable_clone = [];
+    this.filtraDeliverableCombo(r.id_attivita, { label: r.nome_tipo_deliverable, value: r.id_tipo_deliverable });
     r.isEditable = true;
   }
 
@@ -415,12 +418,14 @@ export class MonthGridComponent implements OnChanges {
         );
     }
     this.lst_attivita_clone = [];
+    this.lst_deliverable_clone = [];
     editRowConsuntivo.isEditable = false;
   }
 
   private abortEdit(r, i) {
     //TODO: logica di annullo modifiche (annullo modifiche parziali e ripristino riga precedente)
     this.lst_attivita_clone = [];
+    this.lst_deliverable_clone = [];
     r.isEditable = false;
   }
 
@@ -456,7 +461,7 @@ export class MonthGridComponent implements OnChanges {
         this.refreshMonthList();
       })
     }
-  
+
   }
 
   //UTILITY
@@ -510,11 +515,6 @@ export class MonthGridComponent implements OnChanges {
       case 'attivita':
         this.lst_attivita_clone = [];
         this.filtraAttivitaComboPerCliente(selCriteria.id_cliente);
-        /*this.attivitaService.getAttivitaWithCriteria(selCriteria).subscribe(attivita => {
-          attivita.forEach(element => {
-            this.att({ label: element.nome_attivita, value: element._id });
-          });
-        })*/
         break;
       case 'ambito':
         this.consuntivoForm.reset();
@@ -570,21 +570,14 @@ export class MonthGridComponent implements OnChanges {
     return total;
   }
 
-  /*private isAdminSystem(): boolean {
-    var userLogged: User = this.user
-    var profiles = Array<string>();
-
-    if (userLogged.clienti != null) {
-      for (let i = 0; i < userLogged.clienti.length; i++)
-        profiles.push(userLogged.clienti[i].profilo);
-
-      return (profiles.includes('AS') || userLogged.isAdmin) ? true : false;
-
-    }*/
-
   private filtraAttivitaCombo(isEdit, idDeliverable, idCliente, editedObject) {
+    var attivitaTrovata = null;
+    
     this.lst_attivita.forEach(elements => {
-        if (isEdit){
+      if (this.consuntivi != null)
+        attivitaTrovata = null;//this.consuntivi.find(x => x.id_attivita == elements.value && x.id_tipo_deliverable == idDeliverable)
+      if (attivitaTrovata == null)
+        if (isEdit) {
           if ((this.attivitaList.find(x => x.id_cliente == idCliente && x._id == elements.value) != undefined))
             this.lst_attivita_clone.push(elements);
         }
@@ -597,13 +590,25 @@ export class MonthGridComponent implements OnChanges {
   private filtraAttivitaComboPerCliente(idCliente) {
     var attivitaTrovata = null;
     this.attivitaList.forEach(attivita => {
-      /*this.attivitaDeliverableList.forEach(attivitaDeliverable => {
-        attivitaTrovata = this.consuntivi.find(x => x.id_attivita == attivitaDeliverable.id_attivita && x.id_tipo_deliverable == attivitaDeliverable.id_deliverable)
-      });*/
       if (attivita.id_cliente == idCliente)
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
+  }
+
+  private filtraDeliverableCombo(idAttivita, editedObject) {
+    var deliverableTrovata = null;
+    
+    if (editedObject != null) {
+      this.lst_deliverable_clone.push(editedObject);
+    }
+
+    this.lst_deliverable.forEach(elements => {
+      if (this.consuntivi != null)
+        deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
+      if (deliverableTrovata == null)
+        this.lst_deliverable_clone.push(elements);
+    });
   }
 
 

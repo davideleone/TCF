@@ -49,7 +49,7 @@
         <ng-template let-col let-row="rowData" pTemplate="body">
             <span *ngIf="!row.isEditable" [title]="row.nome_tipo_deliverable">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">
-                <p-dropdown [options]="lst_deliverable" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown [options]="lst_deliverable_clone" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
         </ng-template>
     </p-column>
@@ -114,7 +114,8 @@
                         <label for="ddl_attivita" [ngStyle]="{'color': isValid('ddl_attivita')}"  style="top: -.60em;font-size:12px;">Attività</label>
                     </span>
                     <p-dropdown id="ddl_attivita" formControlName="ddl_attivita" [options]="lst_attivita_clone" [(ngModel)]="newRowConsuntivo.id_attivita"
-                        appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('attivita')"></p-dropdown>
+                        appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('attivita')"
+                        (onChange)="filtraDeliverableCombo(newRowConsuntivo.id_attivita, null)"></p-dropdown>
                 </div>
             </div>
             <div class="ui-grid-row">
@@ -122,7 +123,7 @@
                     <span class="ui-float-label">
                         <label for="ddl_deliverable" [ngStyle]="{'color': isValid('ddl_deliverable')}" style="top: -.60em;font-size:12px; color:#d6d6d6">Deliverable</label>
                     </span>
-                    <p-dropdown id="ddl_deliverable" formControlName="ddl_deliverable" [options]="lst_deliverable" [(ngModel)]="newRowConsuntivo.id_tipo_deliverable"
+                    <p-dropdown id="ddl_deliverable" formControlName="ddl_deliverable" [options]="lst_deliverable_clone" [(ngModel)]="newRowConsuntivo.id_tipo_deliverable"
                         appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('deliverable')"></p-dropdown>
                 </div>
             </div>
