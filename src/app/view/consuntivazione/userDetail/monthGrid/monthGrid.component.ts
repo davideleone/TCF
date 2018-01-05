@@ -598,7 +598,7 @@ export class MonthGridComponent implements OnChanges {
 
   private filtraDeliverableCombo(idAttivita, editedObject) {
     var deliverableTrovata = null;
-    
+    this.lst_deliverable_clone = [];
     if (editedObject != null) {
       this.lst_deliverable_clone.push(editedObject);
     }
