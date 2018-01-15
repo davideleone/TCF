@@ -46,6 +46,7 @@ export class MonthGridComponent implements OnChanges {
 
   newRowConsuntivo: any;
   blankConsuntivo: Consuntivo;
+  
 
 
   lst_clienti: SelectItem[];
