@@ -511,18 +511,19 @@ export class MonthGridComponent implements OnChanges {
     var selCriteria;
     selCriteria = new Object();
     selCriteria.id_cliente = this.newRowConsuntivo.id_cliente;
-
+    selCriteria.id_ambito = this.newRowConsuntivo.id_ambito;
+    selCriteria.id_macro_area = this.newRowConsuntivo.id_macro_area;
     switch (componentname) {
       case 'attivita':
         this.lst_attivita_clone = [];
-        this.filtraAttivitaComboPerCliente(selCriteria.id_cliente);
+        this.filtraAttivitaComboPerCliente(selCriteria.id_cliente, selCriteria.id_ambito, selCriteria.id_macro_area);
         break;
       case 'ambito':
         this.consuntivoForm.reset();
         this.resetConsuntivo(this.newRowConsuntivo);
         this.newRowConsuntivo.id_cliente = selCriteria.id_cliente;
         this.lst_ambiti = [];
-
+        this.lst_attivita_clone = [];
         let ambitiCliente: any[] = this.clienti.find(x => x._id == this.newRowConsuntivo.id_cliente).ambiti;
 
         this.ambiti.forEach(ambito => {
@@ -588,10 +589,12 @@ export class MonthGridComponent implements OnChanges {
 
   }
 
-  private filtraAttivitaComboPerCliente(idCliente) {
+  private filtraAttivitaComboPerCliente(idCliente, idAmbito, idMacroArea) {
     var attivitaTrovata = null;
     this.attivitaList.forEach(attivita => {
-      if (attivita.id_cliente == idCliente)
+      if (attivita.id_cliente == idCliente &&
+          attivita.id_ambito == idAmbito &&
+          attivita.id_macro_area == idMacroArea)
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
