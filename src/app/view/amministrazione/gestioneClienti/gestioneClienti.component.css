@@ -10,3 +10,10 @@
     font-size: 12px;
     text-align: center;
 }
+:host /deep/ .ui-datatable-scrollable-body{
+    padding-bottom: 0px !important;
+}
+
+:host /deep/  .ui-datatable-header {
+    padding: 0px  !important;
+}

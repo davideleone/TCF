@@ -31,7 +31,7 @@ export class ClienteService {
   @beforeMethod(LogAspect.log)
   addCliente(clienteParam : Cliente){
   	var headers = new Headers();
-  	headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'application/json');
   	return this.http.post('/tcf/api/clienteController/cliente', clienteParam, {headers:headers})
   		.map(res => res.json());
   }

@@ -571,6 +571,7 @@ export class MonthGridComponent implements OnChanges {
     return total;
   }
 
+
   private filtraAttivitaCombo(isEdit, idDeliverable, idCliente, editedObject) {
     var attivitaTrovata = null;
     

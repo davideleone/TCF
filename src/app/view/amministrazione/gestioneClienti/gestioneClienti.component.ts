@@ -69,6 +69,10 @@ export class GestioneClientiComponent implements OnInit {
     });
 
 
+    this.getListClienti();
+  }
+
+  getListClienti(){
     //se non è admin, per essere in amministrazione, può essere solo admin di progetto
     if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
       var selClientiCriteria = [];
@@ -122,14 +126,13 @@ export class GestioneClientiComponent implements OnInit {
 
     this.clientService.addCliente(this.newClient).subscribe(
       cliente => {
-        if (this.clientIndex == null) { //aggiunta
+        if (this.clientIndex == null)
           this.clients.push(cliente);
-        } else { //modifica
+        else
           this.clients[this.clientIndex] = cliente;
-        }
-        this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy  
-        this.changeFormatDate(this.clients);
-      });
+
+        //this.changeFormatDate(this.clients);
+    });
     this.displayDialog = false;
     this.selectedAmbitis = [];
   }

@@ -7,9 +7,14 @@
     <p-dataTable [value]="clients" emptyMessage="Nessun cliente trovato" scrollable="true"  [paginator]="true" [immutable]="false"
         [rows]="8" [globalFilter]="gb" responsive="true">
         <p-header>
-            <div>
-                <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
-                <button style="float: left;" pButton (click)=addNewClient() label="Aggiungi Cliente"></button>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2 ui-g-2 ui-md-2">
+                     <button class="pull-left" pButton (click)=addNewClient() label="Aggiungi Cliente"></button>
+                </div>
+                <div style="text-align:center" class="ui-grid-col-8 ui-g-8 ui-md-8">
+                     <label>Lista Clienti</label>
+                </div>
+                <div class="ui-grid-col-2 ui-g-2 ui-md-2" id="empty"></div>
             </div>
         </p-header>
         <p-column header="Azioni" visible="true" styleClass="editable_col">
