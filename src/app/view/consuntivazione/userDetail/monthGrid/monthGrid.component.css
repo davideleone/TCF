@@ -27,6 +27,7 @@
     padding: 0rem 0rem !important;
 }
 
+
 :host /deep/ .cellHoliday {
     width: 20px !important;
     overflow: inherit !important;
@@ -92,4 +93,12 @@
     -moz-opacity: 0.5;          /* Netscape */
     -khtml-opacity: 0.5;        /* Safari 1.x */
     opacity: 0.5;               /* Good browsers */
+}
+
+:host /deep/ .ui-datatable-scrollable-body{
+    padding-bottom: 0px !important;
+}
+
+:host /deep/  .ui-datatable-header {
+    padding: 0px  !important;
 }

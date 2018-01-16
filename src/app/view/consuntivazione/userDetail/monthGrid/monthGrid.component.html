@@ -1,10 +1,15 @@
-<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)"
-    columnResizeMode="fit" [style]="{'margin-top':'30px'}">
 
-    <p-header>
-        <div>
-            <label style="vertical-align: middle;text-align: center;">{{monthSelected}}/{{yearSelected}}</label>
-            <button style="float: left;" pButton (click)=showDialogToAdd() label="Aggiungi Attività"></button>
+<p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)"
+    columnResizeMode="fit">
+
+    <p-header frozen="true">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-2 ui-g-2 ui-md-2">
+                <button class="pull-left" pButton (click)=showDialogToAdd() label="Aggiungi Attività"></button>
+            </div>
+            <div style="text-align:center" class="ui-grid-col-10 ui-g-10 ui-md-10">
+                <label>{{monthSelected}}/{{yearSelected}}</label>
+            </div>
         </div>
     </p-header>
 
@@ -66,7 +71,7 @@
         </ng-template>
     </p-column>
 
-    <p-footerColumnGroup frozen="true">
+    <p-footerColumnGroup frozen="true" >
         <p-row>
             <p-column footer="Totali" colspan="4"></p-column>           
         </p-row>
