@@ -153,7 +153,7 @@ export class GestioneCommClienteComponent implements OnInit {
         else { //modifica
             var selCriteria;
             selCriteria = new Object();
-            /*selCriteria.codice_attivita = this.newCommCli.;*/
+            selCriteria._id = this.newCommCli._id;
             this.commessaClienteService.updateCommessaCliente(this.newCommCli, selCriteria).subscribe(event => {
                 this.commClientes[this.CommCliIndex] = this.newCommCli;
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
