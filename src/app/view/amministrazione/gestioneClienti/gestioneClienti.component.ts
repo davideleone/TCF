@@ -11,6 +11,7 @@ import { ConfirmationService } from 'primeng/primeng';
 import { AuthenticationService } from '../../../service/authentication.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { User } from '../../../model/user';
+import { error } from 'util';
 
 @Component({
   selector: 'gestioneClienti',
@@ -57,8 +58,7 @@ export class GestioneClientiComponent implements OnInit {
 
     domainService.getAmbiti().subscribe(ambiti => {
       this.ambitiComboBox = ambiti;
-    }
-    );
+    });
 
   }
 
@@ -131,8 +131,13 @@ export class GestioneClientiComponent implements OnInit {
         else
           this.clients[this.clientIndex] = cliente;
 
-        //this.changeFormatDate(this.clients);
-    });
+        this.changeFormatDate(this.clients);
+      },
+      error => {
+          this.alertDialog = true;
+          this.alertMsg = error;
+      }
+    );
     this.displayDialog = false;
     this.selectedAmbitis = [];
   }
@@ -171,7 +176,8 @@ export class GestioneClientiComponent implements OnInit {
           this.alertDialog = true;
           this.alertMsg = 'Impossibile eliminare il cliente, presenti attività in corso collegate!';
         }
-      }
+      },
+
     )
 
 
