@@ -63,6 +63,9 @@ export class MonthGridComponent implements OnChanges {
   attivitaList: Attivita[];
   hd: any;
   attivitaDeliverableList: any = [];
+  displayNote: boolean = false;
+  isNoteEditable: boolean = false;
+  noteConsuntivo: string = null;
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -385,6 +388,10 @@ export class MonthGridComponent implements OnChanges {
     this.lst_deliverable_clone = [];
     this.filtraDeliverableCombo(r.id_attivita, { label: r.nome_tipo_deliverable, value: r.id_tipo_deliverable });
     r.isEditable = true;
+    r.note.forEach(element => {
+      if(element.note != null)
+        this.noteConsuntivo = r.note;
+    });    
   }
 
   private CloseAllEditable() {
@@ -406,6 +413,7 @@ export class MonthGridComponent implements OnChanges {
       if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
         editRowConsuntivo[i].nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
         editRowConsuntivo[i].nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
+        editRowConsuntivo[i].note = this.noteConsuntivo;
         consuntiviToAdd.push(editRowConsuntivo[i]);
       }
     }
@@ -420,6 +428,7 @@ export class MonthGridComponent implements OnChanges {
     }
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
+    this.noteConsuntivo = null;
     editRowConsuntivo.isEditable = false;
   }
 
@@ -615,5 +624,14 @@ export class MonthGridComponent implements OnChanges {
     });
   }
 
+  private showNote(row, index){
+    this.displayNote = true;
+    this.noteConsuntivo = row[index].note; 
+    if(row.isEditable){
+      this.isNoteEditable = true;      
+    }else{
+      this.isNoteEditable = false;
+    }
+  }
 
 }

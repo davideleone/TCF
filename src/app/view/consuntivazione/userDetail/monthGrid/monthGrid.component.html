@@ -1,4 +1,3 @@
-
 <p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)"
     columnResizeMode="fit">
 
@@ -19,6 +18,7 @@
             <p-column header="Cliente" styleClass="cliente_col"></p-column>
             <p-column header="Attività" styleClass="attivita_col"></p-column>
             <p-column header="Tipo Deliverable" styleClass="deliverable_col"></p-column>
+            <p-column header="Note" styleClass="editable_col"></p-column>
         </p-row>
     </p-headerColumnGroup>
 
@@ -43,7 +43,7 @@
 
     <p-column frozen="true" styleClass="attivita_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable" [title]="row.nome_attivita">{{row.nome_attivita}}</span>
+            <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_attivita_clone" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
             </span>
@@ -52,9 +52,17 @@
 
     <p-column header="Tipo Deliverable" frozen="true" styleClass="deliverable_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable" [title]="row.nome_tipo_deliverable">{{row.nome_tipo_deliverable}}</span>
+            <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_deliverable_clone" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
+            </span>
+        </ng-template>
+    </p-column>
+
+    <p-column header="Note" frozen="true" styleClass="editable_col">
+        <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
+            <span>
+                <i class="fa fa-sticky-note-o modifica" aria-hidden="true" (click)="showNote(row, index)"></i>
             </span>
         </ng-template>
     </p-column>
@@ -71,9 +79,9 @@
         </ng-template>
     </p-column>
 
-    <p-footerColumnGroup frozen="true" >
+    <p-footerColumnGroup frozen="true">
         <p-row>
-            <p-column footer="Totali" colspan="4"></p-column>           
+            <p-column footer="Totali" colspan="4"></p-column>
         </p-row>
     </p-footerColumnGroup>
 
@@ -143,3 +151,15 @@
 </p-dialog>
 
 <p-confirmDialog acceptLabel="Elimina" rejectLabel="Annulla" appendTo="body"></p-confirmDialog>
+
+<p-dialog header="Note" [(visible)]="displayNote" modal="true" [responsive]="true" appendTo="body">
+    <span *ngIf="isNoteEditable">
+        <textarea pInputTextarea rows="5" cols="30" [(ngModel)]="noteConsuntivo" placeholder="Inserisci nota..."></textarea>
+    </span>
+    <span *ngIf="!isNoteEditable">
+        <p>{{noteConsuntivo != null ? noteConsuntivo : 'Nessuna nota'}}</p>
+    </span>
+    <p-footer *ngIf="isNoteEditable">
+            <button type="button" pButton (click)="displayNote = false; isNoteEditable = false; " label="Salva"></button>
+    </p-footer>
+</p-dialog>
