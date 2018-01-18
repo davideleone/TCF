@@ -83,16 +83,11 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.getUsersByManager(this.userLogged._id).subscribe(users =>
-      this.users = users);
+    this.userService.getUsersByManager(this.userLogged._id).subscribe(users => this.users = users);
 
-    this.domainService.getSedi().subscribe(sedi => {
-      this.sediList = sedi;
-    });
+    this.domainService.getSedi().subscribe(sedi => this.sediList = sedi );
 
-    this.authenticationService.user$.subscribe(user => {
-      this.userLogged = user;
-    });
+    this.authenticationService.user$.subscribe(user => this.userLogged = user);
     //se non è admin, per essere in amministrazione, può essere solo admin di progetto
     if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
       var selClientiCriteria = []
@@ -173,10 +168,14 @@ export class GestioneUtentiComponent implements OnInit {
         } else {
           this.users[userTrovatoIndex] = user;
         }
+        this.displayDialog = false;
         this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
         this.changeFormatDate(this.users);
+      },
+      error => {
+        this.alertDialog = true;
+        this.alertMsg = error;
       });
-    this.displayDialog = false;
   }
 
   /*Metodo per aggiungere, al click del bottone, una riga alla table dei clienti*/

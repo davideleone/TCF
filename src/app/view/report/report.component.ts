@@ -118,9 +118,6 @@ export class ReportComponent implements OnInit {
         var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
         var CSV = '';   
 
-        console.log(arrData);
-
-        //This condition will generate the Label/Header
         var row = "";
         for (var index in arrData[0]) {
             row += index + ',';
