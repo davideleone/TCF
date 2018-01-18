@@ -4,19 +4,25 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra utenti">
     </div>
-    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="8" [globalFilter]="gb"
-        responsive="true">
+    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="15" [globalFilter]="gb"
+        responsive="true" [rowsPerPageOptions]="[15,30,50]">
         <p-header>
             <div class="ui-grid-row">
                 <div class="ui-grid-col-4 ui-md-4">
-                     <button class="pull-left" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
+                    <button class="pull-left" pButton (click)=addNewUser() label="Aggiungi Utenti"></button>
                 </div>
                 <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
-                     <label>Lista Utenti</label>
+                    <label>Lista Utenti</label>
                 </div>
                 <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
             </div>
         </p-header>
+        <!-- <p-header>
+            <div>
+                <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
+                <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
+            </div>
+        </p-header> -->
         <p-column header="Azioni" visible="true" styleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
@@ -151,7 +157,7 @@
                                 </div>
                                 <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
                             </div>
-                    </p-header>
+                        </p-header> 
                     <p-column field="isEditable" header="Azioni" visible="true" styleClass="editable_col">
                         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <span *ngIf="!row.isEditable">

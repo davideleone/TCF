@@ -5,13 +5,25 @@
         <input #gb type="text" pInputText size="30" placeholder="Filtra Commessa Cliente">
     </div>
     <p-dataTable #dt [value]="commClientes" emptyMessage="Nessuna Commessa Cliente trovata" scrollable="true" [paginator]="true"
-        [rows]="8" [globalFilter]="gb" responsive="true">
+        [rows]="15" [globalFilter]="gb" responsive="true" [rowsPerPageOptions]="[15,30,50]">
         <p-header>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4 ui-md-4">
+                    <button class="pull-left" pButton (click)=addNewCommCli() label="Aggiungi Commesse Cliente"></button>
+                </div>
+                <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
+                    <label>Lista Commesse Cliente</label>
+                </div>
+                <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+            </div>
+        </p-header>
+
+        <!-- <p-header>
             <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Commesse Cliente</label>
                 <button style="float: left;" type="button" pButton (click)=addNewCommCli() label="Aggiungi Commessa Cliente"></button>
             </div>
-        </p-header>
+        </p-header> -->
         <p-column header="Azioni" visible="true" styleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
@@ -33,7 +45,7 @@
         </p-column>
         <p-column field="budget_euro" header="Budget euro" [sortable]="true">
             <ng-template let-row="rowData" pTemplate="body">
-                    {{row.budget_euro != null ? row.budget_euro : 0}} €
+                {{row.budget_euro != null ? row.budget_euro : 0}} €
             </ng-template>
         </p-column>
         <p-column field="data_inizio_validita" header="Data Inizio" [sortable]="true">
