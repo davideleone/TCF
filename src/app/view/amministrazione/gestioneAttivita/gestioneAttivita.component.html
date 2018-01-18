@@ -7,11 +7,23 @@
     <p-dataTable #dt [value]="activities" emptyMessage="Nessuna attivita trovata" scrollable="true" [paginator]="true" [rows]="15"
         [globalFilter]="gb" responsive="true" [rowsPerPageOptions]="[15,30,50]">
         <p-header>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4 ui-md-4">
+                    <button class="pull-left" pButton (click)=addNewActivity() label="Aggiungi Attivita"></button>
+                </div>
+                <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
+                    <label>Lista Attivita</label>
+                </div>
+                <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+            </div>
+        </p-header>
+
+        <!-- <p-header>
             <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Attivita</label>
                 <button style="float: left;" type="button" pButton (click)=addNewActivity() label="Aggiungi Attivita"></button>
             </div>
-        </p-header>
+        </p-header> -->
         <p-column header="Azioni" visible="true" StyleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">

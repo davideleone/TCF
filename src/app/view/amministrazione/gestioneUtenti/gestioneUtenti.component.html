@@ -7,11 +7,22 @@
     <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="15" [globalFilter]="gb"
         responsive="true" [rowsPerPageOptions]="[15,30,50]">
         <p-header>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-4 ui-md-4">
+                    <button class="pull-left" pButton (click)=addNewUser() label="Aggiungi Utenti"></button>
+                </div>
+                <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
+                    <label>Lista Utenti</label>
+                </div>
+                <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+            </div>
+        </p-header>
+        <!-- <p-header>
             <div>
                 <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
                 <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
             </div>
-        </p-header>
+        </p-header> -->
         <p-column header="Azioni" visible="true" styleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
@@ -137,11 +148,16 @@
                 <p-dataTable [value]="clientiObject" [immutable]="false" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
                     scrollHeight="200px">
                     <p-header>
-                        <div>
-                            <button style="float: left;" pButton type="button" (click)="addCliente()" label="Aggiungi Cliente"></button>
-                            <label style="vertical-align: middle;text-align: center;">Lista Clienti</label>
-                        </div>
-                    </p-header>
+                            <div class="ui-grid-row">
+                                <div class="ui-grid-col-4 ui-md-4">
+                                    <button class="pull-left" pButton (click)=addCliente() label="Aggiungi Cliente"></button>
+                                </div>
+                                <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
+                                    <label>Lista Clienti</label>
+                                </div>
+                                <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+                            </div>
+                        </p-header> 
                     <p-column field="isEditable" header="Azioni" visible="true" styleClass="editable_col">
                         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <span *ngIf="!row.isEditable">
