@@ -4,16 +4,15 @@ import 'jquery-ui';
 import 'jquery-easing';
 import { SelectItem } from 'primeng/primeng';
 import { ClienteService } from '../../service/cliente.service';
-import { ConsuntivazioneService } from '../../service/consuntivazione.service';
+import { ReportService } from '../../service/report.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-/*import { Angular2Csv } from 'angular2-csv/Angular2-csv';*/
 import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'report',
     templateUrl: './report.component.html',
     styleUrls: ['./report.component.css'],
-    providers: [ClienteService, ConsuntivazioneService]
+    providers: [ClienteService, ReportService]
 })
 
 export class ReportComponent implements OnInit {
@@ -32,7 +31,7 @@ export class ReportComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
-        private consuntivazioneService: ConsuntivazioneService) {
+        private reportService: ReportService) {
 
         this.reportForm = this.formBuilder.group({
             modalita: new FormControl('', Validators.required),
@@ -74,7 +73,8 @@ export class ReportComponent implements OnInit {
     }
 
     public createReport() {
-        /*var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
+    
+        var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
         var options = { 
@@ -82,27 +82,28 @@ export class ReportComponent implements OnInit {
             quoteStrings: '"',
             decimalseparator: '.',
             showLabels: true,  
-          };
+        };
 
-        switch (this.modalitaSelected) {
-            case 'r_attivita':
-                console.log('Report attivita');
-                this.consuntivazioneService.getReportAttivita(this.clienteSelected, new Date(this.dataInizio).toISOString(), new Date(this.dataFine).toISOString()).subscribe(report => {
-                    console.log(report);
-                    options.headers = this.header_csv_attivita;
-                    new Angular2Csv(report, 'ReportAttivita_'+cliente+'_'+date, options);
-                })
-                break;
-            case 'r_totale':
-                console.log('Report totale');
-                this.consuntivazioneService.getReportTotale(this.clienteSelected, new Date(this.dataInizio).toISOString(), new Date(this.dataFine).toISOString()).subscribe(report => {
-                    console.log(report);
-                    options.headers = this.header_csv_totale;
-                    new Angular2Csv(report, 'ReportTotale_'+cliente+'_'+date, options);
-                })
-                break;
-        }*/
-        alert("Creo Report");
+        var reportDownloadParams = {
+            clientId: this.clienteSelected,
+            start: new Date(this.dataInizio).toISOString(),
+            end: new Date(this.dataFine).toISOString(),
+            type: this.modalitaSelected
+        };
+
+        this.reportService.getReportistica(reportDownloadParams).subscribe(report => {
+            switch (reportDownloadParams.type) {
+                case 'r_totale':
+                    this.JSONToCSVConvertor(report,'report-totale');
+                    break;
+                case 'r_attivita':
+                    this.JSONToCSVConvertor(report,'report-attivita');
+                    break;
+                default:
+                    break;
+            }
+        })
+        
     }
 
     public isValid(componentName: string) {
@@ -112,26 +113,49 @@ export class ReportComponent implements OnInit {
             return "#898989"; //#d6d6d6
     }
 
-    private DownloadJSON2CSV(objArray) {
-        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-        var str = '';
+    public JSONToCSVConvertor(JSONData, reportName) {
 
-        for (var i = 0; i < array.length; i++) {
-            var line = '';
+        var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+        var CSV = '';   
 
-            for (var index in array[i]) {
-                line += array[i][index] + ',';
-            }
+        console.log(arrData);
 
-            // Here is an example where you would wrap the values in double quotes
-            // for (var index in array[i]) {
-            //    line += '"' + array[i][index] + '",';
-            // }
-
-            line.slice(0, line.length - 1);
-
-            str += line + '\r\n';
+        //This condition will generate the Label/Header
+        var row = "";
+        for (var index in arrData[0]) {
+            row += index + ',';
         }
-        window.open("data:text/csv;charset=utf-8," + str);// + _.escape(str))
+        row = row.slice(0, -1);
+        CSV += row + '\r\n';
+
+        for (var i = 0; i < arrData.length; i++) {
+            var row = "";
+
+            for (var index in arrData[i]) 
+                row += '"' + arrData[i][index] + '",';
+
+            row.slice(0, row.length - 1);
+            CSV += row + '\r\n';
+        }
+
+        if (CSV == '') {        
+            alert("Invalid data");
+            return;
+        }   
+        
+        //Generate a file name
+        var date = new Date();
+        
+        var fileName =  date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString() + '_' + reportName;
+        fileName = fileName.replace(/ /g,"_");   
+        var uri = 'data:text/csv;charset=utf-8,' + encodeURI(CSV);
+        //Create hidden link for download
+        var link = document.createElement("a");    
+        link.href = uri;
+        link.download = fileName + ".csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }
+

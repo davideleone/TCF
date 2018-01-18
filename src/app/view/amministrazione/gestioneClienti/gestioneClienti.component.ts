@@ -66,10 +66,9 @@ export class GestioneClientiComponent implements OnInit {
 
     this.authenticationService.user$.subscribe(user => {
       this.userLogged = user;
+      this.getListClienti();
     });
 
-
-    this.getListClienti();
   }
 
   getListClienti(){
@@ -138,6 +137,7 @@ export class GestioneClientiComponent implements OnInit {
           this.alertMsg = error;
       }
     );
+    
     this.displayDialog = false;
     this.selectedAmbitis = [];
   }
