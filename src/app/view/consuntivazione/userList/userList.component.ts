@@ -1,6 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
-import {User} from '../../../model/user';
-import {UserService} from '../../../service/user.service';
+import { User } from '../../../model/user';
+import { UserService } from '../../../service/user.service';
 import { Pipe, PipeTransform, EventEmitter, Input, OnChanges } from '@angular/core';
 import * as $ from 'jquery';
 import 'jquery-ui';
@@ -28,58 +28,64 @@ export class SearchUser implements PipeTransform {
 })
 
 
-export class UserListComponent implements OnChanges{
+export class UserListComponent implements OnChanges {
 
-  users: User[];
+  users: User[] = [];
   query: any;
-  @Input() userLogged : User;
-  @Input() maxUserLoggedProfile : string;
+  @Input() userLogged: User;
+  @Input() maxUserLoggedProfile: string;
   @Input() selected;
   @Output() userSelected = new EventEmitter();
 
-  constructor(private userService : UserService) {
+  constructor(private userService: UserService) {
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.getUsers();
   }
 
-  selectUser(userParam){
-      this.userSelected.emit(userParam);
+  selectUser(userParam) {
+    this.userSelected.emit(userParam);
   }
 
-  deleteUser(userParam){
+  deleteUser(userParam) {
     //elimina utente per id
   }
 
-  getUsers(){
-    this.userService.getUsersByManager(this.userLogged._id).subscribe( users => this.users = users);
+  getUsers() {
+    this.userService.getUsersByManager(this.userLogged._id).subscribe(
+      users =>
+        users.forEach(element => {
+          if(element._id != this.userLogged._id)
+            this.users.push(element)
+        })
+      );
   }
 
-  chooseClass(userParam : User){
+  chooseClass(userParam: User) {
     var userClass;
-      switch(this.getMaxUserProfile(userParam)){
-        case 'AS':
-          userClass = "fa fa-user-md";
-          break;
-        case 'AP':
-          userClass = "fa fa-user-plus";
-          break;
-        case 'CS':
-          userClass = "fa fa-user";
-          break;
-      }
-    return userClass;  
+    switch (this.getMaxUserProfile(userParam)) {
+      case 'AS':
+        userClass = "fa fa-user-md";
+        break;
+      case 'AP':
+        userClass = "fa fa-user-plus";
+        break;
+      case 'CS':
+        userClass = "fa fa-user";
+        break;
+    }
+    return userClass;
   }
 
-  getMaxUserProfile(userLogged : User) : string{
+  getMaxUserProfile(userLogged: User): string {
     var profiles = Array<string>();
-    
-    for(let i=0; i<userLogged.clienti.length; i++)
-        profiles.push(userLogged.clienti[i].profilo);
+
+    for (let i = 0; i < userLogged.clienti.length; i++)
+      profiles.push(userLogged.clienti[i].profilo);
 
     return profiles.includes('AS') ? "AS" : profiles.includes('AP') ? "AP" : "CS";
 
   }
 
-  }
+}
