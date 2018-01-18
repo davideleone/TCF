@@ -63,6 +63,9 @@ export class MonthGridComponent implements OnChanges {
   attivitaList: Attivita[];
   hd: any;
   attivitaDeliverableList: any = [];
+  displayNote: boolean = false;
+  isNoteEditable: boolean = false;
+  noteConsuntivo: string = null;
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -385,6 +388,10 @@ export class MonthGridComponent implements OnChanges {
     this.lst_deliverable_clone = [];
     this.filtraDeliverableCombo(r.id_attivita, { label: r.nome_tipo_deliverable, value: r.id_tipo_deliverable });
     r.isEditable = true;
+    r.note.forEach(element => {
+      if(element.note != null)
+        this.noteConsuntivo = r.note;
+    });    
   }
 
   private CloseAllEditable() {
@@ -406,6 +413,7 @@ export class MonthGridComponent implements OnChanges {
       if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
         editRowConsuntivo[i].nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
         editRowConsuntivo[i].nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
+        editRowConsuntivo[i].note = this.noteConsuntivo;
         consuntiviToAdd.push(editRowConsuntivo[i]);
       }
     }
@@ -420,6 +428,7 @@ export class MonthGridComponent implements OnChanges {
     }
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
+    this.noteConsuntivo = null;
     editRowConsuntivo.isEditable = false;
   }
 
@@ -511,18 +520,19 @@ export class MonthGridComponent implements OnChanges {
     var selCriteria;
     selCriteria = new Object();
     selCriteria.id_cliente = this.newRowConsuntivo.id_cliente;
-
+    selCriteria.id_ambito = this.newRowConsuntivo.id_ambito;
+    selCriteria.id_macro_area = this.newRowConsuntivo.id_macro_area;
     switch (componentname) {
       case 'attivita':
         this.lst_attivita_clone = [];
-        this.filtraAttivitaComboPerCliente(selCriteria.id_cliente);
+        this.filtraAttivitaComboPerCliente(selCriteria.id_cliente, selCriteria.id_ambito, selCriteria.id_macro_area);
         break;
       case 'ambito':
         this.consuntivoForm.reset();
         this.resetConsuntivo(this.newRowConsuntivo);
         this.newRowConsuntivo.id_cliente = selCriteria.id_cliente;
         this.lst_ambiti = [];
-
+        this.lst_attivita_clone = [];
         let ambitiCliente: any[] = this.clienti.find(x => x._id == this.newRowConsuntivo.id_cliente).ambiti;
 
         this.ambiti.forEach(ambito => {
@@ -589,10 +599,12 @@ export class MonthGridComponent implements OnChanges {
 
   }
 
-  private filtraAttivitaComboPerCliente(idCliente) {
+  private filtraAttivitaComboPerCliente(idCliente, idAmbito, idMacroArea) {
     var attivitaTrovata = null;
     this.attivitaList.forEach(attivita => {
-      if (attivita.id_cliente == idCliente)
+      if (attivita.id_cliente == idCliente &&
+          attivita.id_ambito == idAmbito &&
+          attivita.id_macro_area == idMacroArea)
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
@@ -613,5 +625,14 @@ export class MonthGridComponent implements OnChanges {
     });
   }
 
+  private showNote(row, index){
+    this.displayNote = true;
+    this.noteConsuntivo = row[index].note; 
+    if(row.isEditable){
+      this.isNoteEditable = true;      
+    }else{
+      this.isNoteEditable = false;
+    }
+  }
 
 }

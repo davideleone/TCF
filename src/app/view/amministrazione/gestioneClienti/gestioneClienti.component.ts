@@ -122,14 +122,15 @@ export class GestioneClientiComponent implements OnInit {
 
   saveNew() {
     this.popolaAmbitiCliente(this.selectedAmbitis);
-
+    var clienteTrovatoIndex = this.clients.findIndex(i => i._id == this.newClient._id);
     this.clientService.addCliente(this.newClient).subscribe(
       cliente => {
-        if (this.clientIndex == null)
+        if ( clienteTrovatoIndex == -1 )
           this.clients.push(cliente);
-        else
-          this.clients[this.clientIndex] = cliente;
-
+        else{
+          this.clients[clienteTrovatoIndex] = cliente;
+        }
+        this.clients = JSON.parse(JSON.stringify(this.clients));
         this.changeFormatDate(this.clients);
       },
       error => {
@@ -145,6 +146,7 @@ export class GestioneClientiComponent implements OnInit {
 
   //DELETE ROW
   private deleteRow(rowData, rowIndex) {
+    var clienteTrovatoIndex = this.clients.findIndex(i => i._id == rowData._id);
     var selCriteria;
     var attivitaCount = 0;
     selCriteria = new Object();
@@ -166,7 +168,7 @@ export class GestioneClientiComponent implements OnInit {
             icon: 'fa fa-trash',
             accept: () => {
               this.clientService.deleteCliente(selCriteria).subscribe(event => {
-                this.clients.splice(rowIndex, 1);
+                this.clients.splice(clienteTrovatoIndex, 1);
                 this.clients = JSON.parse(JSON.stringify(this.clients)); //deepcopy
               });
             }

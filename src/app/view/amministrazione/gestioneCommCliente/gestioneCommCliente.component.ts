@@ -134,7 +134,8 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     saveNew() {
-        console.log("save");
+        var commClienteTrovatoIndex = this.commClientes.findIndex(i => i._id == this.newCommCli._id);
+        
         this.newCommCli.nome_cliente = this.lst_clienti.find(x => x.value == this.newCommCli.id_cliente).label;
         this.newCommCli.nome_commessa_fnc = this.lst_commesse_fnc.find(x => x.value == this.newCommCli.id_commessa_fnc).label;
 
@@ -143,7 +144,7 @@ export class GestioneCommClienteComponent implements OnInit {
         if (this.newCommCli.budget_gg == null)
             this.newCommCli.budget_gg = 0;
 
-        if (this.CommCliIndex == null) { //aggiunta
+        if (commClienteTrovatoIndex == -1) { //aggiunta
             this.commessaClienteService.addCommessaCliente(this.newCommCli).subscribe(event => {
                 this.commClientes.push(this.newCommCli);
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
@@ -155,7 +156,7 @@ export class GestioneCommClienteComponent implements OnInit {
             selCriteria = new Object();
             selCriteria._id = this.newCommCli._id;
             this.commessaClienteService.updateCommessaCliente(this.newCommCli, selCriteria).subscribe(event => {
-                this.commClientes[this.CommCliIndex] = this.newCommCli;
+                this.commClientes[commClienteTrovatoIndex] = this.newCommCli;
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                 this.changeFormatDate(this.commClientes);
             });
@@ -164,6 +165,8 @@ export class GestioneCommClienteComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
+        var commClienteTrovatoIndex = this.commClientes.findIndex(i => i._id == rowData._id);
+        
         var selCriteria, attivitaCount = 0;
         selCriteria = new Object();
         //selCriteria.codice_commCliente = rowData.codice_commCliente;
@@ -184,7 +187,7 @@ export class GestioneCommClienteComponent implements OnInit {
                         icon: 'fa fa-trash',
                         accept: () => {
                             this.commessaClienteService.deleteCommessaCliente(selCriteria).subscribe(event => {
-                                this.commClientes.splice(rowIndex, 1);
+                                this.commClientes.splice(commClienteTrovatoIndex, 1);
                                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                                 this.changeFormatDate(this.commClientes);
                             });
