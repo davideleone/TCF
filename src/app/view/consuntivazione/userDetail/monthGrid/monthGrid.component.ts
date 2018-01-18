@@ -421,7 +421,7 @@ export class MonthGridComponent implements OnChanges {
       this.consuntivazioneService
         .addUpdateConsuntivi(consuntiviToAdd)
         .subscribe(obj => {
-          alert(obj.msg);
+          console.log(obj.msg);
         },
         err => alert(err)
         );
