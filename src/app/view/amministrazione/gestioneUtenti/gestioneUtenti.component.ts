@@ -162,15 +162,16 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   saveNew() {
+    var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id);
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
-        if (this.userIndex == null) { //aggiunta
+        if (userTrovatoIndex == -1) { //aggiunta
           if (this.users != null)
             this.users.push(user);
           else
             this.users = this.newUser;
         } else {
-          this.users[this.userIndex] = user;
+          this.users[userTrovatoIndex] = user;
         }
         this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
         this.changeFormatDate(this.users);
@@ -198,16 +199,17 @@ export class GestioneUtentiComponent implements OnInit {
 
   //DELETE ROW
   private deleteRow(rowData, rowIndex) {
+    var userTrovatoIndex = this.users.findIndex(i => i._id == rowData._id);
     var selCriteria;
     selCriteria = new Object();
     selCriteria._id = rowData._id;
     this.confirmationService.confirm({
-      message: "Sei sicuro di voler eliminare l'utente '" + rowData.username + "' ?",
+      message: "Sei sicuro di voler eliminare l'utente '" + rowData.nome + " "+rowData.cognome+"' ?",
       header: 'Elimina utente',
       icon: 'fa fa-trash',
       accept: () => {
         this.userService.deleteUser(selCriteria).subscribe(event => {
-          this.users.splice(rowIndex, 1);
+          this.users.splice(userTrovatoIndex, 1);
           this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
           this.changeFormatDate(this.users);
         });

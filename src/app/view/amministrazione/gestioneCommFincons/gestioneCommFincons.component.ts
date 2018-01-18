@@ -79,12 +79,14 @@ export class GestioneCommFinconsComponent implements OnInit {
     }
 
     saveNew() {
+    var commFinconsTrovatoIndex = this.commFinconss.findIndex(i => i._id == this.newCommFincons._id);
+        
         if(this.newCommFincons.budget_euro==null)
             this.newCommFincons.budget_euro = 0;
         if(this.newCommFincons.budget_gg==null)
             this.newCommFincons.budget_gg = 0;
 
-        if (this.CommFinconsIndex == null) { //aggiunta
+        if (commFinconsTrovatoIndex == -1) { //aggiunta
             this.commessaFinconsService.addcommessaFincons(this.newCommFincons).subscribe(event => {
                 this.commFinconss.push(this.newCommFincons);
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
@@ -94,9 +96,10 @@ export class GestioneCommFinconsComponent implements OnInit {
         else { //modifica
             var selCriteria;
             selCriteria = new Object();
-            /*selCriteria.codice_attivita = this.newCommFincons.;*/
+            selCriteria.codice_commessa = this.newCommFincons.codice_commessa;
+            alert(this.newCommFincons.codice_commessa);
             this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
-                this.commFinconss[this.CommFinconsIndex] = this.newCommFincons;
+                this.commFinconss[commFinconsTrovatoIndex] = this.newCommFincons;
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                 this.changeFormatDate(this.commFinconss);
             });
@@ -105,6 +108,8 @@ export class GestioneCommFinconsComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
+        var commFinconsTrovatoIndex = this.commFinconss.findIndex(i => i._id == rowData._id);
+        
         var selCriteria, commesseCount = 0;
         selCriteria = new Object();
         selCriteria.id_commessa_fnc = rowData._id;
@@ -125,7 +130,7 @@ export class GestioneCommFinconsComponent implements OnInit {
                     icon: 'fa fa-trash',
                     accept: () => {
                         this.commessaFinconsService.deletecommessaFincons(selCriteria).subscribe(event => {
-                            this.commFinconss.splice(rowIndex, 1);
+                            this.commFinconss.splice(commFinconsTrovatoIndex, 1);
                             this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                             this.changeFormatDate(this.commFinconss);
                         });
