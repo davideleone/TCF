@@ -13,7 +13,7 @@ export class AttivitaService {
   //retrieving ActivityService
 	@beforeMethod(LogAspect.log)
   getAttivita(){
-  	return this.http.get('/tcf/api/attivitaController/CRUD')
+  	return this.http.get('/tcf/api/attivitaController/attivitaAll')
   		.map(res=> res.json());
   }
 
@@ -30,6 +30,15 @@ export class AttivitaService {
   	return this.http.post('/tcf/api/attivitaController/CRUD/', attivitaParam, {headers:headers})
   		.map(res => res.json());
   }
+
+
+  /*@beforeMethod(LogAspect.log)
+  addAttivita(attivitaParam : Attivita){
+  	var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+  	return this.http.post('/tcf/api/attivitaController/attivita', attivitaParam, {headers:headers})
+  		.map(res => res.json());
+  }*/
 
   @beforeMethod(LogAspect.log)
   deleteAttivita(criteria){
