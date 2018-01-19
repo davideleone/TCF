@@ -135,7 +135,6 @@ export class GestioneCommClienteComponent implements OnInit {
 
     saveNew() {
         var commClienteTrovatoIndex = this.commClientes.findIndex(i => i._id == this.newCommCli._id && this.newCommCli._id != undefined);
-        alert(commClienteTrovatoIndex);
         this.newCommCli.nome_cliente = this.lst_clienti.find(x => x.value == this.newCommCli.id_cliente).label;
         this.newCommCli.nome_commessa_fnc = this.lst_commesse_fnc.find(x => x.value == this.newCommCli.id_commessa_fnc).label;
 
@@ -156,7 +155,6 @@ export class GestioneCommClienteComponent implements OnInit {
             selCriteria = new Object();
             selCriteria._id = this.newCommCli._id;
             this.commessaClienteService.updateCommessaCliente(this.newCommCli, selCriteria).subscribe(event => {
-                //alert(commClienteTrovatoIndex);
                 this.commClientes[commClienteTrovatoIndex] = this.newCommCli;
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                 this.changeFormatDate(this.commClientes);
