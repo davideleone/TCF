@@ -14,18 +14,6 @@ export class CommessaClienteService {
   	return this.http.get('/tcf/api/commessaClienteController/CRUD')
   		.map(res=> res.json());
   }
-
-  /*@beforeMethod(LogAspect.log)
-  getCommessaByCliente(idParam){
-  	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify(idParam))
-  		.map(res=> res.json());
-  }*/
-
-  /*@beforeMethod(LogAspect.log)
-  getClienteByCommessa(idParam){
-  	return this.http.get('/tcf/api/commessaClienteController/CRUD?criteria='+JSON.stringify(idParam))
-  		.map(res=> res.json());
-  }*/
   
   @beforeMethod(LogAspect.log)
   getCommessaClienteByUser(clienteCriteria){
