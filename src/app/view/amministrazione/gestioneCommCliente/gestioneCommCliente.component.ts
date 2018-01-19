@@ -148,6 +148,11 @@ export class GestioneCommClienteComponent implements OnInit {
                 this.commClientes.push(this.newCommCli);
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                 this.changeFormatDate(this.commClientes);
+                this.displayDialog = false;
+            },
+            error => {
+                this.alertDialog = true;
+                this.alertMsg = error;
             });
         }
         else { //modifica
@@ -158,9 +163,13 @@ export class GestioneCommClienteComponent implements OnInit {
                 this.commClientes[commClienteTrovatoIndex] = this.newCommCli;
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                 this.changeFormatDate(this.commClientes);
+                this.displayDialog = false;
+            },
+            error => {
+                this.alertDialog = true;
+                this.alertMsg = error;
             });
         }
-        this.displayDialog = false;
     }
 
     private deleteRow(rowData, rowIndex) {
