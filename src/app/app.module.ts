@@ -34,6 +34,7 @@ var consoleAppender = JL.createConsoleAppender('consoleAppender');
 
 JL().setOptions({ "level": environment.logLevel, "appenders": [ajaxAppender, consoleAppender] });
 JL.setOptions({ "defaultAjaxUrl": environment.apiUrl + environment.loggerApiUrl });
+JL.setOptions({ "enabled" : false});
 
 /*
 if (typeof window !== 'undefined' && !window.onerror) {
