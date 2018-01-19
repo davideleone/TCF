@@ -148,16 +148,16 @@
                 <p-dataTable [value]="clientiObject" [immutable]="false" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
                     scrollHeight="200px">
                     <p-header>
-                            <div class="ui-grid-row">
-                                <div class="ui-grid-col-4 ui-md-4">
-                                    <button class="pull-left" pButton (click)=addCliente() label="Aggiungi Cliente"></button>
-                                </div>
-                                <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
-                                    <label>Lista Clienti</label>
-                                </div>
-                                <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4 ui-md-4">
+                                <button class="pull-left" type="button" pButton (click)=addCliente() label="Aggiungi Cliente"></button>
                             </div>
-                        </p-header> 
+                            <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
+                                <label>Lista Clienti</label>
+                            </div>
+                            <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
+                        </div>
+                    </p-header>
                     <p-column field="isEditable" header="Azioni" visible="true" styleClass="editable_col">
                         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
                             <span *ngIf="!row.isEditable">
