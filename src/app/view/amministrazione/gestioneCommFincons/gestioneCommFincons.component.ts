@@ -78,9 +78,9 @@ export class GestioneCommFinconsComponent implements OnInit {
         return form.valid;
     }
 
-    saveNew() {
-    var commFinconsTrovatoIndex = this.commFinconss.findIndex(i => i._id == this.newCommFincons._id);
-        
+    saveNew() {    
+    
+    var commFinconsTrovatoIndex = this.commFinconss.findIndex(i => i._id == this.newCommFincons._id && this.newCommFincons._id != undefined);
         if(this.newCommFincons.budget_euro==null)
             this.newCommFincons.budget_euro = 0;
         if(this.newCommFincons.budget_gg==null)
@@ -97,9 +97,7 @@ export class GestioneCommFinconsComponent implements OnInit {
             var selCriteria;
             selCriteria = new Object();
             selCriteria._id = this.newCommFincons._id;
-            console.log(this.newCommFincons.codice_commessa);
-            console.log(this.newCommFincons._id);
-            this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
+             this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
                 this.commFinconss[commFinconsTrovatoIndex] = this.newCommFincons;
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                 this.changeFormatDate(this.commFinconss);

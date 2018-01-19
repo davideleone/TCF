@@ -122,7 +122,7 @@ export class GestioneClientiComponent implements OnInit {
 
   saveNew() {
     this.popolaAmbitiCliente(this.selectedAmbitis);
-    var clienteTrovatoIndex = this.clients.findIndex(i => i._id == this.newClient._id);
+    var clienteTrovatoIndex = this.clients.findIndex(i => i._id == this.newClient._id && this.newClient._id != undefined);
     this.clientService.addCliente(this.newClient).subscribe(
       cliente => {
         if ( clienteTrovatoIndex == -1 )

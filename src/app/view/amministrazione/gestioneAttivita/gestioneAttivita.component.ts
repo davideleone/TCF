@@ -148,7 +148,7 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     saveNew() {
-        var attivitaTrovataIndex = this.activities.findIndex(i => i._id == this.newActivity._id);
+        var attivitaTrovataIndex = this.activities.findIndex(i => i._id == this.newActivity._id && this.newActivity._id != undefined);
         
         this.newActivity.nome_cliente = this.lst_clienti.find(x => x.value == this.newActivity.id_cliente).label;
         this.newActivity.nome_ambito = this.lst_ambiti.find(x => x.value == this.newActivity.id_ambito).label;
