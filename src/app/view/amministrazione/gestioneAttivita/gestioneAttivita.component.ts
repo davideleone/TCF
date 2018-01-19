@@ -148,6 +148,8 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     saveNew() {
+        var attivitaTrovataIndex = this.activities.findIndex(i => i._id == this.newActivity._id);
+        
         this.newActivity.nome_cliente = this.lst_clienti.find(x => x.value == this.newActivity.id_cliente).label;
         this.newActivity.nome_ambito = this.lst_ambiti.find(x => x.value == this.newActivity.id_ambito).label;
         this.newActivity.nome_macro_area = this.lst_macro_aree.find(x => x.value == this.newActivity.id_macro_area).label;
@@ -159,8 +161,9 @@ export class GestioneAttivitaComponent implements OnInit {
         if (this.newActivity.budget_ore == null)
             this.newActivity.budget_ore = 0;
 
-        if (this.activityIndex == null) { //aggiunta
-            this.attivitaService.addAttivita(this.newActivity).subscribe(event => {
+        if (attivitaTrovataIndex == -1) { //aggiunta
+            this.attivitaService.addAttivita(this.newActivity).subscribe(
+            event => {
                 this.activities.push(this.newActivity);
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
                 this.changeFormatDate(this.activities);
@@ -169,13 +172,30 @@ export class GestioneAttivitaComponent implements OnInit {
         else { //modifica
             var selCriteria;
             selCriteria = new Object();
-            selCriteria.codice_attivita = this.newActivity.codice_attivita;
+            selCriteria._id = this.newActivity._id;
+            console.log(this.newActivity._id);
             this.attivitaService.updateAttivita(this.newActivity, selCriteria).subscribe(event => {
-                this.activities[this.activityIndex] = this.newActivity;
+                this.activities[attivitaTrovataIndex] = this.newActivity;
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
                 this.changeFormatDate(this.activities);
             });
         }
+        /*this.attivitaService.addAttivita(this.newActivity).subscribe(
+            attivita => {
+              if ( attivitaTrovataIndex == -1 )
+                this.activities.push(attivita);
+              else{
+                this.activities[attivitaTrovataIndex] = attivita;
+              }
+              this.activities = JSON.parse(JSON.stringify(this.activities));
+              this.changeFormatDate(this.activities);
+            },
+            error => {
+                this.alertDialog = true;
+                this.alertMsg = error;
+            }
+          );*/
+          
         this.displayDialog = false;
     }
 
@@ -200,7 +220,7 @@ export class GestioneAttivitaComponent implements OnInit {
                 });
                 this.newActivity.stato_attivita = "OPEN";
                 this.newActivity.nome_stato = "Aperto";
-                break;
+                break; 
             case 'commessa_cliente':
                 this.lst_commesse_clienti = [];
                 this.commesse.forEach(element => {
@@ -212,6 +232,7 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     private deleteRow(rowData, rowIndex) {
+        var attivitaTrovataIndex = this.activities.findIndex(i => i._id == rowData._id);
         var selCriteria, consuntivoCount = 0;
         selCriteria = new Object();
         selCriteria.id_attivita = rowData._id;
@@ -232,7 +253,7 @@ export class GestioneAttivitaComponent implements OnInit {
                         icon: 'fa fa-trash',
                         accept: () => {
                             this.attivitaService.deleteAttivita(selCriteria).subscribe(event => {
-                                this.activities.splice(rowIndex, 1);
+                                this.activities.splice(attivitaTrovataIndex, 1);
                                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
                                 this.changeFormatDate(this.activities);
                             });
