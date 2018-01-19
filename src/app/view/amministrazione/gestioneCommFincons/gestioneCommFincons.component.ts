@@ -96,8 +96,9 @@ export class GestioneCommFinconsComponent implements OnInit {
         else { //modifica
             var selCriteria;
             selCriteria = new Object();
-            selCriteria.codice_commessa = this.newCommFincons.codice_commessa;
-            alert(this.newCommFincons.codice_commessa);
+            selCriteria._id = this.newCommFincons._id;
+            console.log(this.newCommFincons.codice_commessa);
+            console.log(this.newCommFincons._id);
             this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
                 this.commFinconss[commFinconsTrovatoIndex] = this.newCommFincons;
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
