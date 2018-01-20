@@ -98,10 +98,6 @@ export class GestioneAttivitaComponent implements OnInit {
                 });
             });
 
-            /*this.attivitaService.getAttivitaByUser(selClientiCriteria).subscribe(attivita => {
-                this.activities = attivita;
-            });*/
-
             this.activities = [];
             this.attivitaService.getAttivita().subscribe(attivita => {
                 var clientArray = [];

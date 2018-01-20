@@ -31,8 +31,9 @@
                     </span>
             </ng-template>
         </p-column>
-        <p-column field="nome" header="Nome" [sortable]="true"></p-column>
         <p-column field="cognome" header="Cognome" [sortable]="true"></p-column>
+        <p-column field="nome" header="Nome" [sortable]="true"></p-column>
+        <p-column field="email" header="Email" [sortable]="true" styleClass="email_col"></p-column>
         <p-column field="clienti" header="Clienti">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
                 <ng-container *ngIf="users[index].clienti != null">
@@ -44,6 +45,18 @@
                 </ng-container>
             </ng-template>
         </p-column>
+        <p-column field="data_inizio_validita" header="Data Inizio Validita" [sortable]="true" styleClass="data_col">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.data_inizio_validita | date:'dd/MM/yy'}}
+            </ng-template>
+        </p-column>
+        <p-column field="data_fine_validita" header="Data Fine Validita" [sortable]="true" styleClass="data_col">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.data_fine_validita | date:'dd/MM/yy'}}
+            </ng-template>
+        </p-column>
+        <p-column field="username" header="User" [sortable]="true"></p-column>
+        <p-column field="desc_sede" header="Sede" [sortable]="true"></p-column>
     </p-dataTable>
 
 

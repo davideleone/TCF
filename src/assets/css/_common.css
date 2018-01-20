@@ -287,3 +287,14 @@ input::-ms-clear {
     width: 60px;
     overflow: visible;
 }
+
+.email_col{
+    width: 250px;
+    overflow: visible;
+}
+
+.data_col{
+    width: 90px;
+    overflow: visible;
+}
+
