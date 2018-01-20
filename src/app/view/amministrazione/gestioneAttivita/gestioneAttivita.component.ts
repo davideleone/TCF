@@ -98,9 +98,24 @@ export class GestioneAttivitaComponent implements OnInit {
                 });
             });
 
-            this.attivitaService.getAttivitaByUser(selClientiCriteria).subscribe(attivita => {
+            /*this.attivitaService.getAttivitaByUser(selClientiCriteria).subscribe(attivita => {
                 this.activities = attivita;
+            });*/
+
+            this.activities = [];
+            this.attivitaService.getAttivita().subscribe(attivita => {
+                var clientArray = [];
+                attivita.forEach((element,index) => {
+                    selClientiCriteria.forEach(userClienti =>{
+                        if(userClienti == element.id_cliente){
+                            clientArray.push(element);
+                        }
+                    })
+                }); 
+                this.activities = clientArray;               
             });
+
+            
         }
         else {//nessun filtro
             this.clienteService.getClienti().subscribe(clientiAll => {
@@ -114,8 +129,6 @@ export class GestioneAttivitaComponent implements OnInit {
                 this.activities = attivita;
             });
         }
-
-
 
         this.domainService.getAree().subscribe(aree => {
             this.lst_macro_aree = aree;

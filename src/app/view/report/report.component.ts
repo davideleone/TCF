@@ -7,6 +7,7 @@ import { ClienteService } from '../../service/cliente.service';
 import { ReportService } from '../../service/report.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
     selector: 'report',
@@ -16,6 +17,7 @@ import { DatePipe } from '@angular/common';
 })
 
 export class ReportComponent implements OnInit {
+    userLogged;
     dataInizio;
     dataFine;
     clienteSelected: string;
@@ -26,18 +28,19 @@ export class ReportComponent implements OnInit {
     reportForm: FormGroup;
     alertDialog: boolean = false;
     alertMsg: string;
-    header_csv_totale : string[] = ['Nome Cliente','Nome Ambito','Nome Macro Area','Cod. Commessa','Commessa Fnc','Attivita','Budget gg','Type of work','Cognome','Nome','Note','Ore','GG'];
-    header_csv_attivita : string[] = ['Nome Cliente','Nome Ambito','Nome Macro Area','Attivita','Cod. Commessa','Attivita','Commessa Fnc','Nome Commessa Fnc','Note','Stato','Budget Ore','Data Inizio','Data Fine'];
+    header_csv_totale: string[] = ['Nome Cliente', 'Nome Ambito', 'Nome Macro Area', 'Cod. Commessa', 'Commessa Fnc', 'Attivita', 'Budget gg', 'Type of work', 'Cognome', 'Nome', 'Note', 'Ore', 'GG'];
+    header_csv_attivita: string[] = ['Nome Cliente', 'Nome Ambito', 'Nome Macro Area', 'Attivita', 'Cod. Commessa', 'Attivita', 'Commessa Fnc', 'Nome Commessa Fnc', 'Note', 'Stato', 'Budget Ore', 'Data Inizio', 'Data Fine'];
 
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
-        private reportService: ReportService) {
+        private reportService: ReportService,
+        private authenticationService : AuthenticationService) {
 
         this.reportForm = this.formBuilder.group({
             modalita: new FormControl('', Validators.required),
             cliente: new FormControl('', Validators.required),
             dataInizio: new FormControl('', Validators.required),
-            dataFine: new FormControl('', [Validators.required,this.controlDateValidator]),
+            dataFine: new FormControl('', [Validators.required, this.controlDateValidator]),
         });
     }
 
@@ -46,11 +49,31 @@ export class ReportComponent implements OnInit {
     }
 
     getInformations() {
-        this.clienteService.getClienti().subscribe(clienti => {
-            clienti.forEach(clienti => {
-                this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
-            });
+
+        this.authenticationService.user$.subscribe(user => {
+            this.userLogged = user;
         });
+
+        if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
+            var selClientiCriteria = []
+
+            this.userLogged.clienti.forEach(clientiUser => {
+                selClientiCriteria.push(clientiUser.cliente._id);
+            });
+
+            this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clientiAll => {
+                clientiAll.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+        }
+        else {
+            this.clienteService.getClienti().subscribe(clienti => {
+                clienti.forEach(clienti => {
+                    this.lst_clienti.push({ label: clienti.nome_cliente, value: clienti._id });
+                });
+            });
+        }
     }
 
     public checkForm(form) {
@@ -73,15 +96,15 @@ export class ReportComponent implements OnInit {
     }
 
     public createReport() {
-    
-        var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM')+'-'+new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
+
+        var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM') + '-' + new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
-        var options = { 
+        var options = {
             fieldSeparator: ',',
             quoteStrings: '"',
             decimalseparator: '.',
-            showLabels: true,  
+            showLabels: true,
         };
 
         var reportDownloadParams = {
@@ -94,16 +117,16 @@ export class ReportComponent implements OnInit {
         this.reportService.getReportistica(reportDownloadParams).subscribe(report => {
             switch (reportDownloadParams.type) {
                 case 'r_totale':
-                    this.JSONToCSVConvertor(report,'report-totale');
+                    this.JSONToCSVConvertor(report, 'report-totale');
                     break;
                 case 'r_attivita':
-                    this.JSONToCSVConvertor(report,'report-attivita');
+                    this.JSONToCSVConvertor(report, 'report-attivita');
                     break;
                 default:
                     break;
             }
         })
-        
+
     }
 
     public isValid(componentName: string) {
@@ -116,7 +139,7 @@ export class ReportComponent implements OnInit {
     public JSONToCSVConvertor(JSONData, reportName) {
 
         var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-        var CSV = '';   
+        var CSV = '';
 
         var row = "";
         for (var index in arrData[0]) {
@@ -128,26 +151,26 @@ export class ReportComponent implements OnInit {
         for (var i = 0; i < arrData.length; i++) {
             var row = "";
 
-            for (var index in arrData[i]) 
+            for (var index in arrData[i])
                 row += '"' + arrData[i][index] + '",';
 
             row.slice(0, row.length - 1);
             CSV += row + '\r\n';
         }
 
-        if (CSV == '') {        
+        if (CSV == '') {
             alert("Invalid data");
             return;
-        }   
-        
+        }
+
         //Generate a file name
         var date = new Date();
-        
-        var fileName =  date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString() + '_' + reportName;
-        fileName = fileName.replace(/ /g,"_");   
+
+        var fileName = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString() + '_' + reportName;
+        fileName = fileName.replace(/ /g, "_");
         var uri = 'data:text/csv;charset=utf-8,' + encodeURI(CSV);
         //Create hidden link for download
-        var link = document.createElement("a");    
+        var link = document.createElement("a");
         link.href = uri;
         link.download = fileName + ".csv";
         document.body.appendChild(link);

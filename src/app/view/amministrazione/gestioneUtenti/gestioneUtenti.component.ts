@@ -157,7 +157,7 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   saveNew() {
-    var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id);
+    var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id  && this.newUser._id != undefined);
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
         if (userTrovatoIndex == -1) { //aggiunta
