@@ -115,6 +115,11 @@ export class ReportComponent implements OnInit {
         };
 
         this.reportService.getReportistica(reportDownloadParams).subscribe(report => {
+            report.forEach(element => {
+                element.data_consuntivo = new DatePipe('en-US').transform(new Date(element.data_consuntivo), 'dd/MM/yyyy')
+                /*if(element.desc_consuntivo == null)
+                    element.desc_consuntivo = ' ';*/
+            });
             switch (reportDownloadParams.type) {
                 case 'r_totale':
                     this.JSONToCSVConvertor(report, 'report-totale');
