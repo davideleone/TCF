@@ -151,6 +151,11 @@
                             [(ngModel)]="newUser.isAdmin"></p-dropdown>
                     </div>
                 </div>
+                <!-- <div class="ui-g ui-fluid">
+                    <p-multiSelect class="ui-g-12 ui-md-12" [options]="clientiComboBox" [(ngModel)]="selectedClients" [panelStyle]="{minWidth:'12em'}"
+                        defaultLabel="Seleziona cliente" maxSelectedLabels="10" scrollable="false">
+                    </p-multiSelect>
+                </div> -->
             </div>
             <div style="clear:both;">
                 <p-dataTable [value]="clientiObject" [immutable]="false" emptyMessage="Nessun cliente trovato" scrollable="true" [style]="{'width':'60%'}"
@@ -180,40 +185,42 @@
                     </p-column>
                     <p-column field="clienti" header="Cliente">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-
-                            <span>
-                                <p-dropdown [disabled]="!row.isEditable" 
-                                formControlName="idCliente" [options]="clientiComboBoxClone" [autoWidth]="false" [(ngModel)]="row.cliente._id" [style]="{'width':'100%'}"
-                                appendTo="body" [placeholder]="row.cliente.nome_cliente"></p-dropdown>
+                            <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
+                            <span *ngIf="!row.isEditable">{{row.cliente.nome_cliente}}</span>
+                            <span *ngIf="row.isEditable">
+                                <p-dropdown formControlName="idCliente" [options]="clientiComboBoxClone" [autoWidth]="false" [(ngModel)]="row.cliente._id" [style]="{'width':'100%'}"
+                                appendTo="body" placeholder="Seleziona cliente"></p-dropdown>
                             </span>
                         </ng-template>
                     </p-column>
                     <p-column field="profilo" header="Profilo">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-
-                            <span>
-                                <p-dropdown [disabled]="!row.isEditable" 
-                                formControlName="profiloCliente" [options]="profili" [(ngModel)]="row.profilo" required="true" [autoWidth]="false"
+                            <!-- #clienti="ngModel" name="clienti" required [ngStyle]="{'color': isValid(f.submitted && !clienti.valid)}" -->
+                            <span *ngIf="!row.isEditable">{{row.profilo}}</span>
+                            <span *ngIf="row.isEditable">
+                                <p-dropdown formControlName="profiloCliente" [options]="profili" [(ngModel)]="row.profilo" required="true" [autoWidth]="false"
                                 [style]="{'width':'100%'}" required="true" appendTo="body" placeholder="Seleziona profilo"></p-dropdown>
                             </span>
                         </ng-template>
                     </p-column>
                     <p-column field="data_inizio_validita_cliente" header="Data Inizio">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-                            <span >
-                                <p-calendar [disabled]="!row.isEditable"
-                                formControlName="dataInizioCliente" placeholder="Data Inizio (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_inizio_validita_cliente"
+                            <span *ngIf="!row.isEditable">{{row.data_inizio_validita_cliente | date:'dd/MM/yy'}}</span>
+                            <span *ngIf="row.isEditable">
+                                <p-calendar formControlName="dataInizioCliente" placeholder="Data Inizio (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_inizio_validita_cliente"
                                 dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
                             </span>
+                            <!-- [minDate]="minClientDate[index] | date:'dd/mm/yy'" [maxDate]="maxClientDate[index]"  -->
                         </ng-template>
                     </p-column>
                     <p-column field="data_fine_validita_cliente" header="Data Fine">
                         <ng-template let-row="rowData" let-index="rowIndex" pTemplate="body">
-                            <span>
-                                <p-calendar [disabled]="!row.isEditable"
-                                formControlName="dataFineCliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
+                            <span *ngIf="!row.isEditable">{{row.data_fine_validita_cliente | date:'dd/MM/yy'}}</span>
+                            <span *ngIf="row.isEditable">
+                                <p-calendar formControlName="dataFineCliente" placeholder="Data Fine (dd/mm/aa)" [inputStyle]="{'width':'90%'}" [(ngModel)]="row.data_fine_validita_cliente"
                                 dateFormat="dd/mm/yy" [style]="{'width':'100%'}" [showIcon]="true" appendTo="body"></p-calendar>
                             </span>
+                            <!-- [minDate]="minClientDate[index] | date:'dd/mm/yy'" [maxDate]="maxClientDate[index]"  -->
                         </ng-template>
                     </p-column>
 
