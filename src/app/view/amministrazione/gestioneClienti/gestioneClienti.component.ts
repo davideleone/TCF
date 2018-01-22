@@ -132,6 +132,8 @@ export class GestioneClientiComponent implements OnInit {
         }
         this.clients = JSON.parse(JSON.stringify(this.clients));
         this.changeFormatDate(this.clients);
+        this.displayDialog = false;
+        this.selectedAmbitis = [];
       },
       error => {
           this.alertDialog = true;
@@ -139,8 +141,7 @@ export class GestioneClientiComponent implements OnInit {
       }
     );
     
-    this.displayDialog = false;
-    this.selectedAmbitis = [];
+
   }
 
 
