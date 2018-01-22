@@ -94,7 +94,12 @@ export class LoginComponent implements OnInit {
             .subscribe(
             data => {
                 this.loading = false;
-                this.router.navigate([this.returnUrl]);
+                if(!data.isAdmin){
+                    if(!this.getUserAP(data)){  
+                        this.returnUrl += 'consuntivazione';
+                    }
+                }
+                this.router.navigate([this.returnUrl]);   
             },
             error => {
                 this.alertDialog = true;
@@ -118,4 +123,14 @@ export class LoginComponent implements OnInit {
         else
             return "#898989"; //#d6d6d6*/
     }
+
+    public getUserAP(userLogged: any): boolean {
+        var profiles = Array<string>();
+    
+        for (let i = 0; i < userLogged.clienti.length; i++)
+          profiles.push(userLogged.clienti[i].profilo);
+    
+        return profiles.includes('AP');
+    
+      }
 }
