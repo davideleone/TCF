@@ -31,7 +31,7 @@ export class CommessaFinconsService {
   addcommessaFincons(commessaParam : CommessaFincons){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
-  	return this.http.post('/tcf/api/commessaFinconsController/CRUD/', commessaParam, {headers:headers})
+  	return this.http.post('/tcf/api/commessaFinconsController/addOrUpdateCommessaFincons/', commessaParam, {headers:headers})
   		.map(res => res.json());
   }
 
@@ -47,7 +47,7 @@ export class CommessaFinconsService {
   updatecommessaFincons(commessaParam, criteria){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
-  	return this.http.put('/tcf/api/commessaFinconsController/CRUD/?criteria='+JSON.stringify(criteria), commessaParam, {headers:headers})
+  	return this.http.post('/tcf/api/commessaFinconsController/addOrUpdateCommessaFincons', commessaParam, {headers:headers})
   		.map(res => res.json());
   }
 }

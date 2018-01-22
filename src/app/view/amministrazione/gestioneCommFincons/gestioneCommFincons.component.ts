@@ -88,22 +88,31 @@ export class GestioneCommFinconsComponent implements OnInit {
 
         if (commFinconsTrovatoIndex == -1) { //aggiunta
             this.commessaFinconsService.addcommessaFincons(this.newCommFincons).subscribe(event => {
+                this.displayDialog = false;
                 this.commFinconss.push(this.newCommFincons);
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                 this.changeFormatDate(this.commFinconss);
+            },
+            error => {
+                this.alertDialog = true;
+                this.alertMsg = error;
             });
         }
         else { //modifica
             var selCriteria;
             selCriteria = new Object();
             selCriteria._id = this.newCommFincons._id;
-             this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
+            this.commessaFinconsService.updatecommessaFincons(this.newCommFincons, selCriteria).subscribe(event => {
+                this.displayDialog = false;
                 this.commFinconss[commFinconsTrovatoIndex] = this.newCommFincons;
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                 this.changeFormatDate(this.commFinconss);
+            },
+            error => {
+                this.alertDialog = true;
+                this.alertMsg = error;
             });
         }
-        this.displayDialog = false;
     }
 
     private deleteRow(rowData, rowIndex) {
