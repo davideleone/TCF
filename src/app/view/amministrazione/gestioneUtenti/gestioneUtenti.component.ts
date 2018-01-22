@@ -286,8 +286,7 @@ export class GestioneUtentiComponent implements OnInit {
       this.userForm.controls['dataFineCliente'].disable();
     }
     this.formSubmitted = true;
-    /*var invalidElements: string[] = this.findInvalidControls();
-    if (invalidElements != null) {*/
+
     if (!form.valid) {
       this.alertDialog = true;
       this.alertMsg = "Alcuni campi non stati compilati correttamente!";

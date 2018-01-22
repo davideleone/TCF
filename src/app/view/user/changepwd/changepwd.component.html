@@ -4,21 +4,21 @@
         
         <form name="form" (ngSubmit)="f.form.valid && changeUserPwd(f)" #f="ngForm" novalidate>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
-                <input type="text" placeholder="Password attuale" class="form-control input" name="oldPwd_" [(ngModel)]="model.oldPwd" #oldPwd_="ngModel" required />
+                <input type="password" placeholder="Password attuale" class="form-control input" name="oldPwd_" [(ngModel)]="model.oldPwd" #oldPwd_="ngModel" required />
                 <div *ngIf="f.submitted && !oldPwd_.valid" class="help-block">Campo richiesto</div>
             </div>
             
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
-                <input type="text" placeholder="Nuova password" class="form-control input" name="newPwd_" [(ngModel)]="model.newPwd" #newPwd_="ngModel" required />
+                <input type="password" placeholder="Nuova password" class="form-control input" name="newPwd_" [(ngModel)]="model.newPwd" #newPwd_="ngModel" required />
                 <div *ngIf="f.submitted && !newPwd_.valid" class="help-block">Campo richiesto</div>
             </div>
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
-                <input type="text" placeholder="Ripeti nuova password" class="form-control input" name="newPwdConfirm_" [(ngModel)]="model.newPwdConfirm" #newPwdConfirm_="ngModel" required />
+                <input type="password" placeholder="Ripeti nuova password" class="form-control input" name="newPwdConfirm_" [(ngModel)]="model.newPwdConfirm" #newPwdConfirm_="ngModel" required />
                 <div *ngIf="f.submitted && !newPwdConfirm_.valid" class="help-block">Campo richiesto</div>
             </div>
             <div class="form-group">
                 <button pButton label="Modifica"></button>
-                <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                <img *ngIf="displaySpinner" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             </div>
         </form>            
     

@@ -13,6 +13,7 @@ import { NgForm } from '@angular/forms';
 export class ChangePwdComponent implements OnInit {
   userLogged: User;
   model: any = {};
+  displaySpinner: boolean = false;
 
 
   constructor(private authenticationService : AuthenticationService, private userService : UserService){
@@ -33,11 +34,13 @@ export class ChangePwdComponent implements OnInit {
       alert('Password attuale non corretta');
       return;
     }
+    this.displaySpinner = true;
     this.userService.changeUserPwd(this.userLogged, this.model.oldPwd, this.model.newPwd).subscribe(
       data => {
         console.log('pwd successfully changed');   
         alert('Password modificata correttamente');
         form.resetForm();
+        this.displaySpinner = false;
       },
       error => {
         console.log('error on pwd change');
@@ -45,6 +48,7 @@ export class ChangePwdComponent implements OnInit {
         if(error){
           msgToShow += ': ' +error;
         }
+        this.displaySpinner = false;
         alert(msgToShow);
       });
   }
