@@ -444,7 +444,7 @@ export class MonthGridComponent implements OnChanges {
 
   //DELETE ROW
   private delete(r, i) {
-    var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i._id == r._id);
+    var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i.id_utente == r.id_utente && i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_tipo_deliverable == r.id_tipo_deliverable);
     var delCriteria;
     delCriteria = new Object();
     delCriteria.id_utente = r.id_utente;
