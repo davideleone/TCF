@@ -78,7 +78,8 @@ export class GestioneCommClienteComponent implements OnInit {
             var selClientiCriteria = [];
 
             this.userLogged.clienti.forEach(clientiUser => {
-                selClientiCriteria.push(clientiUser.cliente._id);
+                if(clientiUser.profilo == 'AP')
+                    selClientiCriteria.push(clientiUser.cliente._id);
             });
 
             this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clientiAll => {
