@@ -66,6 +66,7 @@ export class MonthGridComponent implements OnChanges {
   displayNote: boolean = false;
   isNoteEditable: boolean = false;
   noteConsuntivo: string = null;
+  noteIndex: number = null;
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -244,6 +245,7 @@ export class MonthGridComponent implements OnChanges {
         row.id_tipo_deliverable = group_act.id_tipo_deliverable;
         row.nome_tipo_deliverable = group_act.nome_tipo_deliverable;
         row.id_utente = this.userSelected._id;
+        row.note = group_act.note;
         row.isEditable = false;
 
         this.cloneConsuntivoField(row, this.blankConsuntivo);
@@ -325,9 +327,6 @@ export class MonthGridComponent implements OnChanges {
     this.newRowConsuntivo.ore = 0;
 
 
-    //TODO: Verifico che non sia già presente tra quelle visualizzate
-
-
     //Se è la prima riga inserita del mese devo creare anche il mese /sarebbe da creare il servizio ad-hoc server side
     if (this.consuntivi.length == 0) {
       var meseConsuntivo: MeseConsuntivo = new MeseConsuntivo();
@@ -406,6 +405,8 @@ export class MonthGridComponent implements OnChanges {
   private saveEdit(editRowConsuntivo, index) {
     editRowConsuntivo.nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
     editRowConsuntivo.nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
+    var nuovaNota = editRowConsuntivo.note;
+    //editRowConsuntivo.note = this.noteConsuntivo;
     //this.attivitaDeliverableList.push({id_attivita : editRowConsuntivo.id_attivita, id_deliverable: editRowConsuntivo.id_tipo_deliverable});
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
@@ -413,10 +414,11 @@ export class MonthGridComponent implements OnChanges {
       if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
         editRowConsuntivo[i].nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
         editRowConsuntivo[i].nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
-        editRowConsuntivo[i].note = this.noteConsuntivo;
+        editRowConsuntivo[i].note = nuovaNota;
         consuntiviToAdd.push(editRowConsuntivo[i]);
       }
     }
+
     if (consuntiviToAdd.length > 0) {
       this.consuntivazioneService
         .addUpdateConsuntivi(consuntiviToAdd)
@@ -426,6 +428,7 @@ export class MonthGridComponent implements OnChanges {
         err => alert(err)
         );
     }
+
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
     this.noteConsuntivo = null;
@@ -492,6 +495,7 @@ export class MonthGridComponent implements OnChanges {
     consuntivo.id_tipo_deliverable = null;
     consuntivo.nome_tipo_deliverable = null;
     consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
+    consuntivo.note = null;
   }
 
 
@@ -508,6 +512,7 @@ export class MonthGridComponent implements OnChanges {
     consuntivoTarget.id_tipo_deliverable = consuntivoSource.id_tipo_deliverable;
     consuntivoTarget.nome_tipo_deliverable = consuntivoSource.nome_tipo_deliverable;
     consuntivoTarget.data_consuntivo = consuntivoSource.data_consuntivo;
+    consuntivoTarget.note = consuntivoSource.note;
   }
 
   /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
@@ -627,7 +632,8 @@ export class MonthGridComponent implements OnChanges {
 
   private showNote(row, index){
     this.displayNote = true;
-    this.noteConsuntivo = row[index].note; 
+    this.noteConsuntivo = row.note; 
+    this.noteIndex = index;
     if(row.isEditable){
       this.isNoteEditable = true;      
     }else{

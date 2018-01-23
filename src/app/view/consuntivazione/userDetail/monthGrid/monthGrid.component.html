@@ -62,7 +62,7 @@
 
     <p-column header="Note" frozen="true" styleClass="editable_col">
         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
-            <span>
+            <span *ngIf="row.note != null || row.isEditable">
                 <i class="fa fa-sticky-note-o modifica" aria-hidden="true" (click)="showNote(row, index)"></i>
             </span>
         </ng-template>
@@ -141,6 +141,15 @@
                         appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}" [disabled]="isDisabled('deliverable')"></p-dropdown>
                 </div>
             </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12 ui-g-12 ui-md-12">
+
+                    <span class="ui-float-label">
+                            <label for="txtNote" style="top: -.60em;font-size:12px; color:#d6d6d6">Note</label>
+                        </span>
+                    <textarea [ngModelOptions]="{standalone: true}" pInputTextarea rows="5" cols="30" [(ngModel)]="newRowConsuntivo.note"></textarea>
+                </div>
+            </div>
         </div>
         <p-footer>
             <div class="ui-dialog-buttonpane">
@@ -155,12 +164,12 @@
 
 <p-dialog header="Note" [(visible)]="displayNote" modal="true" [responsive]="true" appendTo="body">
     <span *ngIf="isNoteEditable">
-        <textarea pInputTextarea rows="5" cols="30" [(ngModel)]="noteConsuntivo" placeholder="Inserisci nota..."></textarea>
+        <textarea pInputTextarea rows="5" cols="30" [(ngModel)]="consuntivi[noteIndex].note" placeholder="Inserisci nota..."></textarea>
     </span>
     <span *ngIf="!isNoteEditable">
         <p>{{noteConsuntivo != null ? noteConsuntivo : 'Nessuna nota'}}</p>
     </span>
     <p-footer *ngIf="isNoteEditable">
-            <button type="button" pButton (click)="displayNote = false; isNoteEditable = false; " label="Salva"></button>
+        <button type="button" pButton (click)="displayNote = false; isNoteEditable = false; " label="Salva"></button>
     </p-footer>
 </p-dialog>
