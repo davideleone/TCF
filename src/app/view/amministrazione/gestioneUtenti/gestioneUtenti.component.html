@@ -17,16 +17,11 @@
                 <div class="ui-grid-col-4 ui-md-4" id="empty"></div>
             </div>
         </p-header>
-        <!-- <p-header>
-            <div>
-                <label style="vertical-align: middle;text-align: center;">Lista Utenti</label>
-                <button style="float: left;" pButton (click)=addNewUser() label="Aggiungi Utente"></button>
-            </div>
-        </p-header> -->
+
         <p-column header="Azioni" visible="true" styleClass="editable_col">
             <ng-template let-row="rowData" let-index="rowIndex" pTemplate="user">
                 <span style="display: inline-block;">
-                        <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editRow(row, index)"></i>   
+                        <i class="fa fa-pencil-square-o modifica" aria-hidden="true" (click)="editUser(row, index)"></i>   
                         <i class="fa fa-trash-o elimina" aria-hidden="true" (click)="deleteRow(row, index)"></i>
                     </span>
             </ng-template>

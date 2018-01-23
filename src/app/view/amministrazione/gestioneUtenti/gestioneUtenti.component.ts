@@ -87,57 +87,68 @@ export class GestioneUtentiComponent implements OnInit {
 
     this.domainService.getSedi().subscribe(sedi => this.sediList = sedi );
 
-    this.authenticationService.user$.subscribe(user => this.userLogged = user);
-    //se non è admin, per essere in amministrazione, può essere solo admin di progetto
-    if (!this.userLogged.isAdmin) { //gestione filtro per clienti dell'utente loggato
-      var selClientiCriteria = []
+    this.authenticationService.user$.subscribe(user => {
+      this.userLogged = user
+
+      if (!this.userLogged.isAdmin) 
+        this.getClientiLikeProjectAdmin();
+      else
+        this.getClientiLikeFullAdmin();
+    });
+
+  }
+
+  getClientiLikeFullAdmin(){
+    this.clienteService.getClienti().subscribe(clienti => {
+      this.clientiList = Object.assign({}, clienti);
+      clienti.forEach(cliente => {
+        this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
+        this.minClientDate.push(cliente.data_inizio_validita);
+        this.maxClientDate.push(cliente.data_fine_validita);
+      });
+    });
+  }
+
+  getClientiLikeProjectAdmin(){
+    var selClientiCriteria = []
 
       this.userLogged.clienti.forEach(clientiUser => {
         selClientiCriteria.push(clientiUser.cliente._id);
       });
 
       this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clienti => {
-        this.clientiList = clienti;
+        this.clientiList = Object.assign({}, clienti);
         clienti.forEach(cliente => {
           this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
           this.minClientDate.push(cliente.data_inizio_validita);
           this.maxClientDate.push(cliente.data_fine_validita);
         });
       });
-    }
-    else{ //Nessun filtro
-      this.clienteService.getClienti().subscribe(clienti => {
-        this.clientiList = clienti;
-        clienti.forEach(cliente => {
-          this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
-          this.minClientDate.push(cliente.data_inizio_validita);
-          this.maxClientDate.push(cliente.data_fine_validita);
-        });
-      });
-    }
   }
 
-
   /*Gestione click MODIFICA UTENTE*/
-  editRow(rowData, rowIndex) {
+  editUser(rowData, rowIndex) {
     this.abilitaValidazioni();
+
     this.newUser = JSON.parse(JSON.stringify(rowData));
     this.newUser.data_inizio_validita = new Date(this.newUser.data_inizio_validita);
     this.newUser.data_fine_validita = this.newUser.data_fine_validita != null ? new Date(this.newUser.data_fine_validita) : null;
-    this.newUser.clienti.forEach((element, index) => {
+    
+    this.clientiObject = [];
+
+    this.newUser.clienti.forEach((element : any, index) => {
       if (element != null) {
         element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
         element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
       }
-    });
 
-    this.clientiObject = this.newUser.clienti;
-    this.clientiObject.forEach(element => {
-      element.isEditable = false;
+      if(element.cliente != undefined && element.cliente._id != null){
+        element.isEditable = false;
+        this.clientiObject.push(element)
+      }
     });
 
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
-    //this.btnDialog = "Modifica";
     this.userIndex = rowIndex;
     this.displayDialog = true;
   }
