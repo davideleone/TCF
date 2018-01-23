@@ -4,7 +4,7 @@
         <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
         <input #gb type="text" pInputText size="30" placeholder="Filtra utenti">
     </div>
-    <p-dataTable [value]="users" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="15" [globalFilter]="gb"
+    <p-dataTable [value]="users" sortField="cognome" emptyMessage="Nessun utente trovato" scrollable="true" [paginator]="true" [rows]="15" [globalFilter]="gb"
         responsive="true" [rowsPerPageOptions]="[15,30,50]">
         <p-header>
             <div class="ui-grid-row">
