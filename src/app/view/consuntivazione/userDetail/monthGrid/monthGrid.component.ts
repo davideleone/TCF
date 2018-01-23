@@ -444,7 +444,7 @@ export class MonthGridComponent implements OnChanges {
 
   //DELETE ROW
   private delete(r, i) {
-
+    var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i._id == r._id);
     var delCriteria;
     delCriteria = new Object();
     delCriteria.id_utente = r.id_utente;
@@ -459,13 +459,13 @@ export class MonthGridComponent implements OnChanges {
       icon: 'fa fa-trash',
       accept: () => {
         this.consuntivazioneService.deleteConsuntivi(delCriteria).subscribe(msg => {
-          this.consuntivi.splice(i, 1);
-          this.consuntivi = Object.create(this.consuntivi); //deepcopy    
+          this.consuntivi.splice(consuntivoTrovatoIndex, 1);
+          this.consuntivi = JSON.parse(JSON.stringify(this.consuntivi)); //deepcopy
         });
       }
     });
 
-    if (i == 0) {
+    if (i == 0 && !(this.consuntivi.length > 0)) {
       var meseConsuntivo = new MeseConsuntivo();
       meseConsuntivo.anno_consuntivo = this.yearSelected.toString();
       meseConsuntivo.mese_consuntivo = this.monthSelected.toString();
