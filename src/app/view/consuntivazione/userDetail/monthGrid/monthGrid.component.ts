@@ -443,8 +443,8 @@ export class MonthGridComponent implements OnChanges {
   }
 
   //DELETE ROW
-  private delete(r, i) {
-    var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i.id_utente == r.id_utente && i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_tipo_deliverable == r.id_tipo_deliverable);
+  private delete(r, index) {
+    var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i.id_utente == r.id_utente && i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_attivita == r.id_attivita && i.id_tipo_deliverable == r.id_tipo_deliverable);
     var delCriteria;
     delCriteria = new Object();
     delCriteria.id_utente = r.id_utente;
@@ -465,7 +465,7 @@ export class MonthGridComponent implements OnChanges {
       }
     });
 
-    if (i == 0 && !(this.consuntivi.length > 0)) {
+    if (index == 0 && !(this.consuntivi.length > 0)) {
       var meseConsuntivo = new MeseConsuntivo();
       meseConsuntivo.anno_consuntivo = this.yearSelected.toString();
       meseConsuntivo.mese_consuntivo = this.monthSelected.toString();
