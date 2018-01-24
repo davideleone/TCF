@@ -16,6 +16,7 @@ import { AuthenticationService } from '../../service/authentication.service';
     providers: [ClienteService, ReportService]
 })
 
+
 export class ReportComponent implements OnInit {
     userLogged;
     dataInizio;
@@ -34,7 +35,10 @@ export class ReportComponent implements OnInit {
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
         private reportService: ReportService,
-        private authenticationService : AuthenticationService) {
+        private authenticationService: AuthenticationService) {
+
+        this.dataInizio = new DatePipe('en-US').transform(new Date(), 'dd/MM/yyyy');
+        this.dataFine = new DatePipe('en-US').transform(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0), 'dd/MM/yyyy');
 
         this.reportForm = this.formBuilder.group({
             modalita: new FormControl('', Validators.required),
@@ -182,5 +186,6 @@ export class ReportComponent implements OnInit {
         link.click();
         document.body.removeChild(link);
     }
+
 }
 
