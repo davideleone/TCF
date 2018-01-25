@@ -51,6 +51,7 @@ export class GestioneUtentiComponent implements OnInit {
   alertDialog: boolean = false;
   alertMsg: string;
   deepCopyClienti;
+  disableAggiuntaCliente: boolean = false;
 
   constructor(private userService: UserService,
     private domainService: DomainService,
@@ -135,18 +136,19 @@ export class GestioneUtentiComponent implements OnInit {
     this.newUser.data_fine_validita = this.newUser.data_fine_validita != null ? new Date(this.newUser.data_fine_validita) : null;
     
     this.clientiObject = [];
+    if(this.newUser.clienti != null && Object.keys(this.newUser.clienti).length > 0){
+      this.newUser.clienti.forEach((element : any, index) => {
+        if (element != null) {
+          element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
+          element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
+        }
 
-    this.newUser.clienti.forEach((element : any, index) => {
-      if (element != null) {
-        element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
-        element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
-      }
-
-      if(element.cliente != undefined && element.cliente._id != null){
-        element.isEditable = false;
-        this.clientiObject.push(element)
-      }
-    });
+        if(element.cliente != undefined && element.cliente._id != null){
+          element.isEditable = false;
+          this.clientiObject.push(element)
+        }
+      });
+    }
 
     this.headerUtente = "Modifica Utente - " + this.newUser.nome + " " + this.newUser.cognome;
     this.userIndex = rowIndex;
@@ -204,6 +206,7 @@ export class GestioneUtentiComponent implements OnInit {
     newCliente.isEditable = true;
 
     this.clientiObject.push(newCliente);
+    this.disableAggiuntaCliente = true;
     this.clientiComboBoxClone = [];
     this.filtraClientiCombo(null);
   }
@@ -298,6 +301,7 @@ export class GestioneUtentiComponent implements OnInit {
     }
     this.formSubmitted = true;
 
+    console.log(form)
     if (!form.valid) {
       this.alertDialog = true;
       this.alertMsg = "Alcuni campi non stati compilati correttamente!";
@@ -352,8 +356,16 @@ export class GestioneUtentiComponent implements OnInit {
     if (rowData.cliente._id == null) {
       this.alertDialog = true;
       this.alertMsg = "Nessun cliente selezionato!";
+      return;
     }
-    else {
+
+    if(!rowData.profilo){
+      this.alertDialog = true;
+      this.alertMsg = "Profilo per il cliente obbligatorio";
+      return;
+    }
+
+    
       /*Prendo solo la porziona di array senza l'ultimo elemento. Quest'ultimo infatti contiene
       il cliente che sto inserendo, andando quindi ad influenzare la find poichè troverebbe sicuramente almeno un elemento*/
       if (this.newUser.clienti != null && this.newUser.clienti.length > 0)
@@ -361,22 +373,43 @@ export class GestioneUtentiComponent implements OnInit {
 
       if (clienteTrovato == null) { //aggiunta nuovo cliente
         var newCliente: any = {};
-        this.popolaCliente(rowData, newCliente);
+        //this.popolaCliente(rowData, newCliente);
 
-        if (this.newUser.clienti != null)
-          this.newUser.clienti[indexData] = newCliente;
-        else
-          this.newUser.clienti = [{ cliente: newCliente.cliente, profilo: newCliente.profilo, data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente, data_fine_validita_cliente: newCliente.data_fine_validita_cliente }]
+        if (this.newUser.clienti != null){
+          this.newUser.clienti[indexData] = { 
+            cliente: this.getClienteInList(rowData.cliente._id), 
+            profilo: rowData.profilo, 
+            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente, 
+            data_fine_validita_cliente: rowData.data_fine_validita_cliente 
+          };
+        }
+        else{
+          this.popolaCliente(rowData, newCliente);
+          this.newUser.clienti = [{ 
+            cliente: this.getClienteInList(rowData.cliente._id), 
+            profilo: newCliente.profilo, 
+            data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente, 
+            data_fine_validita_cliente: newCliente.data_fine_validita_cliente 
+          }]
+        }
 
         this.clientiObject = this.newUser.clienti;
 
-      } else {
+      } 
+      else {
         this.popolaCliente(rowData, clienteTrovato);
-        this.clientiObject[indexData] = clienteTrovato;
+        this.clientiObject.push(clienteTrovato);
       }
-
+  
       this.clientiComboBoxClone = [];
       rowData.isEditable = false;
+      this.disableAggiuntaCliente = false;
+  }
+
+  getClienteInList(id){
+    for(let i = 0; i < Object.keys(this.clientiList).length; i++){
+      if(this.clientiList[i]._id == id)
+        return this.clientiList[i];
     }
   }
 
@@ -400,7 +433,14 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   private popolaCliente(clienteSource, clienteTarget) {
-    clienteTarget.cliente = this.clientiList.filter(cliente => cliente._id == clienteSource.cliente._id)[0];
+    //clienteTarget.cliente = this.clientiList.filter(cliente => cliente._id == clienteSource.cliente._id)[0];
+
+    for(let i = 0; i < this.clientiList.length; i++){
+      if(this.clientiList[i]._id == clienteSource.cliente._id){
+        clienteTarget.cliente = this.clientiList[i]
+        clienteTarget._id = this.clientiList[i]._id
+      }
+    }
     clienteTarget.profilo = clienteSource.profilo;
     clienteTarget.data_inizio_validita_cliente = clienteSource.data_inizio_validita_cliente;
     clienteTarget.data_fine_validita_cliente = clienteSource.data_fine_validita_cliente;

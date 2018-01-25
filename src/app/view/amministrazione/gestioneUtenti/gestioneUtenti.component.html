@@ -158,7 +158,7 @@
                     <p-header>
                         <div class="ui-grid-row">
                             <div class="ui-grid-col-4 ui-md-4">
-                                <button class="pull-left" type="button" pButton (click)=addCliente() label="Aggiungi Cliente"></button>
+                                <button class="pull-left" type="button" pButton (click)="addCliente()" [disabled]="disableAggiuntaCliente" label="Aggiungi Cliente"></button>
                             </div>
                             <div style="text-align:center" class="ui-grid-col-4 ui-md-4">
                                 <label>Lista Clienti</label>
