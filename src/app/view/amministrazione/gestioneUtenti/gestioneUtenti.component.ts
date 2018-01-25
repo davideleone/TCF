@@ -169,7 +169,7 @@ export class GestioneUtentiComponent implements OnInit {
     this.userForm.reset();
   }
 
-  saveNew(form) {
+  saveNew() {
     
     var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id  && this.newUser._id != undefined);
     this.newUser.desc_sede = this.sediList.find(i => i.value == this.newUser.id_sede).label;
