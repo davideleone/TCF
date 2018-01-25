@@ -169,7 +169,8 @@ export class GestioneUtentiComponent implements OnInit {
     this.userForm.reset();
   }
 
-  saveNew() {
+  saveNew(form) {
+    
     var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id  && this.newUser._id != undefined);
     this.newUser.desc_sede = this.sediList.find(i => i.value == this.newUser.id_sede).label;
     this.userService.insOrUpdUser(this.newUser).subscribe(
@@ -237,9 +238,9 @@ export class GestioneUtentiComponent implements OnInit {
       header: 'Elimina cliente',
       icon: 'fa fa-trash',
       accept: () => {
+        this.clientiObject.splice(rowIndex,1);
         this.newUser.clienti.splice(rowIndex, 1);
-        //this.newUser.clienti = JSON.parse(JSON.stringify(this.newUser.clienti)); //deepcopy
-        //this.changeFormatDate(this.newUser);
+        this.disabilitaValidazioni();
       }
     });
   }
@@ -318,6 +319,15 @@ export class GestioneUtentiComponent implements OnInit {
     this.userForm.controls['dataFineCliente'].enable();
   }
 
+  private disabilitaValidazioni() {
+    this.userForm.controls['password'].disable();
+    this.userForm.controls['confPassword'].disable();
+    this.userForm.controls['idCliente'].disable();
+    this.userForm.controls['profiloCliente'].disable();
+    this.userForm.controls['dataInizioCliente'].disable();
+    this.userForm.controls['dataFineCliente'].disable();
+  }
+
   public isValid(componentName: string) {
     if ((this.userForm.get(componentName).touched || this.formSubmitted) && this.userForm.get(componentName).errors)
       return "#a94442";
@@ -344,10 +354,16 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   private abortEditCliente(rowData, indexData) {
-    rowData.isEditable = false;
     this.clientiComboBoxClone = [];
-    if (rowData.cliente._id == null)
-      this.newUser.clienti.splice(indexData, 1);
+
+    if (rowData.cliente._id == null){
+      this.clientiObject.splice(indexData, 1);
+      rowData.isEditable = false;
+    } 
+    else
+      rowData.isEditable = false;
+
+    this.disableAggiuntaCliente = false;
   }
 
   private saveEditCliente(rowData, indexData) {
@@ -371,15 +387,14 @@ export class GestioneUtentiComponent implements OnInit {
       if (this.newUser.clienti != null && this.newUser.clienti.length > 0)
         clienteTrovato = this.newUser.clienti.slice(0, this.newUser.clienti.length - 1).find(x => x.cliente._id == rowData.cliente._id)
 
-      if (clienteTrovato == null) { //aggiunta nuovo cliente
+      if (clienteTrovato == null) { 
         var newCliente: any = {};
-        //this.popolaCliente(rowData, newCliente);
 
         if (this.newUser.clienti != null){
           this.newUser.clienti[indexData] = { 
             cliente: this.getClienteInList(rowData.cliente._id), 
             profilo: rowData.profilo, 
-            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente, 
+            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(), 
             data_fine_validita_cliente: rowData.data_fine_validita_cliente 
           };
         }
@@ -388,7 +403,7 @@ export class GestioneUtentiComponent implements OnInit {
           this.newUser.clienti = [{ 
             cliente: this.getClienteInList(rowData.cliente._id), 
             profilo: newCliente.profilo, 
-            data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente, 
+            data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente != null ? new Date(newCliente.data_inizio_validita_cliente) : new Date(),
             data_fine_validita_cliente: newCliente.data_fine_validita_cliente 
           }]
         }
@@ -397,12 +412,19 @@ export class GestioneUtentiComponent implements OnInit {
 
       } 
       else {
-        this.popolaCliente(rowData, clienteTrovato);
-        this.clientiObject.push(clienteTrovato);
+        if(rowData._id){
+          this.newUser.clienti[indexData] = {
+            cliente: this.getClienteInList(rowData.cliente._id), 
+            profilo: rowData.profilo, 
+            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(), 
+            data_fine_validita_cliente: rowData.data_fine_validita_cliente 
+          }
+          this.clientiObject = this.newUser.clienti;
+        }
       }
   
-      this.clientiComboBoxClone = [];
       rowData.isEditable = false;
+      this.clientiComboBoxClone = [];
       this.disableAggiuntaCliente = false;
   }
 
