@@ -37,8 +37,8 @@ export class ReportComponent implements OnInit {
         private reportService: ReportService,
         private authenticationService: AuthenticationService) {
 
-        this.dataInizio = new DatePipe('en-US').transform(new Date(), 'dd/MM/yyyy');
-        this.dataFine = new DatePipe('en-US').transform(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0), 'dd/MM/yyyy');
+        this.dataInizio = new DatePipe('en-US').transform(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'dd/MM/yyyy');
+        this.dataFine = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0);
 
         this.reportForm = this.formBuilder.group({
             modalita: new FormControl('', Validators.required),
@@ -101,7 +101,7 @@ export class ReportComponent implements OnInit {
 
     public createReport() {
 
-        var date = new DatePipe('en-US').transform(this.dataInizio, 'ddMMM') + '-' + new DatePipe('en-US').transform(this.dataFine, 'ddMMM');
+        var date = new DatePipe('en-US').transform(new Date(this.dataInizio), 'ddMMM') + '-' + new DatePipe('en-US').transform(new Date(this.dataFine), 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
         var options = {
@@ -119,16 +119,24 @@ export class ReportComponent implements OnInit {
         };
 
         this.reportService.getReportistica(reportDownloadParams).subscribe(report => {
-            report.forEach(element => {
-                element.data_consuntivo = new DatePipe('en-US').transform(new Date(element.data_consuntivo), 'dd/MM/yyyy')
-                /*if(element.desc_consuntivo == null)
-                    element.desc_consuntivo = ' ';*/
-            });
+            
             switch (reportDownloadParams.type) {
                 case 'r_totale':
+                    report.forEach(element => {
+                        element.data_consuntivo = new DatePipe('en-US').transform(new Date(element.data_consuntivo), 'dd/MM/yyyy')
+                        /*if(element.desc_consuntivo == null)
+                            element.desc_consuntivo = ' ';*/
+                    });
                     this.JSONToCSVConvertor(report, 'report-totale');
                     break;
                 case 'r_attivita':
+                    report.forEach(element => {
+                        element.data_inizio = new DatePipe('en-US').transform(new Date(element.data_inizio), 'dd/MM/yyyy')
+                        if (element.data_fine != null)
+                            element.data_fine = new DatePipe('en-US').transform(new Date(element.data_fine), 'dd/MM/yyyy')
+                        /*if(element.desc_consuntivo == null)
+                            element.desc_consuntivo = ' ';*/
+                    });
                     this.JSONToCSVConvertor(report, 'report-attivita');
                     break;
                 default:
