@@ -149,6 +149,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.activityForm.reset();
         this.newActivity.data_inizio_validita = new Date();
         this.newActivity.stato_attivita = "OPEN";
+        this.newActivity.nome_attivita = "Aperto"
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
@@ -183,7 +184,7 @@ export class GestioneAttivitaComponent implements OnInit {
             var selCriteria;
             selCriteria = new Object();
             selCriteria._id = this.newActivity._id;
-            console.log(this.newActivity._id);
+
             this.attivitaService.updateAttivita(this.newActivity, selCriteria).subscribe(event => {
                 this.activities[attivitaTrovataIndex] = this.newActivity;
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
@@ -213,12 +214,27 @@ export class GestioneAttivitaComponent implements OnInit {
         var selCriteria;
         selCriteria = new Object();
         selCriteria.id_cliente = this.newActivity.id_cliente;
+
         switch (componentName) {
             case 'ambito':
                 if (!isEdit) {
-                    this.activityForm.reset();
-                    this.resetActivity(this.newActivity);
+                    /* this.activityForm.reset();
+                    this.resetActivity(this.newActivity); */
                     this.newActivity.id_cliente = selCriteria.id_cliente;
+                    switch(this.newActivity.nome_stato){
+                        case "Aperto":
+                            this.newActivity.stato_attivita = "OPEN";
+                            break;
+                        case "Chiuso":
+                            this.newActivity.stato_attivita = "CLOSE";
+                            break;
+                        case "In Verifica":
+                            this.newActivity.stato_attivita = "CHECK";
+                            break;
+                        case null:
+                            this.newActivity.stato_attivita = "OPEN";
+                            this.newActivity.nome_stato = "Aperto"
+                    }
                 }
                 this.lst_ambiti = [];
                 let ambitiCliente: any[] = this.clienti.find(x => x._id == this.newActivity.id_cliente).ambiti;
@@ -228,8 +244,6 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (elem != null)
                         this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
                 });
-                this.newActivity.stato_attivita = "OPEN";
-                this.newActivity.nome_stato = "Aperto";
                 break; 
             case 'commessa_cliente':
                 this.lst_commesse_clienti = [];
@@ -253,7 +267,7 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (element != null)
                         consuntivoCount++;
                 });
-                console.log("Cliente: " + rowData.nome_attivita + " #Consuntivi: " + consuntivoCount + " Id_attivita: " + rowData._id);
+                
                 if (consuntivoCount == 0) {
                     selCriteria = new Object();
                     selCriteria.codice_attivita = rowData.codice_attivita;
@@ -276,7 +290,6 @@ export class GestioneAttivitaComponent implements OnInit {
                 }
             }
         );
-
 
     }
 
@@ -338,6 +351,7 @@ export class GestioneAttivitaComponent implements OnInit {
     }
 
     private resetActivity(attivita: Attivita) {
+
         attivita.id_ambito = null;
         attivita.nome_ambito = null;
         attivita.id_commessa_cliente = null;
@@ -346,10 +360,9 @@ export class GestioneAttivitaComponent implements OnInit {
         attivita.nome_macro_area = null;
         attivita.data_inizio_validita = new Date();
         attivita.data_fine_validita = null;
-        attivita.stato_attivita = this.lst_stati[0].value;
-        attivita.nome_stato = this.lst_stati[0].label;
         attivita.budget_ore = null;
         attivita.budget_euro = null;
+
     }
 
     reset(dt: DataTable) {
