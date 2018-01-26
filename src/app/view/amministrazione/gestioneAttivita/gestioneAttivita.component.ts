@@ -270,7 +270,7 @@ export class GestioneAttivitaComponent implements OnInit {
                 
                 if (consuntivoCount == 0) {
                     selCriteria = new Object();
-                    selCriteria.codice_attivita = rowData.codice_attivita;
+                    selCriteria._id = rowData._id;
                     this.confirmationService.confirm({
                         message: "Sei sicuro di voler eliminare l'attività '" + rowData.nome_attivita + "' ?",
                         header: 'Elimina attività',

@@ -189,7 +189,7 @@ export class GestioneCommClienteComponent implements OnInit {
 
                 if (attivitaCount == 0) { //nessuna attivita collegata
                     selCriteria = new Object();
-                    selCriteria.codice_commessa = rowData.codice_commessa;
+                    selCriteria._id = rowData._id;
                     this.confirmationService.confirm({
                         message: "Sei sicuro di voler eliminare la commessa '" + rowData.nome_commessa + "' ?",
                         header: 'Elimina Commessa Cliente',
