@@ -290,8 +290,7 @@ export class GestioneUtentiComponent implements OnInit {
   public checkForm(form) {
     //disabilito controlli in caso di modifica utente (psw non visibili)
     if (this.userIndex != null) {
-      this.userForm.controls['password'].disable();
-      this.userForm.controls['confPassword'].disable();
+      this.disabilitaValidazioni();
     }
     //disabilito controlli in caso di nessun cliente inserito (posso inserire utente senza clienti)
     if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 0))) {
@@ -380,6 +379,19 @@ export class GestioneUtentiComponent implements OnInit {
       this.alertMsg = "Profilo per il cliente obbligatorio";
       return;
     }
+
+    if(!rowData.data_inizio_validita_cliente){
+      this.alertDialog = true;
+      this.alertMsg = "Data inizio validita obbligatoria";
+      return;
+    }
+
+    if(rowData.data_fine_validita_cliente != null)
+      if(new Date(rowData.data_inizio_validita_cliente) > new Date(rowData.data_fine_validita_cliente)){
+        this.alertDialog = true;
+        this.alertMsg = "Data inizio e fine validita incongruenti";
+        return;
+      }
 
     
       /*Prendo solo la porziona di array senza l'ultimo elemento. Quest'ultimo infatti contiene
