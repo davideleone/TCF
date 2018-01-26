@@ -223,7 +223,7 @@
             </div>
             <p-footer>
                 <div class="ui-dialog-buttonpane">
-                    <button pButton type="submit" label="Salva"></button>
+                    <button pButton type="submit" label="Salva" [disabled]="disableAggiuntaCliente"></button>
                     <button pButton type="button" (click)="abortNew()" label="Annulla"></button>
                 </div>
             </p-footer>
