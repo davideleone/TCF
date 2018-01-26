@@ -149,7 +149,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.activityForm.reset();
         this.newActivity.data_inizio_validita = new Date();
         this.newActivity.stato_attivita = "OPEN";
-        this.newActivity.nome_attivita = "Aperto"
+        this.newActivity.nome_stato = "Aperto"
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
