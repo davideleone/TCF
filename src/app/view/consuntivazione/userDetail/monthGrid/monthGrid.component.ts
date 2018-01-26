@@ -155,7 +155,6 @@ export class MonthGridComponent implements OnChanges {
   private initializeColumns() {
     this.consuntivi = null;
     this.cols = new Array(this.nDays);
-
     var i = 0;
     while (i < this.nDays) {
       this.cols[i] = {};
@@ -479,7 +478,7 @@ export class MonthGridComponent implements OnChanges {
 
   //UTILITY
   private daysInMonth(month, year) {
-    return new Date(year, month, 0).getUTCDate();
+    return new Date(year, month, 1).getUTCDate();
   }
 
   private resetConsuntivo(consuntivo: any) {
