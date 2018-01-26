@@ -130,6 +130,7 @@ export class GestioneUtentiComponent implements OnInit {
   /*Gestione click MODIFICA UTENTE*/
   editUser(rowData, rowIndex) {
     this.abilitaValidazioni();
+    this.disableAggiuntaCliente = false;
 
     this.newUser = JSON.parse(JSON.stringify(rowData));
     this.newUser.data_inizio_validita = new Date(this.newUser.data_inizio_validita);
@@ -158,6 +159,7 @@ export class GestioneUtentiComponent implements OnInit {
   /*Gestione click AGGIUNTA UTENTE*/
   addNewUser() {
     this.clientiObject = [];
+    this.disableAggiuntaCliente = false;
     this.abilitaValidazioni();
     this.newUser = new User();
     this.newUser.isAdmin = false;
@@ -183,6 +185,8 @@ export class GestioneUtentiComponent implements OnInit {
         } else {
           this.users[userTrovatoIndex] = user;
         }
+        this.CloseAllEditable();
+        this.disableAggiuntaCliente = false;
         this.displayDialog = false;
         this.users = JSON.parse(JSON.stringify(this.users)); //deepcopy
         this.changeFormatDate(this.users);
@@ -339,11 +343,12 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   private editCliente(rowData, indexData) {
+    this.clientiComboBoxClone = [];
+    this.filtraClientiCombo({ label: rowData.cliente.nome_cliente, value: rowData.cliente._id });
+    this.disableAggiuntaCliente = true;
     this.CloseAllEditable();
     rowData.isEditable = true;
     this.deepCopyClienti = JSON.parse(JSON.stringify(this.newUser.clienti));
-    this.clientiComboBoxClone = [];
-    this.filtraClientiCombo({ label: rowData.cliente.nome_cliente, value: rowData.cliente._id });
   }
 
   private CloseAllEditable() {
@@ -353,14 +358,18 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   private abortEditCliente(rowData, indexData) {
-    this.clientiComboBoxClone = [];
+    //this.clientiComboBoxClone = [];
+
+   if(this.checkClienteRow(rowData))
+      return;
 
     if (rowData.cliente._id == null){
       this.clientiObject.splice(indexData, 1);
       rowData.isEditable = false;
     } 
-    else
-      rowData.isEditable = false;
+    else{      
+        rowData.isEditable = false;
+    }
 
     this.disableAggiuntaCliente = false;
   }
@@ -368,30 +377,9 @@ export class GestioneUtentiComponent implements OnInit {
   private saveEditCliente(rowData, indexData) {
     var clienteTrovato;
 
-    if (rowData.cliente._id == null) {
-      this.alertDialog = true;
-      this.alertMsg = "Nessun cliente selezionato!";
+    if(this.checkClienteRow(rowData))
       return;
-    }
-
-    if(!rowData.profilo){
-      this.alertDialog = true;
-      this.alertMsg = "Profilo per il cliente obbligatorio";
-      return;
-    }
-
-    if(!rowData.data_inizio_validita_cliente){
-      this.alertDialog = true;
-      this.alertMsg = "Data inizio validita obbligatoria";
-      return;
-    }
-
-    if(rowData.data_fine_validita_cliente != null)
-      if(new Date(rowData.data_inizio_validita_cliente) > new Date(rowData.data_fine_validita_cliente)){
-        this.alertDialog = true;
-        this.alertMsg = "Data inizio e fine validita incongruenti";
-        return;
-      }
+    
 
     
       /*Prendo solo la porziona di array senza l'ultimo elemento. Quest'ultimo infatti contiene
@@ -490,6 +478,37 @@ export class GestioneUtentiComponent implements OnInit {
       }
     }
     return invalid;
+  }
+
+  checkClienteRow(rowData){
+    var error = false;
+    if (rowData.cliente._id == null) {
+      this.alertDialog = true;
+      this.alertMsg = "Nessun cliente selezionato!";
+      error = true;
+    }
+
+    if(!rowData.profilo){
+      this.alertDialog = true;
+      this.alertMsg = "Profilo per il cliente obbligatorio";
+      error = true;
+    }
+
+    if(!rowData.data_inizio_validita_cliente){
+      this.alertDialog = true;
+      this.alertMsg = "Data inizio validita obbligatoria";
+      error = true;
+    }
+
+    if(rowData.data_fine_validita_cliente != null){
+      if(new Date(rowData.data_inizio_validita_cliente) > new Date(rowData.data_fine_validita_cliente)){
+        this.alertDialog = true;
+        this.alertMsg = "Data inizio e fine validita incongruenti";
+        error = true;
+      }
+    }
+
+    return error;
   }
 }
 
