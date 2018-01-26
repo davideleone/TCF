@@ -119,7 +119,9 @@
                         <span class="ui-float-label">
                             <label for="commessa_cliente" [ngStyle]="{'color': isValid('commessa_cliente')}" style="top: -.60em;font-size:12px;">Commessa Cliente</label>
                         </span>
-                        <p-dropdown id="commessa_cliente" formControlName="commessa_cliente" [options]="lst_commesse_clienti" [style]="{'width':'100%'}"
+                        <p-dropdown id="commessa_cliente" formControlName="commessa_cliente" 
+                                    [options]="lst_commesse_clienti" [style]="{'width':'100%'}"
+                                    [filter]="true" filterBy="label,nome_commessa"
                             placeholder="Seleziona Commessa Cliente" [(ngModel)]="newActivity.id_commessa_cliente" [disabled]="isDisabled('commessaCliente')">
                         </p-dropdown>
                     </div>

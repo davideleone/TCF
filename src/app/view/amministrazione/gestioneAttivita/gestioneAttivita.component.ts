@@ -184,7 +184,7 @@ export class GestioneAttivitaComponent implements OnInit {
             var selCriteria;
             selCriteria = new Object();
             selCriteria._id = this.newActivity._id;
-            console.log(this.newActivity._id);
+
             this.attivitaService.updateAttivita(this.newActivity, selCriteria).subscribe(event => {
                 this.activities[attivitaTrovataIndex] = this.newActivity;
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
@@ -214,8 +214,7 @@ export class GestioneAttivitaComponent implements OnInit {
         var selCriteria;
         selCriteria = new Object();
         selCriteria.id_cliente = this.newActivity.id_cliente;
-        console.log(typeof this.newActivity.stato_attivita)
-        console.log(typeof this.lst_stati)
+
         switch (componentName) {
             case 'ambito':
                 if (!isEdit) {
@@ -268,7 +267,7 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (element != null)
                         consuntivoCount++;
                 });
-                console.log("Cliente: " + rowData.nome_attivita + " #Consuntivi: " + consuntivoCount + " Id_attivita: " + rowData._id);
+                
                 if (consuntivoCount == 0) {
                     selCriteria = new Object();
                     selCriteria.codice_attivita = rowData.codice_attivita;
