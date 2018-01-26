@@ -145,8 +145,8 @@ export class GestioneCommClienteComponent implements OnInit {
             this.newCommCli.budget_gg = 0;
 
         if (commClienteTrovatoIndex == -1) { //aggiunta
-            this.commessaClienteService.addCommessaCliente(this.newCommCli).subscribe(event => {
-                this.commClientes.push(this.newCommCli);
+            this.commessaClienteService.addCommessaCliente(this.newCommCli).subscribe(commessaCliente => {
+                this.commClientes.push(commessaCliente);
                 this.commClientes = JSON.parse(JSON.stringify(this.commClientes)); //deepcopy
                 this.changeFormatDate(this.commClientes);
                 this.displayDialog = false;

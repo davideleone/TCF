@@ -87,9 +87,9 @@ export class GestioneCommFinconsComponent implements OnInit {
             this.newCommFincons.budget_gg = 0;
 
         if (commFinconsTrovatoIndex == -1) { //aggiunta
-            this.commessaFinconsService.addcommessaFincons(this.newCommFincons).subscribe(event => {
+            this.commessaFinconsService.addcommessaFincons(this.newCommFincons).subscribe(commessaFincons => {
                 this.displayDialog = false;
-                this.commFinconss.push(this.newCommFincons);
+                this.commFinconss.push(commessaFincons);
                 this.commFinconss = JSON.parse(JSON.stringify(this.commFinconss)); //deepcopy
                 this.changeFormatDate(this.commFinconss);
             },

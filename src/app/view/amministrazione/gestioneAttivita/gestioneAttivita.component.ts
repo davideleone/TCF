@@ -149,7 +149,7 @@ export class GestioneAttivitaComponent implements OnInit {
         this.activityForm.reset();
         this.newActivity.data_inizio_validita = new Date();
         this.newActivity.stato_attivita = "OPEN";
-        this.newActivity.nome_stato = "Aperto"
+        this.newActivity.nome_stato = "Aperto";
     }
 
     /*il form group non ha di per se un metodo per verificare se sul form è stato fatto il submit*/
@@ -174,8 +174,8 @@ export class GestioneAttivitaComponent implements OnInit {
 
         if (attivitaTrovataIndex == -1) { //aggiunta
             this.attivitaService.addAttivita(this.newActivity).subscribe(
-            event => {
-                this.activities.push(this.newActivity);
+            activity => {
+                this.activities.push(activity);
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
                 this.changeFormatDate(this.activities);
             });
