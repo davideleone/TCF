@@ -46,7 +46,7 @@ export class MonthGridComponent implements OnChanges {
 
   newRowConsuntivo: any;
   blankConsuntivo: Consuntivo;
-  
+
 
 
   lst_clienti: SelectItem[];
@@ -387,9 +387,9 @@ export class MonthGridComponent implements OnChanges {
     this.filtraDeliverableCombo(r.id_attivita, { label: r.nome_tipo_deliverable, value: r.id_tipo_deliverable });
     r.isEditable = true;
     r.note.forEach(element => {
-      if(element.note != null)
+      if (element.note != null)
         this.noteConsuntivo = r.note;
-    });    
+    });
   }
 
   private CloseAllEditable() {
@@ -402,17 +402,11 @@ export class MonthGridComponent implements OnChanges {
 
   //SAVE ROW (INLINE)
   private saveEdit(editRowConsuntivo, index) {
-    editRowConsuntivo.nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
-    editRowConsuntivo.nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
     var nuovaNota = editRowConsuntivo.note;
-    //editRowConsuntivo.note = this.noteConsuntivo;
-    //this.attivitaDeliverableList.push({id_attivita : editRowConsuntivo.id_attivita, id_deliverable: editRowConsuntivo.id_tipo_deliverable});
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
     for (let i = 0; i < this.nDays; i++) {
       if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
-        editRowConsuntivo[i].nome_attivita = this.lst_attivita.find(x => x.value == editRowConsuntivo.id_attivita).label;
-        editRowConsuntivo[i].nome_tipo_deliverable = this.lst_deliverable.find(x => x.value == editRowConsuntivo.id_tipo_deliverable).label;
         editRowConsuntivo[i].note = nuovaNota;
         consuntiviToAdd.push(editRowConsuntivo[i]);
       }
@@ -444,23 +438,25 @@ export class MonthGridComponent implements OnChanges {
   //DELETE ROW
   private delete(r, index) {
     var consuntivoTrovatoIndex = this.consuntivi.findIndex(i => i.id_utente == r.id_utente && i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_attivita == r.id_attivita && i.id_tipo_deliverable == r.id_tipo_deliverable);
-    var delCriteria;
-    delCriteria = new Object();
-    delCriteria.id_utente = r.id_utente;
-    delCriteria.id_macro_area = r.id_macro_area;
-    delCriteria.id_ambito = r.id_ambito;
-    delCriteria.id_attivita = r.id_attivita;
-    delCriteria.id_tipo_deliverable = r.id_tipo_deliverable;
 
+    var dataInizio = new Date(this.yearSelected, this.monthSelected - 1, 1);
+    var dataFine = new Date(this.yearSelected, this.monthSelected, 0);
+    console.log('/tcf/api/consuntivoController/delConsuntiviUtente/' + this.monthSelected.toString() + '/' + this.yearSelected.toString() + '/' + r.id_utente + '/' + r.id_macro_area + '/' + r.id_ambito + '/' + r.id_attivita + '/' + r.id_tipo_deliverable)
     this.confirmationService.confirm({
       message: "Sei sicuro di voler eliminare '" + r.nome_attivita + "' ?",
       header: 'Elimina consuntivo',
       icon: 'fa fa-trash',
       accept: () => {
-        this.consuntivazioneService.deleteConsuntivi(delCriteria).subscribe(msg => {
-          this.consuntivi.splice(consuntivoTrovatoIndex, 1);
-          this.consuntivi = JSON.parse(JSON.stringify(this.consuntivi)); //deepcopy
-        });
+        this.consuntivazioneService.deleteConsuntivi(dataInizio,
+          dataFine,
+          r.id_utente,
+          r.id_macro_area,
+          r.id_ambito,
+          r.id_attivita,
+          r.id_tipo_deliverable).subscribe(msg => {
+            this.consuntivi.splice(consuntivoTrovatoIndex, 1);
+            this.consuntivi = JSON.parse(JSON.stringify(this.consuntivi)); //deepcopy
+          });
       }
     });
 
@@ -588,7 +584,7 @@ export class MonthGridComponent implements OnChanges {
 
   private filtraAttivitaCombo(isEdit, idDeliverable, idCliente, editedObject) {
     var attivitaTrovata = null;
-    
+
     this.lst_attivita.forEach(elements => {
       if (this.consuntivi != null)
         attivitaTrovata = null;//this.consuntivi.find(x => x.id_attivita == elements.value && x.id_tipo_deliverable == idDeliverable)
@@ -607,8 +603,8 @@ export class MonthGridComponent implements OnChanges {
     var attivitaTrovata = null;
     this.attivitaList.forEach(attivita => {
       if (attivita.id_cliente == idCliente &&
-          attivita.id_ambito == idAmbito &&
-          attivita.id_macro_area == idMacroArea)
+        attivita.id_ambito == idAmbito &&
+        attivita.id_macro_area == idMacroArea)
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
@@ -629,13 +625,13 @@ export class MonthGridComponent implements OnChanges {
     });
   }
 
-  private showNote(row, index){
+  private showNote(row, index) {
     this.displayNote = true;
-    this.noteConsuntivo = row.note; 
+    this.noteConsuntivo = row.note;
     this.noteIndex = index;
-    if(row.isEditable){
-      this.isNoteEditable = true;      
-    }else{
+    if (row.isEditable) {
+      this.isNoteEditable = true;
+    } else {
       this.isNoteEditable = false;
     }
   }

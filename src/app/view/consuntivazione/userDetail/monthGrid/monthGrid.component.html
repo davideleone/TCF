@@ -1,5 +1,10 @@
+<div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    <input #gb type="text" pInputText size="30" placeholder="Filtra Consuntivo">
+</div>
+
 <p-dataTable emptyMessage="Nessuna attività da consuntivare" [value]="consuntivi" scrollable="true" frozenWidth="470px" unfrozenWidth="calc( 100% - 470px)"
-    columnResizeMode="fit">
+    columnResizeMode="fit" [globalFilter]="gb">
 
     <p-header>
         <div class="ui-grid-row">
@@ -44,19 +49,21 @@
 
     <p-column frozen="true" styleClass="attivita_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_attivita}}</span>
+            <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_attivita}}</span>
+            <!-- <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_attivita}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_attivita_clone" [(ngModel)]="row.id_attivita" required="true" appendTo="body" placeholder="Seleziona attività" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
-            </span>
+            </span> -->
         </ng-template>
     </p-column>
 
     <p-column header="Tipo Deliverable" frozen="true" styleClass="deliverable_col">
         <ng-template let-col let-row="rowData" pTemplate="body">
-            <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_tipo_deliverable}}</span>
+                <span [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_tipo_deliverable}}</span>
+            <!-- <span *ngIf="!row.isEditable" [title]="row.nome_cliente + ' - ' + row.nome_ambito + ' - ' + row.nome_macro_area">{{row.nome_tipo_deliverable}}</span>
             <span *ngIf="row.isEditable">
                 <p-dropdown [options]="lst_deliverable_clone" [(ngModel)]="row.id_tipo_deliverable" required="true" appendTo="body" placeholder="Seleziona deliverable" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
-            </span>
+            </span> -->
         </ng-template>
     </p-column>
 

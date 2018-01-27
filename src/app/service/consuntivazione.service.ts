@@ -44,12 +44,13 @@ export class ConsuntivazioneService {
   // }
 
   @beforeMethod(LogAspect.log)
-  deleteConsuntivi(criteria){
+  deleteConsuntivi(month, year, id_user, id_macro_area, id_ambito, id_attivita, id_tipo_deliverable){
   	var headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log("/tcf/api/consuntivoController/CRUD?criteria="+JSON.stringify(criteria));
-    return this.http.delete('/tcf/api/consuntivoController/CRUD?criteria='+JSON.stringify(criteria), {headers:headers})
-  		.map(res => res.json());
+    
+    //return this.http.delete('/tcf/api/consuntivoController/CRUD?criteria='+JSON.stringify(criteria), {headers:headers})
+    return this.http.delete('/tcf/api/consuntivoController/delConsuntiviUtente/'+month+'/'+year+'/'+id_user+'/'+id_macro_area+'/'+id_ambito+'/'+id_attivita+'/'+id_tipo_deliverable)  
+    .map(res => res.json());
   }
 
   //add Mese Consuntivo
