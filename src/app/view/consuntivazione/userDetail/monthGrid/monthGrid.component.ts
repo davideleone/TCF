@@ -653,7 +653,7 @@ export class MonthGridComponent implements OnChanges {
 
     var macroAreaType = "standard";
     this.lst_aree.forEach( macroArea =>{
-      if(macroArea.value == this.newRowConsuntivo.id_macro_area && macroArea.label == 'AM')
+      if(macroArea.value == this.newRowConsuntivo.id_macro_area && macroArea.label == 'Manutenzione')
         macroAreaType = "AM"
     });
 
