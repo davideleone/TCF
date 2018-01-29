@@ -9,6 +9,8 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { DatePipe } from '@angular/common';
 import { AuthenticationService } from '../../service/authentication.service';
 
+import * as moment from 'moment'
+
 @Component({
     selector: 'report',
     templateUrl: './report.component.html',
@@ -111,10 +113,16 @@ export class ReportComponent implements OnInit {
             showLabels: true,
         };
 
+        var convertedStartDate = moment(this.dataInizio).format('LLLL');
+        convertedStartDate = moment(convertedStartDate).format('YYYY-MM-DDT00:00:00');
+        var convertedEndDate = moment(this.dataFine).format('LLLL');
+        convertedEndDate = moment(convertedEndDate).format('YYYY-MM-DDT23:59:59');
+
+
         var reportDownloadParams = {
             clientId: this.clienteSelected,
-            start: new Date(this.dataInizio).toISOString(),
-            end: new Date(this.dataFine).toISOString(),
+            start: convertedStartDate.toString(),
+            end:  convertedEndDate.toString(),
             type: this.modalitaSelected
         };
 

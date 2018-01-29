@@ -15,11 +15,11 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "0.0.28",
     "@angular/animations": "5.2.0",
     "@angular/common": "5.2.0",
     "@angular/compiler": "5.2.0",
     "@angular/core": "5.2.0",
-    "@angular-devkit/core": "0.0.28",
     "@angular/forms": "5.2.0",
     "@angular/http": "5.2.0",
     "@angular/platform-browser": "5.2.0",
@@ -34,6 +34,7 @@
     "jquery-ui": "1.12.1",
     "jsnlog": "2.24.2",
     "kaop-ts": "1.5.1",
+    "moment": "^2.20.1",
     "primeng": "5.0.2",
     "rxjs": "5.5.2",
     "zone.js": "0.8.18"
