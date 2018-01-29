@@ -23,6 +23,11 @@ export class DomainService {
     }
 
     @beforeMethod(LogAspect.log)
+    getTipiDeliverableAM() {
+        return this.getGenericCall("/FTC/COMMON/lst_deliverable_AM");      
+    }
+
+    @beforeMethod(LogAspect.log)
     getAmbiti() {
         return this.getGenericCall("/FTC/COMMON/lst_ambiti");               
     }

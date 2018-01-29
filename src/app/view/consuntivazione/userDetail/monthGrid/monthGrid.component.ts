@@ -107,10 +107,6 @@ export class MonthGridComponent implements OnChanges {
 
     });
 
-    this.domainService.getTipiDeliverable().subscribe(domain => {
-      this.lst_deliverable = domain;
-    });
-
     this.domainService.getAree().subscribe(domain => {
       this.lst_aree = domain;
     });
@@ -147,6 +143,47 @@ export class MonthGridComponent implements OnChanges {
       this.loading = false;
     }, 1000);
 
+  }
+
+
+  private getDeliverableList(idAttivita,editedObject){
+    var deliverableTrovata = {};
+    this.domainService.getTipiDeliverable().subscribe(list => {
+      this.lst_deliverable = list;
+
+        this.lst_deliverable_clone = [];
+        if (editedObject != null) {
+          this.lst_deliverable_clone.push(editedObject);
+        }
+
+        this.lst_deliverable.forEach(elements => {
+          if (this.consuntivi != null)
+            deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
+          if (deliverableTrovata == null)
+            this.lst_deliverable_clone.push(elements);
+        });
+
+      });
+  }
+
+  private getDeliverableForAM(idAttivita ,editedObject){
+    var deliverableTrovata = {};
+    this.domainService.getTipiDeliverableAM().subscribe(list => {
+      this.lst_deliverable = list;
+
+        this.lst_deliverable_clone = [];
+        if (editedObject != null) {
+          this.lst_deliverable_clone.push(editedObject);
+        }
+
+        this.lst_deliverable.forEach(elements => {
+          if (this.consuntivi != null)
+            deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
+          if (deliverableTrovata == null)
+            this.lst_deliverable_clone.push(elements);
+        });
+
+      });
   }
 
   //GRID - LOAD
@@ -611,18 +648,20 @@ export class MonthGridComponent implements OnChanges {
   }
 
   private filtraDeliverableCombo(idAttivita, editedObject) {
-    var deliverableTrovata = null;
-    this.lst_deliverable_clone = [];
-    if (editedObject != null) {
-      this.lst_deliverable_clone.push(editedObject);
-    }
 
-    this.lst_deliverable.forEach(elements => {
-      if (this.consuntivi != null)
-        deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
-      if (deliverableTrovata == null)
-        this.lst_deliverable_clone.push(elements);
+    var deliverableTrovata = {};
+
+    var macroAreaType = "standard";
+    this.lst_aree.forEach( macroArea =>{
+      if(macroArea.value == this.newRowConsuntivo.id_macro_area && macroArea.label == 'AM')
+        macroAreaType = "AM"
     });
+
+    if(macroAreaType != "AM")
+      this.getDeliverableList(idAttivita,editedObject); 
+
+    if(macroAreaType == "AM")
+      this.getDeliverableForAM(idAttivita,editedObject);  
   }
 
   private showNote(row, index) {
