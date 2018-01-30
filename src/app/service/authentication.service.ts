@@ -7,6 +7,7 @@ import { beforeMethod } from 'kaop-ts';import { LogAspect } from '../helpers/log
 import {JL} from "jsnlog";
 
 import 'rxjs/add/operator/map'
+import { locale } from 'core-js/library/web/timers';
 
 @Injectable()
 export class AuthenticationService implements OnInit, OnChanges{
@@ -21,17 +22,15 @@ export class AuthenticationService implements OnInit, OnChanges{
         private activatedRoute: ActivatedRoute,
         @Inject('JSNLOG') JL: JL.JSNLog
         ) {
-            console.log("constructor authentication service");
             this.JL = JL;
     }
 
-    ngOnChanges(){
-        console.log("onChanges");        
+    ngOnChanges(){     
         this._user$ = localStorage.getItem('currentUser');
     }
 
     ngOnInit(){
-        console.log("authentication service: "+this.user$);
+
         
         this.router.events
         .filter((event) => event instanceof NavigationEnd)
@@ -67,7 +66,9 @@ export class AuthenticationService implements OnInit, OnChanges{
                 let user = response.json();
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    var expirationMS =  30 *60*1000;
+		            var record = {value: JSON.stringify(user), timestamp: new Date().getTime() + expirationMS}
+                    localStorage.setItem('currentUser', JSON.stringify(record));
                    this._user$ = user;                   
                 }
                 return this._user$;
@@ -78,14 +79,12 @@ export class AuthenticationService implements OnInit, OnChanges{
         // remove user from local storage to log user out
         //this.userLogged.next(null);
         //this.userLogged = null;
-        console.log("logout: " + this._user$);
         this.router.navigate(['/login']);
         this._user$ = null;
     }
 
     set _user$(value: any) {
         //JL().info("set userLogged in LocalSorage");
-        console.log("setuser" + value);
         try{
             if(value){            
                 localStorage.setItem('currentUser', JSON.stringify(value));
@@ -100,7 +99,8 @@ export class AuthenticationService implements OnInit, OnChanges{
      
       get _user$() {
         //JL().info("get userLogged from LocalStorage");
-        console.log("getuser" + localStorage.getItem('currentUser'));
+        
+
         return JSON.parse(localStorage.getItem('currentUser'));
       }
 

@@ -24,57 +24,8 @@ export class LeftsideBarComponent implements OnInit {
     }
 
 
-    ngOnInit() { //DA GESTIRE CON ANGULAR2
-        // $('.btnConsuntivazione').addClass('active');
-        // $('.subSection').hide();
-
-        // $('.consuntivazioneContainer').show();
-        // $('.amministrazioneContainer').hide();
-        // $('.reportisticaContainer').hide();
-
-        // $('.btnConsuntivazione').on('click', function() {
-        //     if ($('.navigation').hasClass('active')) {
-        //         $('.navigation').removeClass('active');
-        //     }
-        //     $(this).addClass('active');
-        //     $('.consuntivazione').fadeIn().show();
-        //     $('.consuntivazioneContainer').fadeIn().show();
-        //     $('.amministrazione').hide();
-        //     $('.amministrazioneContainer').hide();
-        //     $('.reportistica').hide();
-        //     $('.reportisticaContainer').hide();
-
-        //     $('.subSection').slideUp();
-        // });
-        // $('.btnAmministrazione').on('click', function() {
-        //     if ($('.navigation').hasClass('active')) {
-        //         $('.navigation').removeClass('active');
-        //     }
-        //     $(this).addClass('active');
-        //     $('.consuntivazione').hide();
-        //     $('.consuntivazioneContainer').hide();
-        //     $('.amministrazione').fadeIn().show();
-        //     $('.amministrazioneContainer').fadeIn().show();
-        //     $('.reportistica').hide();
-        //     $('.reportisticaContainer').hide();
-
-        //     $('.subSection').slideDown();
-        // });
-        // $('.btnReportistica').on('click', function() {
-        //     if ($('.navigation').hasClass('active')) {
-        //         $('.navigation').removeClass('active');
-        //     }
-        //     $(this).addClass('active');
-        //     $('.consuntivazione').hide();
-        //     $('.consuntivazioneContainer').hide();
-        //     $('.amministrazione').hide();
-        //     $('.amministrazioneContainer').hide();
-        //     $('.reportistica').fadeIn().show();
-        //     $('.reportisticaContaia te buona er').fadeIn().show();
-
-        //     $('.subSection').slideUp();
-        // });
-
+    ngOnInit() { 
+        
         $('.sidebarToggle').on('click', function () {
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active').hide().fadeIn().addClass('deactive');
@@ -88,7 +39,9 @@ export class LeftsideBarComponent implements OnInit {
         });
 
         this.menuService.getMenu(this.userLogged._id).subscribe(
-            menulist => this.menuEntries = menulist,
+            menulist => {
+                this.menuEntries = menulist
+            },
             error => alert(error)
         );
     }
@@ -148,10 +101,21 @@ export class LeftsideBarComponent implements OnInit {
     }
 
     isVisible(item){
-        if(this.maxUserProfile == 'Consuntivatore' && !this.userLogged.isAdmin)
-            return item == 'Consuntivazione';
-        else
+        if((this.maxUserProfile == 'Consuntivatore' ||
+            this.maxUserProfile == 'Amministratore di sistema' ||
+            this.maxUserProfile == 'Amministratore di progetto') && item.profile == 'CS')
             return true;
+
+        if((this.maxUserProfile == 'Amministatore di sistema' ||
+            this.maxUserProfile == 'Amministratore di progetto') && (item.profile == 'AP' || item.profile == 'CS'))
+            return true;
+
+        if(this.maxUserProfile == 'Amministratore di sistema' && 
+            (item.profile == 'AP' || item.profile == 'CS' || item.profile == 'AS'))
+            return true;
+
+       
+        return false;
     }
 
 }

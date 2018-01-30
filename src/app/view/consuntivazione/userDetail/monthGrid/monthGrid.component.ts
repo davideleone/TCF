@@ -40,14 +40,11 @@ export class MonthGridComponent implements OnChanges {
   cols: any[];
   formSubmitted: boolean = false;
 
-
   nDays: number;
   beforeOnInit: boolean = true;
 
   newRowConsuntivo: any;
   blankConsuntivo: Consuntivo;
-
-
 
   lst_clienti: SelectItem[];
   clienti: Cliente[];

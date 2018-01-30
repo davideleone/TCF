@@ -176,8 +176,14 @@ export class ReportComponent implements OnInit {
         for (var i = 0; i < arrData.length; i++) {
             var row = "";
 
-            for (var index in arrData[i])
-                row += '"' + arrData[i][index] + '",';
+            for (var index in arrData[i]){
+                var tmp = arrData[i][index];
+                if(tmp == null)
+                    tmp = "";
+
+                row += '"' + tmp + '",';
+            }
+        
 
             row.slice(0, row.length - 1);
             CSV += row + '\r\n';
@@ -193,7 +199,7 @@ export class ReportComponent implements OnInit {
 
         var fileName = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate().toString() + '_' + reportName;
         fileName = fileName.replace(/ /g, "_");
-        var uri = 'data:text/csv;charset=utf-8,' + encodeURI(CSV);
+        var uri = 'data:text/csv;charset=UTF-8,' + encodeURIComponent(CSV);
         //Create hidden link for download
         var link = document.createElement("a");
         link.href = uri;

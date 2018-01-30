@@ -1,15 +1,19 @@
 <section class="leftSidebar active">
     <ul>
         <li *ngFor="let item of menuEntries; let i = index" class="navigation" [ngClass]="{active: isActive(item.title_menu)}">
-            <ng-container *ngIf="isVisible(item.title_menu)">
+            <ng-container *ngIf="isVisible(item)">
                 <div class="sectionHead" attr.id="sectionHead_{{i}}" (click)="selectMenu($event, item.title_menu, item.children_menu.length, true)" [routerLink]="item.children_menu.length == 0 ? item.url : null">
                     {{item.title_menu}}
                     <i class="fa fa-arrow-down" aria-hidden="true" *ngIf="item.children_menu.length > 0"></i>
                 </div>
                 <ul class="subSection" *ngIf="item.children_menu.length > 0" style="display: none" >
-                    <li id="subitem.title_menu" *ngFor="let subitem of item.children_menu; let j = index" [routerLink]="subitem.url" (click)="selectMenu($event, item.title_menu + ' - ' + subitem.title_menu, 0, false)">
-                        {{subitem.title_menu}}
-                    </li>
+                    <ng-container *ngFor="let subitem of item.children_menu; let j = index" >
+                        <li id="subitem.title_menu" 
+                            *ngIf="isVisible(subitem)"
+                            [routerLink]="subitem.url" (click)="selectMenu($event, item.title_menu + ' - ' + subitem.title_menu, 0, false)">
+                                    {{subitem.title_menu}}
+                        </li>
+                    </ng-container>
                 </ul>
             </ng-container>    
         </li>

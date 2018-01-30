@@ -83,7 +83,11 @@
             </span>
         </ng-template>
         <ng-template let-col let-row="rowData" pTemplate="footer">
-            <div [class]="(calculateGroupTotal(col.field) < 8) ? 'error_col' : 'correct_col'">{{calculateGroupTotal(col.field)}}</div>
+            <div [class]="(calculateGroupTotal(col.field) < 8) ? 'error_col' : 'correct_col'">
+                <span style="font-size:14px">
+                {{calculateGroupTotal(col.field)}}
+                </span>
+            </div>
         </ng-template>
     </p-column>
 
