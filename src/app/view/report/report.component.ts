@@ -178,8 +178,8 @@ export class ReportComponent implements OnInit {
 
             for (var index in arrData[i]){
                 var tmp = arrData[i][index];
-                if(tmp == null)
-                    tmp = "";
+                if(tmp == null || tmp.length < 1)
+                    tmp = "N/D";
 
                 row += '"' + tmp + '",';
             }
@@ -189,8 +189,8 @@ export class ReportComponent implements OnInit {
             CSV += row + '\r\n';
         }
 
-        if (CSV == '') {
-            alert("Invalid data");
+        if (CSV.length < 1) {
+            alert("Dati vuoti per il CSV");
             return;
         }
 
