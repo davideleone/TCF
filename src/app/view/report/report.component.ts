@@ -168,7 +168,7 @@ export class ReportComponent implements OnInit {
 
         var row = "";
         for (var index in arrData[0]) {
-            row += index + ',';
+            row += index + ';';
         }
         row = row.slice(0, -1);
         CSV += row + '\r\n';
@@ -178,10 +178,17 @@ export class ReportComponent implements OnInit {
 
             for (var index in arrData[i]){
                 var tmp = arrData[i][index];
-                if(tmp == null || tmp.length < 1)
-                    tmp = "N/D";
 
-                row += '"' + tmp + '",';
+                if(tmp != undefined){
+                    if(tmp == null || tmp.length < 1)
+                        tmp = "N/D";
+                    
+                    if(tmp.toString().includes(','))
+                        tmp.replace(',' , ' ')
+
+                    row += '"' + tmp + '";';
+                }
+                
             }
         
 
