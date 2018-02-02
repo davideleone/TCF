@@ -11,7 +11,7 @@ export class CommessaClienteService {
 
   @beforeMethod(LogAspect.log)
   getCommesse(){
-  	return this.http.get('/tcf/api/commessaClienteController/CRUD')
+  	return this.http.get('/tcf/api/commessaClienteController/commessaAll')
   		.map(res=> res.json());
   }
   
