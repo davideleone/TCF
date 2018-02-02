@@ -184,7 +184,21 @@ export class ReportComponent implements OnInit {
                         tmp = "N/D";
                     
                     if(tmp.toString().includes(','))
-                        tmp = tmp.replace(',' , ' ')
+                        for(let i in tmp)
+                            tmp = tmp.replace(',' , ' ')
+                    
+                    if(tmp.toString().includes(';'))
+                        for(let i in tmp)
+                            tmp = tmp.replace(';' , ' ')
+
+                    if(tmp.toString().includes('\n'))
+                        for(let i in tmp)
+                            tmp = tmp.replace('\n', ' ')
+
+                    if(tmp.toString().includes('"'))
+                        for(let i in tmp)
+                            tmp = tmp.replace('"', '')
+
 
                     row += '="' + tmp + '";';
                 }
