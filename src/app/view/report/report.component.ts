@@ -186,7 +186,7 @@ export class ReportComponent implements OnInit {
                     if(tmp.toString().includes(','))
                         tmp = tmp.replace(',' , ' ')
 
-                    row += '"' + tmp + '";';
+                    row += '="' + tmp + '";';
                 }
 
             }
