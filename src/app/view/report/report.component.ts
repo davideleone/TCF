@@ -199,6 +199,10 @@ export class ReportComponent implements OnInit {
                         for(let i in tmp)
                             tmp = tmp.replace('"', '')
 
+                    if(tmp.toString().includes("'"))
+                        for(let i in tmp)
+                            tmp = tmp.replace("'", " ")
+
 
                     row += '="' + tmp + '";';
                 }
