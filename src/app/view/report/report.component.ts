@@ -179,8 +179,13 @@ export class ReportComponent implements OnInit {
             for (var index in arrData[i]){
                 var tmp = arrData[i][index];
 
-                if(tmp != undefined){
-                    if(tmp == null || tmp.length < 1)
+        
+                    if(    tmp == null 
+                        || tmp.length < 1 
+                        || tmp == '' 
+                        || tmp == 'null' 
+                        || tmp == 0
+                        || tmp == undefined)
                         tmp = "N/D";
                     
                     if(tmp.toString().includes(','))
@@ -203,14 +208,12 @@ export class ReportComponent implements OnInit {
                         for(let i in tmp)
                             tmp = tmp.replace("'", " ")
 
-
+                    
                     row += '="' + tmp + '";';
-                }
 
             }
         
 
-            row.slice(0, row.length - 1);
             CSV += row + '\r\n';
         }
 
