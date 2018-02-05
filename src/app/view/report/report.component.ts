@@ -209,7 +209,7 @@ export class ReportComponent implements OnInit {
                             tmp = tmp.replace("'", " ")
 
                     
-                    row += '="' + tmp + '";';
+                    row += '"' + tmp + '";';
 
             }
         
