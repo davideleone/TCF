@@ -22,6 +22,9 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, Valid
 })
 
 export class GestioneUtentiComponent implements OnInit {
+
+  readonly ID_CLIENTE_FINCONS: any = '5a4628f3a8e4253d4faadbcb';
+
   allSistemUser: User[] = [];
   users: any;
   newUser: User;
@@ -52,6 +55,7 @@ export class GestioneUtentiComponent implements OnInit {
   alertMsg: string;
   deepCopyClienti;
   disableAggiuntaCliente: boolean = false;
+  clienteFincons: Cliente;
 
   constructor(private userService: UserService,
     private domainService: DomainService,
@@ -86,12 +90,12 @@ export class GestioneUtentiComponent implements OnInit {
   ngOnInit() {
     this.userService.getUsersByManager(this.userLogged._id).subscribe(users => this.users = users);
 
-    this.domainService.getSedi().subscribe(sedi => this.sediList = sedi );
+    this.domainService.getSedi().subscribe(sedi => this.sediList = sedi);
 
     this.authenticationService.user$.subscribe(user => {
       this.userLogged = user
 
-      if (!this.userLogged.isAdmin) 
+      if (!this.userLogged.isAdmin)
         this.getClientiLikeProjectAdmin();
       else
         this.getClientiLikeFullAdmin();
@@ -99,10 +103,13 @@ export class GestioneUtentiComponent implements OnInit {
 
   }
 
-  getClientiLikeFullAdmin(){
+  getClientiLikeFullAdmin() {
     this.clienteService.getClienti().subscribe(clienti => {
       this.clientiList = Object.assign({}, clienti);
+
       clienti.forEach(cliente => {
+        if (cliente._id == this.ID_CLIENTE_FINCONS)
+          this.clienteFincons = cliente;
         this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
         this.minClientDate.push(cliente.data_inizio_validita);
         this.maxClientDate.push(cliente.data_fine_validita);
@@ -110,21 +117,23 @@ export class GestioneUtentiComponent implements OnInit {
     });
   }
 
-  getClientiLikeProjectAdmin(){
+  getClientiLikeProjectAdmin() {
     var selClientiCriteria = []
 
-      this.userLogged.clienti.forEach(clientiUser => {
-        selClientiCriteria.push(clientiUser.cliente._id);
-      });
+    this.userLogged.clienti.forEach(clientiUser => {
+      selClientiCriteria.push(clientiUser.cliente._id);
+    });
 
-      this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clienti => {
-        this.clientiList = Object.assign({}, clienti);
-        clienti.forEach(cliente => {
-          this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
-          this.minClientDate.push(cliente.data_inizio_validita);
-          this.maxClientDate.push(cliente.data_fine_validita);
-        });
+    this.clienteService.getClientiByUser(selClientiCriteria).subscribe(clienti => {
+      this.clientiList = Object.assign({}, clienti);
+      clienti.forEach(cliente => {
+        if (cliente._id == this.ID_CLIENTE_FINCONS)
+          this.clienteFincons = cliente;
+        this.clientiComboBox.push({ label: cliente.nome_cliente, value: cliente._id });
+        this.minClientDate.push(cliente.data_inizio_validita);
+        this.maxClientDate.push(cliente.data_fine_validita);
       });
+    });
   }
 
   /*Gestione click MODIFICA UTENTE*/
@@ -135,16 +144,16 @@ export class GestioneUtentiComponent implements OnInit {
     this.newUser = JSON.parse(JSON.stringify(rowData));
     this.newUser.data_inizio_validita = new Date(this.newUser.data_inizio_validita);
     this.newUser.data_fine_validita = this.newUser.data_fine_validita != null ? new Date(this.newUser.data_fine_validita) : null;
-    
+
     this.clientiObject = [];
-    if(this.newUser.clienti != null && Object.keys(this.newUser.clienti).length > 0){
-      this.newUser.clienti.forEach((element : any, index) => {
+    if (this.newUser.clienti != null && Object.keys(this.newUser.clienti).length > 0) {
+      this.newUser.clienti.forEach((element: any, index) => {
         if (element != null) {
           element.data_inizio_validita_cliente = element.data_inizio_validita_cliente != null ? new Date(element.data_inizio_validita_cliente) : null;
           element.data_fine_validita_cliente = element.data_fine_validita_cliente != null ? new Date(element.data_fine_validita_cliente) : null;
         }
 
-        if(element.cliente != undefined && element.cliente._id != null){
+        if (element.cliente != undefined && element.cliente._id != null) {
           element.isEditable = false;
           this.clientiObject.push(element)
         }
@@ -158,10 +167,21 @@ export class GestioneUtentiComponent implements OnInit {
 
   /*Gestione click AGGIUNTA UTENTE*/
   addNewUser() {
+    var newclienteFincons: any;
+    newclienteFincons = {};
+    newclienteFincons.cliente = this.clienteFincons;
+    newclienteFincons.profilo = this.profili.find(x => x.value == 'CS').value;
+    newclienteFincons.data_inizio_validita_cliente = new Date();
+    newclienteFincons.data_fine_validita_cliente = null;
+    newclienteFincons.isEditable = false;
+
     this.clientiObject = [];
+    this.clientiObject.push(newclienteFincons);
+
     this.disableAggiuntaCliente = false;
     this.abilitaValidazioni();
     this.newUser = new User();
+    this.newUser.clienti = this.clientiObject;
     this.newUser.isAdmin = false;
     this.newUser.data_inizio_validita = new Date();
     this.formSubmitted = false;
@@ -172,8 +192,8 @@ export class GestioneUtentiComponent implements OnInit {
   }
 
   saveNew() {
-    
-    var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id  && this.newUser._id != undefined);
+
+    var userTrovatoIndex = this.users.findIndex(i => i._id == this.newUser._id && this.newUser._id != undefined);
     this.newUser.desc_sede = this.sediList.find(i => i.value == this.newUser.id_sede).label;
     this.userService.insOrUpdUser(this.newUser).subscribe(
       user => {
@@ -223,7 +243,7 @@ export class GestioneUtentiComponent implements OnInit {
     selCriteria = new Object();
     selCriteria._id = rowData._id;
     this.confirmationService.confirm({
-      message: "Sei sicuro di voler eliminare l'utente '" + rowData.nome + " "+rowData.cognome+"' ?",
+      message: "Sei sicuro di voler eliminare l'utente '" + rowData.nome + " " + rowData.cognome + "' ?",
       header: 'Elimina utente',
       icon: 'fa fa-trash',
       accept: () => {
@@ -242,7 +262,7 @@ export class GestioneUtentiComponent implements OnInit {
       header: 'Elimina cliente',
       icon: 'fa fa-trash',
       accept: () => {
-        this.clientiObject.splice(rowIndex,1);
+        this.clientiObject.splice(rowIndex, 1);
         this.newUser.clienti.splice(rowIndex, 1);
         this.disabilitaValidazioni();
       }
@@ -297,7 +317,7 @@ export class GestioneUtentiComponent implements OnInit {
       this.disabilitaValidazioni();
     }
     //disabilito controlli in caso di nessun cliente inserito (posso inserire utente senza clienti)
-    if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 0))) {
+    if (this.newUser.clienti == null || (this.newUser.clienti != null && !(this.newUser.clienti.length > 1))) {
       this.userForm.controls['idCliente'].disable();
       this.userForm.controls['profiloCliente'].disable();
       this.userForm.controls['dataInizioCliente'].disable();
@@ -360,15 +380,15 @@ export class GestioneUtentiComponent implements OnInit {
   private abortEditCliente(rowData, indexData) {
     //this.clientiComboBoxClone = [];
 
-   if(this.checkClienteRow(rowData))
+    if (this.checkClienteRow(rowData))
       return;
 
-    if (rowData.cliente._id == null){
+    if (rowData.cliente._id == null) {
       this.clientiObject.splice(indexData, 1);
       rowData.isEditable = false;
-    } 
-    else{      
-        rowData.isEditable = false;
+    }
+    else {
+      rowData.isEditable = false;
     }
 
     this.disableAggiuntaCliente = false;
@@ -377,60 +397,60 @@ export class GestioneUtentiComponent implements OnInit {
   private saveEditCliente(rowData, indexData) {
     var clienteTrovato;
 
-    if(this.checkClienteRow(rowData))
+    if (this.checkClienteRow(rowData))
       return;
-    
 
-    
-      /*Prendo solo la porziona di array senza l'ultimo elemento. Quest'ultimo infatti contiene
-      il cliente che sto inserendo, andando quindi ad influenzare la find poichè troverebbe sicuramente almeno un elemento*/
-      if (this.newUser.clienti != null && this.newUser.clienti.length > 0)
-        clienteTrovato = this.newUser.clienti.slice(0, this.newUser.clienti.length - 1).find(x => x.cliente._id == rowData.cliente._id)
 
-      if (clienteTrovato == null) { 
-        var newCliente: any = {};
 
-        if (this.newUser.clienti != null){
-          this.newUser.clienti[indexData] = { 
-            cliente: this.getClienteInList(rowData.cliente._id), 
-            profilo: rowData.profilo, 
-            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(), 
-            data_fine_validita_cliente: rowData.data_fine_validita_cliente 
-          };
-        }
-        else{
-          this.popolaCliente(rowData, newCliente);
-          this.newUser.clienti = [{ 
-            cliente: this.getClienteInList(rowData.cliente._id), 
-            profilo: newCliente.profilo, 
-            data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente != null ? new Date(newCliente.data_inizio_validita_cliente) : new Date(),
-            data_fine_validita_cliente: newCliente.data_fine_validita_cliente 
-          }]
-        }
+    /*Prendo solo la porziona di array senza l'ultimo elemento. Quest'ultimo infatti contiene
+    il cliente che sto inserendo, andando quindi ad influenzare la find poichè troverebbe sicuramente almeno un elemento*/
+    if (this.newUser.clienti != null && this.newUser.clienti.length > 0)
+      clienteTrovato = this.newUser.clienti.slice(0, this.newUser.clienti.length - 1).find(x => x.cliente._id == rowData.cliente._id)
 
-        this.clientiObject = this.newUser.clienti;
+    if (clienteTrovato == null) {
+      var newCliente: any = {};
 
-      } 
-      else {
-        if(rowData._id){
-          this.newUser.clienti[indexData] = {
-            cliente: this.getClienteInList(rowData.cliente._id), 
-            profilo: rowData.profilo, 
-            data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(), 
-            data_fine_validita_cliente: rowData.data_fine_validita_cliente 
-          }
-          this.clientiObject = this.newUser.clienti;
-        }
+      if (this.newUser.clienti != null) {
+        this.newUser.clienti[indexData] = {
+          cliente: this.getClienteInList(rowData.cliente._id),
+          profilo: rowData.profilo,
+          data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(),
+          data_fine_validita_cliente: rowData.data_fine_validita_cliente
+        };
       }
-  
-      rowData.isEditable = false;
-      this.clientiComboBoxClone = [];
-      this.disableAggiuntaCliente = false;
+      else {
+        this.popolaCliente(rowData, newCliente);
+        this.newUser.clienti = [{
+          cliente: this.getClienteInList(rowData.cliente._id),
+          profilo: newCliente.profilo,
+          data_inizio_validita_cliente: newCliente.data_inizio_validita_cliente != null ? new Date(newCliente.data_inizio_validita_cliente) : new Date(),
+          data_fine_validita_cliente: newCliente.data_fine_validita_cliente
+        }]
+      }
+
+      this.clientiObject = this.newUser.clienti;
+
+    }
+    else {
+      if (rowData._id) {
+        this.newUser.clienti[indexData] = {
+          cliente: this.getClienteInList(rowData.cliente._id),
+          profilo: rowData.profilo,
+          data_inizio_validita_cliente: rowData.data_inizio_validita_cliente != null ? new Date(rowData.data_inizio_validita_cliente) : new Date(),
+          data_fine_validita_cliente: rowData.data_fine_validita_cliente
+        }
+        this.clientiObject = this.newUser.clienti;
+      }
+    }
+
+    rowData.isEditable = false;
+    this.clientiComboBoxClone = [];
+    this.disableAggiuntaCliente = false;
   }
 
-  getClienteInList(id){
-    for(let i = 0; i < Object.keys(this.clientiList).length; i++){
-      if(this.clientiList[i]._id == id)
+  getClienteInList(id) {
+    for (let i = 0; i < Object.keys(this.clientiList).length; i++) {
+      if (this.clientiList[i]._id == id)
         return this.clientiList[i];
     }
   }
@@ -457,8 +477,8 @@ export class GestioneUtentiComponent implements OnInit {
   private popolaCliente(clienteSource, clienteTarget) {
     //clienteTarget.cliente = this.clientiList.filter(cliente => cliente._id == clienteSource.cliente._id)[0];
 
-    for(let i = 0; i < this.clientiList.length; i++){
-      if(this.clientiList[i]._id == clienteSource.cliente._id){
+    for (let i = 0; i < this.clientiList.length; i++) {
+      if (this.clientiList[i]._id == clienteSource.cliente._id) {
         clienteTarget.cliente = this.clientiList[i]
         clienteTarget._id = this.clientiList[i]._id
       }
@@ -480,7 +500,7 @@ export class GestioneUtentiComponent implements OnInit {
     return invalid;
   }
 
-  checkClienteRow(rowData){
+  checkClienteRow(rowData) {
     var error = false;
     if (rowData.cliente._id == null) {
       this.alertDialog = true;
@@ -488,20 +508,20 @@ export class GestioneUtentiComponent implements OnInit {
       error = true;
     }
 
-    if(!rowData.profilo){
+    if (!rowData.profilo) {
       this.alertDialog = true;
       this.alertMsg = "Profilo per il cliente obbligatorio";
       error = true;
     }
 
-    if(!rowData.data_inizio_validita_cliente){
+    if (!rowData.data_inizio_validita_cliente) {
       this.alertDialog = true;
       this.alertMsg = "Data inizio validita obbligatoria";
       error = true;
     }
 
-    if(rowData.data_fine_validita_cliente != null){
-      if(new Date(rowData.data_inizio_validita_cliente) > new Date(rowData.data_fine_validita_cliente)){
+    if (rowData.data_fine_validita_cliente != null) {
+      if (new Date(rowData.data_inizio_validita_cliente) > new Date(rowData.data_fine_validita_cliente)) {
         this.alertDialog = true;
         this.alertMsg = "Data inizio e fine validita incongruenti";
         error = true;
