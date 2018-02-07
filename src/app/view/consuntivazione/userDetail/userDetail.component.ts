@@ -23,6 +23,8 @@ export class UserDetailComponent implements OnInit{
   yearSelected : Number;
   yearSelection : boolean;
   monthOpened : boolean;
+  monthClosed : boolean;
+  meseChihuso : boolean;
 
   ngOnInit(){
     this.consuntivatore = this.isConsuntivatore();
@@ -62,5 +64,9 @@ export class UserDetailComponent implements OnInit{
 
   isConsuntivatore() : boolean {
     return this.maxUserLoggedProfile == 'Consuntivatore' ? true : false;
+  }
+
+  getEventMonth(evt){
+    this.monthClosed = evt;
   }
 }

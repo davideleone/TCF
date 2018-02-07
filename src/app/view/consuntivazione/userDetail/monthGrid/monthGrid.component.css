@@ -31,9 +31,8 @@
 :host /deep/ .cellHoliday {
     width: 20px !important;
     overflow: inherit !important;
-    background-color: grey !important;
+    background-color: lightgrey !important;
     color: white !important;
-    border-color: grey !important;
 }
 
 :host /deep/ .cellDay {
@@ -61,20 +60,24 @@
     -webkit-appearance: none;
     -moz-appearance:textfield;
     appearance: none;
+    border-bottom: 0;
     margin: 0; 
 }
 
 :host /deep/ .cliente_col{
-    width: 100px;
+    width: 60px;
+}
+
+:host /deep/ .macroarea_col{
+    width: 80px;
 }
 
 :host /deep/ .deliverable_col{
     width: 85px;
 }
 
-
 :host /deep/ .editable_col{
-    width: 45px;
+    width: 35px;
 }
 
 :host /deep/ .error_col{

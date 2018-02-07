@@ -17,6 +17,13 @@ export class MonthListComponent implements OnChanges, OnInit {
   @Input() userSelected: User;
   @Input() backToMonthEvent: boolean;
   @Input() monthOpened: boolean;
+  monthClosedValue: boolean;
+  @Input() set monthClosed(value: boolean) {
+    this.monthClosedValue = value;
+    this.meseConsuntivoService.getMesiConsuntiviUtente(this.userSelected._id, $('.today').val()).subscribe(monthsAll =>{
+      this.monthsOfUser = monthsAll;
+      });
+  }
   @Output() monthSelect = new EventEmitter();
   @Output() yearSelect = new EventEmitter();
   todayYear = (new Date()).getFullYear();
@@ -29,7 +36,7 @@ export class MonthListComponent implements OnChanges, OnInit {
   yearChanged: boolean = false;
   yearOld = null;
   userSelectedOld = null;
-  monthClicked : boolean = false;
+  monthClicked: boolean = false;
 
 
   constructor(private meseConsuntivoService: MeseConsuntivoService) {
@@ -48,7 +55,7 @@ export class MonthListComponent implements OnChanges, OnInit {
     if (this.userSelected._id != this.userSelectedOld) {
       $('.riassuntoMesiSection p').text('');
       $('.today').val(this.todayYear);
-      if(!this.monthClicked){
+      if (!this.monthClicked) {
         this.openMonthsClone();
       }
       this.userSelectedOld = this.userSelected._id;

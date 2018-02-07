@@ -32,4 +32,20 @@ export class MeseConsuntivoService {
       return this.http.delete('/tcf/api/meseConsuntivoController/CRUD?criteria='+JSON.stringify(meseConsuntivoParam), {headers:headers})
         .map(res => res.json());
     }
+
+    @beforeMethod(LogAspect.log)
+    getMeseConsuntivoCRUD(meseConsuntivoParam : string[]){
+      return this.http.get('/tcf/api/meseConsuntivoController/CRUD?criteria='+JSON.stringify(meseConsuntivoParam))
+        .map(res=> res.json());
+    }
+
+    @beforeMethod(LogAspect.log)
+    updateMeseConsuntivo(meseConsuntivoParam, criteria){
+      var headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.put('/tcf/api/meseConsuntivoController/CRUD/?criteria='+JSON.stringify(criteria), meseConsuntivoParam, {headers:headers})
+        .map(res => res.json());
+    }
+
+
 }

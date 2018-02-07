@@ -29,9 +29,14 @@ export class MonthGridComponent implements OnChanges {
   yearSelected: number = 2017;
   @Input()
   userSelected: User;
+  @Input()
+  userLogged: User;
   @Output() newMonthOpened = new EventEmitter();
-
-
+  @Output() monthClosedEvent: EventEmitter<any> = new EventEmitter();
+  shouldStick: boolean;
+  consClienti: string[] = ["Zurich", "ITAS"];
+  monthClosed: boolean = false;
+  meseConsuntivo: MeseConsuntivo;
   displayDialog: boolean;
   settings: any = {};
   userDays: [Consuntivo];
@@ -39,6 +44,7 @@ export class MonthGridComponent implements OnChanges {
   loading: boolean;
   cols: any[];
   formSubmitted: boolean = false;
+  acceptLabel: string = '';
 
   nDays: number;
   beforeOnInit: boolean = true;
@@ -57,6 +63,8 @@ export class MonthGridComponent implements OnChanges {
   lst_deliverable_clone: SelectItem[] = [];
   consuntivoForm: FormGroup;
 
+  listaMesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
   attivitaList: Attivita[];
   hd: any;
   attivitaDeliverableList: any = [];
@@ -64,6 +72,7 @@ export class MonthGridComponent implements OnChanges {
   isNoteEditable: boolean = false;
   noteConsuntivo: string = null;
   noteIndex: number = null;
+  displaySpinner: boolean = false;
 
   constructor(
     private consuntivazioneService: ConsuntivazioneService,
@@ -140,47 +149,60 @@ export class MonthGridComponent implements OnChanges {
       this.loading = false;
     }, 1000);
 
+    var selCriteria;
+    selCriteria = new Object();
+    selCriteria.id_utente = this.userSelected._id;
+    selCriteria.mese_consuntivo = this.monthSelected;
+    selCriteria.anno_consuntivo = this.yearSelected;
+
+    this.meseConsuntivoService
+      .getMeseConsuntivoCRUD(selCriteria)
+      .subscribe(object => {
+        this.meseConsuntivo = object[0];
+        this.monthClosed = object[0].nome_stato == 'Chiuso' ? true : false;
+      });
+
   }
 
 
-  private getDeliverableList(idAttivita,editedObject){
+  private getDeliverableList(idAttivita, editedObject) {
     var deliverableTrovata = {};
     this.domainService.getTipiDeliverable().subscribe(list => {
       this.lst_deliverable = list;
 
-        this.lst_deliverable_clone = [];
-        if (editedObject != null) {
-          this.lst_deliverable_clone.push(editedObject);
-        }
+      this.lst_deliverable_clone = [];
+      if (editedObject != null) {
+        this.lst_deliverable_clone.push(editedObject);
+      }
 
-        this.lst_deliverable.forEach(elements => {
-          if (this.consuntivi != null)
-            deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
-          if (deliverableTrovata == null)
-            this.lst_deliverable_clone.push(elements);
-        });
-
+      this.lst_deliverable.forEach(elements => {
+        if (this.consuntivi != null)
+          deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
+        if (deliverableTrovata == null)
+          this.lst_deliverable_clone.push(elements);
       });
+
+    });
   }
 
-  private getDeliverableForAM(idAttivita ,editedObject){
+  private getDeliverableForAM(idAttivita, editedObject) {
     var deliverableTrovata = {};
     this.domainService.getTipiDeliverableAM().subscribe(list => {
       this.lst_deliverable = list;
 
-        this.lst_deliverable_clone = [];
-        if (editedObject != null) {
-          this.lst_deliverable_clone.push(editedObject);
-        }
+      this.lst_deliverable_clone = [];
+      if (editedObject != null) {
+        this.lst_deliverable_clone.push(editedObject);
+      }
 
-        this.lst_deliverable.forEach(elements => {
-          if (this.consuntivi != null)
-            deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
-          if (deliverableTrovata == null)
-            this.lst_deliverable_clone.push(elements);
-        });
-
+      this.lst_deliverable.forEach(elements => {
+        if (this.consuntivi != null)
+          deliverableTrovata = this.consuntivi.find(x => x.id_attivita == idAttivita && x.id_tipo_deliverable == elements.value)
+        if (deliverableTrovata == null)
+          this.lst_deliverable_clone.push(elements);
       });
+
+    });
   }
 
   //GRID - LOAD
@@ -386,6 +408,7 @@ export class MonthGridComponent implements OnChanges {
   }
 
   private addConsuntivo() {
+
     this.consuntivazioneService.addConsuntivo(this.newRowConsuntivo).subscribe
       (obj => {
         var newCons: any = JSON.parse(JSON.stringify(obj));
@@ -436,6 +459,7 @@ export class MonthGridComponent implements OnChanges {
 
   //SAVE ROW (INLINE)
   private saveEdit(editRowConsuntivo, index) {
+    this.displaySpinner = true;
     var nuovaNota = editRowConsuntivo.note;
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
@@ -450,16 +474,18 @@ export class MonthGridComponent implements OnChanges {
       this.consuntivazioneService
         .addUpdateConsuntivi(consuntiviToAdd)
         .subscribe(obj => {
-          console.log(obj.msg);
+          this.displaySpinner = false;
         },
-        err => alert(err)
-        );
+        err => {
+          alert(err);
+          this.displaySpinner = false;
+        });
     }
 
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
     this.noteConsuntivo = null;
-    editRowConsuntivo.isEditable = false;
+    //editRowConsuntivo.isEditable = false;
   }
 
   private abortEdit(r, i) {
@@ -476,6 +502,7 @@ export class MonthGridComponent implements OnChanges {
     var dataInizio = new Date(this.yearSelected, this.monthSelected - 1, 1);
     var dataFine = new Date(this.yearSelected, this.monthSelected, 0);
     console.log('/tcf/api/consuntivoController/delConsuntiviUtente/' + this.monthSelected.toString() + '/' + this.yearSelected.toString() + '/' + r.id_utente + '/' + r.id_macro_area + '/' + r.id_ambito + '/' + r.id_attivita + '/' + r.id_tipo_deliverable)
+    this.acceptLabel = 'Elimina';
     this.confirmationService.confirm({
       message: "Sei sicuro di voler eliminare '" + r.nome_attivita + "' ?",
       header: 'Elimina consuntivo',
@@ -493,7 +520,6 @@ export class MonthGridComponent implements OnChanges {
           });
       }
     });
-
     if (index == 0 && !(this.consuntivi.length > 0)) {
       var meseConsuntivo = new MeseConsuntivo();
       meseConsuntivo.anno_consuntivo = this.yearSelected.toString();
@@ -649,27 +675,101 @@ export class MonthGridComponent implements OnChanges {
     var deliverableTrovata = {};
 
     var macroAreaType = "standard";
-    this.lst_aree.forEach( macroArea =>{
-      if(macroArea.value == this.newRowConsuntivo.id_macro_area && macroArea.label == 'Manutenzione')
+    this.lst_aree.forEach(macroArea => {
+      if (macroArea.value == this.newRowConsuntivo.id_macro_area && macroArea.label == 'Manutenzione')
         macroAreaType = "AM"
     });
 
-    if(macroAreaType != "AM")
-      this.getDeliverableList(idAttivita,editedObject); 
+    if (macroAreaType != "AM")
+      this.getDeliverableList(idAttivita, editedObject);
 
-    if(macroAreaType == "AM")
-      this.getDeliverableForAM(idAttivita,editedObject);  
+    if (macroAreaType == "AM")
+      this.getDeliverableForAM(idAttivita, editedObject);
   }
 
   private showNote(row, index) {
     this.displayNote = true;
     this.noteConsuntivo = row.note;
     this.noteIndex = index;
-    if (row.isEditable) {
+    if (!this.monthClosed) {
       this.isNoteEditable = true;
     } else {
       this.isNoteEditable = false;
     }
+  }
+
+  private closeMonthConsuntivo() {
+    this.acceptLabel = 'Chiudi';
+    this.confirmationService.confirm({
+      message: "Sei sicuro di voler chiudere il consuntivo?",
+      header: 'Chiudi consuntivo',
+      icon: 'fa fa-times',
+      accept: () => {
+        this.monthClosed = true;
+        var updCriteria;
+        updCriteria = new Object();
+        updCriteria._id = this.meseConsuntivo._id;
+        this.meseConsuntivo.nome_stato = 'Chiuso';
+        this.meseConsuntivoService.updateMeseConsuntivo(this.meseConsuntivo, updCriteria).subscribe(obj => {
+          this.monthClosedEvent.emit(true);
+        },
+          err => alert(err)
+        );
+      }
+    });
+  }
+
+  private openMonthConsuntivo() {
+    this.acceptLabel = 'Apri';
+    this.confirmationService.confirm({
+      message: "Sei sicuro di voler aprire il consuntivo?",
+      header: 'Apri consuntivo',
+      icon: 'fa fa-times',
+      accept: () => {
+        this.monthClosed = false;
+        var updCriteria;
+        updCriteria = new Object();
+        updCriteria._id = this.meseConsuntivo._id;
+        this.meseConsuntivo.nome_stato = 'Aperto';
+        this.meseConsuntivoService.updateMeseConsuntivo(this.meseConsuntivo, updCriteria).subscribe(obj => {
+          this.monthClosedEvent.emit(false);
+        },
+          err => alert(err)
+        );
+      }
+    });
+  }
+
+  saveNote(noteIndex) {
+    this.saveEdit(this.consuntivi[noteIndex], noteIndex);
+  }
+
+  calculateGroupClient(col: number, idAttivita) {
+    let total = 0;
+
+    this.consuntivi.forEach(element => {
+      if (element.id_attivita == idAttivita)
+        if (element[col].ore != null)
+          total += element[col].ore
+    });
+
+    return total;
+  }
+
+  calculateRowTotal(r) {
+    let total = 0;
+    var rowConsuntivo : any;
+    rowConsuntivo = this.consuntivi.find(i => i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_attivita == r.id_attivita && i.id_tipo_deliverable == r.id_tipo_deliverable)
+
+    if (rowConsuntivo) {
+      for (let row of rowConsuntivo) {
+        if (row.ore != null) {
+          total += row.ore;
+        }
+      }
+    }
+
+    return total;
   }
 
 }
