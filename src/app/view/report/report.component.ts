@@ -39,9 +39,6 @@ export class ReportComponent implements OnInit {
         private reportService: ReportService,
         private authenticationService: AuthenticationService) {
 
-        this.dataInizio = new DatePipe('en-US').transform(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'dd/MM/yyyy');
-        this.dataFine = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0);
-
         this.reportForm = this.formBuilder.group({
             modalita: new FormControl('', Validators.required),
             cliente: new FormControl('', Validators.required),
@@ -51,7 +48,13 @@ export class ReportComponent implements OnInit {
     }
 
     ngOnInit() {
+        var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+        var firstDay = new Date(y, m, 1);
+        this.dataInizio = firstDay;
+        this.dataFine = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0);
+
         this.getInformations();
+       
     }
 
     getInformations() {
