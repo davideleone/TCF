@@ -459,28 +459,29 @@ export class MonthGridComponent implements OnChanges {
 
   //SAVE ROW (INLINE)
   private saveEdit(editRowConsuntivo, index) {
-    this.displaySpinner = true;
+
+      this.displaySpinner = true;
     var nuovaNota = editRowConsuntivo.note;
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
     for (let i = 0; i < this.nDays; i++) {
-      if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
-        editRowConsuntivo[i].note = nuovaNota;
-        consuntiviToAdd.push(editRowConsuntivo[i]);
+        if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
+          editRowConsuntivo[i].note = nuovaNota;
+          consuntiviToAdd.push(editRowConsuntivo[i]);
+        }
       }
-    }
 
-    if (consuntiviToAdd.length > 0) {
-      this.consuntivazioneService
-        .addUpdateConsuntivi(consuntiviToAdd)
-        .subscribe(obj => {
-          this.displaySpinner = false;
-        },
-        err => {
-          alert(err);
-          this.displaySpinner = false;
-        });
-    }
+      if (consuntiviToAdd.length > 0) {
+        this.consuntivazioneService
+          .addUpdateConsuntivi(consuntiviToAdd)
+          .subscribe(obj => {
+            this.displaySpinner = false;
+          },
+          err => {
+            alert(err);
+            this.displaySpinner = false;
+          });
+      }
 
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
@@ -664,7 +665,12 @@ export class MonthGridComponent implements OnChanges {
     this.attivitaList.forEach(attivita => {
       if (attivita.id_cliente == idCliente &&
         attivita.id_ambito == idAmbito &&
-        attivita.id_macro_area == idMacroArea)
+        attivita.id_macro_area == idMacroArea &&
+        attivita.stato_attivita == 'OPEN' &&
+        new Date(attivita.data_inizio_validita) <= new Date() &&
+        (new Date(attivita.data_fine_validita) >= new Date() ||
+        attivita.data_fine_validita == null)
+        )
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
@@ -772,4 +778,11 @@ export class MonthGridComponent implements OnChanges {
     return total;
   }
 
+  checkInput(character){
+    if(character.data == ',' || character.data == '.'){
+      alert('Carattere inserito non valido');
+      character.data = '';
+    }
+  }
 }
+
