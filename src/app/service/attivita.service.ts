@@ -24,21 +24,21 @@ export class AttivitaService {
   }
   
   @beforeMethod(LogAspect.log)
-  addAttivita(attivitaParam : Attivita){
+  /*addAttivita(attivitaParam : Attivita){
   	var headers = new Headers();
   	headers.append('Content-Type', 'application/json');
   	return this.http.post('/tcf/api/attivitaController/CRUD/', attivitaParam, {headers:headers})
   		.map(res => res.json());
-  }
+  }*/
 
 
-  /*@beforeMethod(LogAspect.log)
+  @beforeMethod(LogAspect.log)
   addAttivita(attivitaParam : Attivita){
   	var headers = new Headers();
     headers.append('Content-Type', 'application/json');
   	return this.http.post('/tcf/api/attivitaController/attivita', attivitaParam, {headers:headers})
   		.map(res => res.json());
-  }*/
+  }
 
   @beforeMethod(LogAspect.log)
   deleteAttivita(criteria){

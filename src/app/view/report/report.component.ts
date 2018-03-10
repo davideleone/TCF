@@ -25,7 +25,7 @@ export class ReportComponent implements OnInit {
     dataFine;
     clienteSelected: string;
     modalitaSelected: string;
-    lst_modalita: SelectItem[] = [{ label: 'Report Totale', value: 'r_totale' }, { label: 'Report Attivita', value: 'r_attivita' }];
+    lst_modalita: SelectItem[] = [{ label: 'Report Attivita Censite', value: 'r_attivita_censite' }, { label: 'Report Totale', value: 'r_totale' }, { label: 'Report Attivita', value: 'r_attivita' }];
     lst_clienti: SelectItem[] = [];
     formSubmitted: boolean = false;
     reportForm: FormGroup;
@@ -33,7 +33,8 @@ export class ReportComponent implements OnInit {
     alertMsg: string;
     header_csv_totale: string[] = ['Nome Cliente', 'Nome Ambito', 'Nome Macro Area', 'Cod. Commessa', 'Commessa Fnc', 'Attivita', 'Budget gg', 'Type of work', 'Cognome', 'Nome', 'Note', 'Ore', 'GG'];
     header_csv_attivita: string[] = ['Nome Cliente', 'Nome Ambito', 'Nome Macro Area', 'Attivita', 'Cod. Commessa', 'Attivita', 'Commessa Fnc', 'Nome Commessa Fnc', 'Note', 'Stato', 'Budget Ore', 'Data Inizio', 'Data Fine'];
-
+    header_csv_attivita_censite: string[] = ['Nome Cliente', 'Nome Ambito', 'Nome Macro Area', 'Attivita', 'Cod. commessa', 'Cod. Attivita', 'Stato', 'Data Inizio', 'Data Fine', 'Budget Ore', 'Budget GG', 'Tot. ore'];
+    
     constructor(private formBuilder: FormBuilder,
         private clienteService: ClienteService,
         private reportService: ReportService,
@@ -87,6 +88,7 @@ export class ReportComponent implements OnInit {
 
     public checkForm(form) {
         this.formSubmitted = true;
+
         if (!form.valid) {
             this.alertDialog = true;
             this.alertMsg = "Alcuni campi non stati compilati correttamente!";
@@ -106,7 +108,7 @@ export class ReportComponent implements OnInit {
 
     public createReport() {
 
-        var date = new DatePipe('en-US').transform(new Date(this.dataInizio), 'ddMMM') + '-' + new DatePipe('en-US').transform(new Date(this.dataFine), 'ddMMM');
+        var date = this.modalitaSelected == 'r_attivita_censite' ? null : new DatePipe('en-US').transform(new Date(this.dataInizio), 'ddMMM') + '-' + new DatePipe('en-US').transform(new Date(this.dataFine), 'ddMMM');
         var cliente = this.lst_clienti.find(x => x.value == this.clienteSelected).label;
 
         var options = {
@@ -115,12 +117,15 @@ export class ReportComponent implements OnInit {
             decimalseparator: '.',
             showLabels: true,
         };
+        var convertedStartDate = '';
+        var convertedEndDate = '';
 
-        var convertedStartDate = moment(this.dataInizio).format('LLLL');
-        convertedStartDate = moment(convertedStartDate).format('YYYY-MM-DDT00:00:00');
-        var convertedEndDate = moment(this.dataFine).format('LLLL');
-        convertedEndDate = moment(convertedEndDate).format('YYYY-MM-DDT23:59:59');
-
+        if(this.modalitaSelected != 'r_attivita_censite'){
+            convertedStartDate = moment(this.dataInizio).format('LLLL');
+            convertedStartDate = moment(convertedStartDate).format('YYYY-MM-DDT00:00:00');
+            convertedEndDate = moment(this.dataFine).format('LLLL');
+            convertedEndDate = moment(convertedEndDate).format('YYYY-MM-DDT23:59:59');
+        }
 
         var reportDownloadParams = {
             clientId: this.clienteSelected,
@@ -150,10 +155,22 @@ export class ReportComponent implements OnInit {
                     });
                     this.JSONToCSVConvertor(report, 'report-attivita');
                     break;
+                case 'r_attivita_censite':
+                    report.forEach(element => {
+                        element.data_inizio = new DatePipe('en-US').transform(new Date(element.data_inizio), 'dd/MM/yyyy')
+                        if (element.data_fine != null)
+                            element.data_fine = new DatePipe('en-US').transform(new Date(element.data_fine), 'dd/MM/yyyy')
+                        /*if(element.desc_consuntivo == null)
+                            element.desc_consuntivo = ' ';*/
+                    });
+                    this.JSONToCSVConvertor(report, 'report-attivita-censite');
+                    break;
                 default:
                     break;
             }
         })
+
+        
 
     }
 
@@ -238,6 +255,23 @@ export class ReportComponent implements OnInit {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    checkReportMode(){
+        if(this.modalitaSelected == 'r_attivita_censite'){
+            this.dataInizio = '';
+            this.dataFine = '';            
+            this.reportForm.controls['dataInizio'].disable();
+            this.reportForm.controls['dataFine'].disable();
+        }
+        else{
+            this.reportForm.controls['dataInizio'].enable();
+            this.reportForm.controls['dataFine'].enable();
+            var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            var firstDay = new Date(y, m, 1);
+            this.dataInizio = firstDay;
+            this.dataFine = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth() + 1, 0);
+        }
     }
 
 }

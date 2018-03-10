@@ -172,7 +172,7 @@ export class GestioneAttivitaComponent implements OnInit {
         if (this.newActivity.budget_ore == null)
             this.newActivity.budget_ore = 0;
 
-        if (attivitaTrovataIndex == -1) { //aggiunta
+        /*if (attivitaTrovataIndex == -1) { //aggiunta
             this.attivitaService.addAttivita(this.newActivity).subscribe(
             activity => {
                 this.activities.push(activity);
@@ -190,8 +190,8 @@ export class GestioneAttivitaComponent implements OnInit {
                 this.activities = JSON.parse(JSON.stringify(this.activities)); //deepcopy
                 this.changeFormatDate(this.activities);
             });
-        }
-        /*this.attivitaService.addAttivita(this.newActivity).subscribe(
+        }*/
+        this.attivitaService.addAttivita(this.newActivity).subscribe(
             attivita => {
               if ( attivitaTrovataIndex == -1 )
                 this.activities.push(attivita);
@@ -205,7 +205,7 @@ export class GestioneAttivitaComponent implements OnInit {
                 this.alertDialog = true;
                 this.alertMsg = error;
             }
-          );*/
+          );
           
         this.displayDialog = false;
     }
@@ -252,6 +252,10 @@ export class GestioneAttivitaComponent implements OnInit {
                         this.lst_commesse_clienti.push({ label: element.nome_commessa, value: element._id })
                 });
                 break;
+            /*case 'cod_attivita':
+                if(!isEdit)
+                    this.newActivity.codice_attivita = ""+(Number(this.getMaxCodAttivita(this.newActivity.id_commessa_cliente))+1);
+                break;*/
         }
     }
 
@@ -372,4 +376,17 @@ export class GestioneAttivitaComponent implements OnInit {
     public abortNew() {
         this.displayDialog = false;
     }
+
+    /*public getMaxCodAttivita(idCommessaCliente){
+        var maxCodAttivita;
+        var activitiesFiltered : Attivita[];
+
+        activitiesFiltered = this.activities.filter(x => x.id_commessa_cliente == idCommessaCliente);
+        
+        maxCodAttivita = activitiesFiltered.reduce(function(prev, current) {
+            return (Number(prev.codice_attivita) > Number(current.codice_attivita)) ? prev : current
+        }).codice_attivita; //returns object
+
+        return maxCodAttivita;
+    }*/
 }
