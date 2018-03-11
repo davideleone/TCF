@@ -15,7 +15,7 @@
                 <span *ngIf="!monthClosed">
                     <button class="pull-right" pButton (click)=closeMonthConsuntivo() label="Chiudi"></button>
                  </span>
-                <span *ngIf="monthClosed && this.userLogged.isAdmin">
+                <span *ngIf="monthClosed && isUserAbilitato()">
                     <button class="pull-right" pButton (click)=openMonthConsuntivo() label="Apri"></button>
                 </span>
             </div>

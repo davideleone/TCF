@@ -787,5 +787,16 @@ export class MonthGridComponent implements OnChanges {
       event.preventDefault();
     }
   }
+
+  isUserAbilitato(): boolean {
+    
+    var profiles = Array<string>();
+
+    for (let i = 0; i < this.userLogged.clienti.length; i++)
+      profiles.push(this.userLogged.clienti[i].profilo);
+
+    return profiles.includes('AS') || profiles.includes('AP') || this.userLogged.isAdmin;
+
+  }
 }
 
