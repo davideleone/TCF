@@ -90,7 +90,7 @@
         <ng-template let-col let-row="rowData" let-index="rowIndex" pTemplate="body">
             
             <span *ngIf="!monthClosed">
-                <input type="number" min="0" max="23" class="from-control input inputDay" [(ngModel)]="row[col.field].ore" (ngModelChange)="saveEdit(row,index)" (click)="$event.target.select()">
+                <input type="number" step="1" min="0" max="23" class="from-control input inputDay" [(ngModel)]="row[col.field].ore" (ngModelChange)="saveEdit(row,index)" (keypress)="checkCharacter($event)" (click)="$event.target.select()">
             </span>
             <span *ngIf="monthClosed"> 
                 {{row[col.field].ore}}
@@ -206,3 +206,4 @@
         <button type="button" pButton (click)="displayNote = false; isNoteEditable = false; saveNote(noteIndex)" label="Salva"></button>
     </p-footer>
 </p-dialog>
+

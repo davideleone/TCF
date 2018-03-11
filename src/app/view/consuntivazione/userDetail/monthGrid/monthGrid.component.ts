@@ -1,6 +1,6 @@
 import { Component, OnChanges, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
-
+import * as $ from 'jquery';
 import { Consuntivo } from '../../../../model/consuntivo';
 import { MeseConsuntivo } from '../../../../model/meseConsuntivo';
 import { User } from '../../../../model/user';
@@ -13,6 +13,7 @@ import { ClienteService } from '../../../../service/cliente.service';
 import { MeseConsuntivoService } from '../../../../service/meseConsuntivo.service';
 import * as Holidays from 'date-holidays';
 import { Attivita } from '../../../../model/attivita';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'month-grid',
@@ -48,7 +49,6 @@ export class MonthGridComponent implements OnChanges {
 
   nDays: number;
   beforeOnInit: boolean = true;
-
   newRowConsuntivo: any;
   blankConsuntivo: Consuntivo;
 
@@ -460,28 +460,28 @@ export class MonthGridComponent implements OnChanges {
   //SAVE ROW (INLINE)
   private saveEdit(editRowConsuntivo, index) {
 
-      this.displaySpinner = true;
+    this.displaySpinner = true;
     var nuovaNota = editRowConsuntivo.note;
     var consuntiviToAdd: Consuntivo[] = new Array<Consuntivo>();
 
     for (let i = 0; i < this.nDays; i++) {
-        if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
-          editRowConsuntivo[i].note = nuovaNota;
-          consuntiviToAdd.push(editRowConsuntivo[i]);
-        }
+      if (editRowConsuntivo[i]._id != null || editRowConsuntivo[i].ore > 0) {
+        editRowConsuntivo[i].note = nuovaNota;
+        consuntiviToAdd.push(editRowConsuntivo[i]);
       }
+    }
 
-      if (consuntiviToAdd.length > 0) {
-        this.consuntivazioneService
-          .addUpdateConsuntivi(consuntiviToAdd)
-          .subscribe(obj => {
-            this.displaySpinner = false;
-          },
-          err => {
-            alert(err);
-            this.displaySpinner = false;
-          });
-      }
+    if (consuntiviToAdd.length > 0) {
+      this.consuntivazioneService
+        .addUpdateConsuntivi(consuntiviToAdd)
+        .subscribe(obj => {
+          this.displaySpinner = false;
+        },
+        err => {
+          alert(err);
+          this.displaySpinner = false;
+        });
+    }
 
     this.lst_attivita_clone = [];
     this.lst_deliverable_clone = [];
@@ -669,8 +669,8 @@ export class MonthGridComponent implements OnChanges {
         attivita.stato_attivita == 'OPEN' &&
         new Date(attivita.data_inizio_validita) <= new Date() &&
         (new Date(attivita.data_fine_validita) >= new Date() ||
-        attivita.data_fine_validita == null)
-        )
+          attivita.data_fine_validita == null)
+      )
         this.lst_attivita_clone.push({ label: attivita.nome_attivita, value: attivita._id });
     });
 
@@ -764,7 +764,7 @@ export class MonthGridComponent implements OnChanges {
 
   calculateRowTotal(r) {
     let total = 0;
-    var rowConsuntivo : any;
+    var rowConsuntivo: any;
     rowConsuntivo = this.consuntivi.find(i => i.id_macro_area == r.id_macro_area && i.id_ambito == r.id_ambito && i.id_attivita == r.id_attivita && i.id_tipo_deliverable == r.id_tipo_deliverable)
 
     if (rowConsuntivo) {
@@ -778,10 +778,13 @@ export class MonthGridComponent implements OnChanges {
     return total;
   }
 
-  checkInput(character){
-    if(character.data == ',' || character.data == '.'){
-      alert('Carattere inserito non valido');
-      character.data = '';
+  checkCharacter(event) {
+    const pattern = /[0-9]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      alert("Carattere inserito non valido");
+      event.preventDefault();
     }
   }
 }
