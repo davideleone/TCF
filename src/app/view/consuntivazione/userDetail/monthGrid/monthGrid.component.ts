@@ -779,10 +779,10 @@ export class MonthGridComponent implements OnChanges {
   }
 
   checkCharacter(event) {
-    const pattern = /[0-9]/;
+    const pattern = /[.\+\,\+\-]/;
     let inputChar = String.fromCharCode(event.charCode);
 
-    if (!pattern.test(inputChar)) {
+    if (pattern.test(inputChar)) {
       alert("Carattere inserito non valido");
       event.preventDefault();
     }
