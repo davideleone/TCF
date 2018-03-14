@@ -13,7 +13,6 @@ import { ClienteService } from '../../../../service/cliente.service';
 import { MeseConsuntivoService } from '../../../../service/meseConsuntivo.service';
 import * as Holidays from 'date-holidays';
 import { Attivita } from '../../../../model/attivita';
-import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'month-grid',
@@ -314,7 +313,7 @@ export class MonthGridComponent implements OnChanges {
         //inizializzo tutte le colonne a blank
         for (let j = 0; j < _days; j++) {
           var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
-          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 1, 0, 1, 0);
+          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, j + 1, 15, 0, 1, 0);
           row[j] = blankItem;
         }
 
@@ -416,11 +415,11 @@ export class MonthGridComponent implements OnChanges {
         //inizializzo la nuova riga con 0 ore su tutti i gg 
         this.cloneConsuntivoField(this.newRowConsuntivo, this.blankConsuntivo);
         this.blankConsuntivo.ore = 0;
-        this.blankConsuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
+        this.blankConsuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 15, 0, 1, 0);
         //inizializzo la table
         for (let i = 0; i < this.nDays; i++) {
           var blankItem = JSON.parse(JSON.stringify(this.blankConsuntivo));
-          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, i + 1, 1, 0, 1, 0);
+          blankItem.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, i + 1, 15, 0, 1, 0);
           newCons[i] = blankItem;
         }
         //var deepCopyObj = JSON.parse(JSON.stringify(this.newConsuntivo));
@@ -550,7 +549,7 @@ export class MonthGridComponent implements OnChanges {
     consuntivo.nome_attivita = null;
     consuntivo.id_tipo_deliverable = null;
     consuntivo.nome_tipo_deliverable = null;
-    consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 1, 0, 1, 0);
+    consuntivo.data_consuntivo = new Date(this.yearSelected, this.monthSelected - 1, 1, 15, 0, 1, 0);
     consuntivo.note = null;
   }
 
@@ -781,10 +780,10 @@ export class MonthGridComponent implements OnChanges {
   checkCharacter(event) {
     const pattern = /[.\+\,\+\-]/;
     let inputChar = String.fromCharCode(event.charCode);
-
+    
     if (pattern.test(inputChar)) {
-      alert("Carattere inserito non valido");
-      event.preventDefault();
+      alert('Carattere inserito non valido');
+     event.preventDefault();
     }
   }
 
