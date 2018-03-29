@@ -511,6 +511,7 @@ export class MonthGridComponent implements OnChanges {
         this.consuntivazioneService.deleteConsuntivi(dataInizio,
           dataFine,
           r.id_utente,
+          r.id_cliente,
           r.id_macro_area,
           r.id_ambito,
           r.id_attivita,
