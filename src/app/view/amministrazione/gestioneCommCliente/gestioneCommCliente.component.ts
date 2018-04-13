@@ -112,6 +112,8 @@ export class GestioneCommClienteComponent implements OnInit {
             commesse.forEach(commessa => {
                 this.lst_commesse_fnc.push({ label: commessa.nome_commessa, value: commessa._id });
             });
+
+            this.ordinaLista(this.lst_commesse_fnc);
         });
 
     }
@@ -290,4 +292,12 @@ export class GestioneCommClienteComponent implements OnInit {
     public abortNew() {
         this.displayDialog = false;
     }
+
+    ordinaLista(listName : SelectItem[]){
+        listName.sort((a, b) => {
+          if (a.label < b.label) return -1;
+          else if (a.label > b.label) return 1;
+          else return 0;
+        });
+      }
 }

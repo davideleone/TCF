@@ -181,6 +181,7 @@ export class MonthGridComponent implements OnChanges {
           this.lst_deliverable_clone.push(elements);
       });
 
+      this.ordinaLista(this.lst_deliverable_clone);
     });
   }
 
@@ -200,7 +201,7 @@ export class MonthGridComponent implements OnChanges {
         if (deliverableTrovata == null)
           this.lst_deliverable_clone.push(elements);
       });
-
+      this.ordinaLista(this.lst_deliverable_clone);
     });
   }
 
@@ -378,6 +379,7 @@ export class MonthGridComponent implements OnChanges {
     this.formSubmitted = false;
     this.displayDialog = true;
 
+    this.ordinaLista(this.lst_aree);
   }
 
   public abortNew() {
@@ -616,6 +618,8 @@ export class MonthGridComponent implements OnChanges {
           if (elem != null)
             this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
         });
+
+        this.ordinaLista(this.lst_ambiti);
         break;
     }
   }
@@ -812,6 +816,14 @@ export class MonthGridComponent implements OnChanges {
 
     return profiles.includes('AS') || profiles.includes('AP') || this.userLogged.isAdmin;
 
+  }
+
+  ordinaLista(listName : SelectItem[]){
+    listName.sort((a, b) => {
+      if (a.label < b.label) return -1;
+      else if (a.label > b.label) return 1;
+      else return 0;
+    });
   }
 }
 

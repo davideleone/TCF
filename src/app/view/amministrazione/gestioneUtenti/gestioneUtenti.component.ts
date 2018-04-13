@@ -90,7 +90,10 @@ export class GestioneUtentiComponent implements OnInit {
   ngOnInit() {
     this.userService.getUsersByManager(this.userLogged._id).subscribe(users => this.users = users);
 
-    this.domainService.getSedi().subscribe(sedi => this.sediList = sedi);
+    this.domainService.getSedi().subscribe(sedi =>{
+       this.sediList = sedi;
+       this.ordinaLista(this.sediList);
+      });
 
     this.authenticationService.user$.subscribe(user => {
       this.userLogged = user
@@ -529,6 +532,14 @@ export class GestioneUtentiComponent implements OnInit {
     }
 
     return error;
+  }
+
+  ordinaLista(listName : SelectItem[]){
+    listName.sort((a, b) => {
+      if (a.label < b.label) return -1;
+      else if (a.label > b.label) return 1;
+      else return 0;
+    });
   }
 }
 
