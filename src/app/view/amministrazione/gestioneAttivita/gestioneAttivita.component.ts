@@ -129,6 +129,7 @@ export class GestioneAttivitaComponent implements OnInit {
 
         this.domainService.getAree().subscribe(aree => {
             this.lst_macro_aree = aree;
+            this.ordinaLista(this.lst_macro_aree);
         });
 
         this.domainService.getAmbiti().subscribe(ambiti => {
@@ -244,6 +245,7 @@ export class GestioneAttivitaComponent implements OnInit {
                     if (elem != null)
                         this.lst_ambiti.push({ label: ambito.label, value: ambito.value })
                 });
+                this.ordinaLista(this.lst_ambiti);
                 break; 
             case 'commessa_cliente':
                 this.lst_commesse_clienti = [];
@@ -389,4 +391,12 @@ export class GestioneAttivitaComponent implements OnInit {
 
         return maxCodAttivita;
     }*/
+
+    ordinaLista(listName : SelectItem[]){
+        listName.sort((a, b) => {
+          if (a.label < b.label) return -1;
+          else if (a.label > b.label) return 1;
+          else return 0;
+        });
+      }
 }
