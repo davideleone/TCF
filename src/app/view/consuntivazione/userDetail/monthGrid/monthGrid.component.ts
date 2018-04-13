@@ -233,18 +233,33 @@ export class MonthGridComponent implements OnChanges {
     try {
 
 
-      //ordino la _userDays per attività, tipodeliverable, data.
+      //ordino la _userDays per cliente, ambito, macro area, attività, tipodeliverable, data.
 
       const consuntivoComparator_AttivitaData = function (a: Consuntivo, b: Consuntivo): number {
 
-        if (a.id_attivita == b.id_attivita) {
-          if (a.id_tipo_deliverable == b.id_tipo_deliverable) {
-            return a.data_consuntivo > b.data_consuntivo ? 1 : a.data_consuntivo < b.data_consuntivo ? -1 : 0;
-          } else {
-            return a.id_tipo_deliverable > b.id_tipo_deliverable ? 1 : -1;
+        if (a.nome_cliente == b.nome_cliente) {
+          if (a.nome_ambito == b.nome_ambito) {
+            if (a.nome_macro_area == b.nome_macro_area) {
+              if (a.nome_attivita == b.nome_attivita) {
+                if (a.nome_tipo_deliverable == b.nome_tipo_deliverable) {
+                  return a.data_consuntivo > b.data_consuntivo ? 1 : a.data_consuntivo < b.data_consuntivo ? -1 : 0;
+                } else {
+                  return a.nome_tipo_deliverable > b.nome_tipo_deliverable ? 1 : -1;
+                }
+              } else {
+                return a.nome_attivita > b.nome_attivita ? 1 : -1;
+              }
+            }
+            else {
+              return a.nome_macro_area > b.nome_macro_area ? 1 : -1;
+            }
           }
-        } else {
-          return a.id_attivita > b.id_attivita ? 1 : -1;
+          else {
+            return a.nome_ambito > b.nome_ambito ? 1 : -1;
+          }
+        }
+        else {
+          return a.nome_cliente > b.nome_cliente ? 1 : -1;
         }
       }
 
@@ -781,15 +796,15 @@ export class MonthGridComponent implements OnChanges {
   checkCharacter(event) {
     const pattern = /[.\+\,\+\-]/;
     let inputChar = String.fromCharCode(event.charCode);
-    
+
     if (pattern.test(inputChar)) {
       alert('Carattere inserito non valido');
-     event.preventDefault();
+      event.preventDefault();
     }
   }
 
   isUserAbilitato(): boolean {
-    
+
     var profiles = Array<string>();
 
     for (let i = 0; i < this.userLogged.clienti.length; i++)
