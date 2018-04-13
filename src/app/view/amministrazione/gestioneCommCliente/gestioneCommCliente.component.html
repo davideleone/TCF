@@ -62,11 +62,11 @@
 
 
     <p-dialog id="dialog" [(header)]="headerCommCliente" [(visible)]="displayDialog" modal="true" responsive="true" appendTo="body"
-        scrollable="true">
+        scrollable="true" >
         <form [formGroup]="CommCliForm" (ngSubmit)="checkForm(CommCliForm) && saveNew()" novalidate>
             <div class="halfWidth noPaddingLeft">
-                <div class="ui-g ui-fluid">
-                    <div class="ui-g-12">
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-12" [ngStyle]="{'width': '450px'}">
                         <span class="ui-float-label">
                             <!-- color:#d6d6d6"-->
                                 <label for="cliente" [ngStyle]="{'color': isValid('cliente')}" style="top: -.60em;font-size:12px;" >Cliente</label>
@@ -113,7 +113,7 @@
 
             <div class="halfWidth noPaddingRight">
                 <div class="ui-g ui-fluid">
-                    <div class="ui-g-12">
+                    <div class="ui-g-12" [ngStyle]="{'width': '450px'}">
                         <span class="ui-float-label">
                                 <label for="ddl_commesse_fnc" [ngStyle]="{'color': isValid('ddl_commesse_fnc')}" style="top: -.60em;font-size:12px;">Commessa Fincons</label>
                             </span>

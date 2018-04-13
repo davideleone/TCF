@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-12" [ngStyle]="{'width': '400px'}">
                         <span class="ui-float-label">
                             <label for="ambito" [ngStyle]="{'color': isValid('ambito')}" style="top: -.60em;font-size:12px;">Ambito</label>
                         </span>
@@ -96,8 +96,8 @@
                         </p-dropdown>
                     </div>
                 </div>
-                <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-md-12">
+                <div class="ui-g ui-fluid" >
+                    <div class="ui-g-12 ui-md-12" [ngStyle]="{'width': '400px'}">
                         <span class="ui-float-label">
                             <label for="macro_area" [ngStyle]="{'color': isValid('macro_area')}" style="top: -.60em;font-size:12px;">Macro Area</label>
                         </span>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-12" [ngStyle]="{'width': '400px'}">
                         <span class="ui-float-label">
                             <input id="nome_attivita" formControlName="nome_attivita" type="text" pInputText [(ngModel)]="newActivity.nome_attivita">
                             <label for="nome_attivita" [ngStyle]="{'color': isValid('nome_attivita')}">Nome attività</label>
@@ -115,7 +115,7 @@
                     </div>
                 </div>
                 <div class="ui-g ui-fluid">
-                    <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-12" [ngStyle]="{'width': '400px'}">
                         <span class="ui-float-label">
                             <label for="commessa_cliente" [ngStyle]="{'color': isValid('commessa_cliente')}" style="top: -.60em;font-size:12px;">Commessa Cliente</label>
                         </span>
