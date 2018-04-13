@@ -11,7 +11,7 @@ export class ClienteService {
 
   @beforeMethod(LogAspect.log)
   getClienti(){
-  	return this.http.get('/tcf/api/clienteController/CRUD')
+  	return this.http.get('/tcf/api/clienteController/clienti')
   		.map(res=> res.json());
   }
 
